@@ -1,0 +1,76 @@
+\documentclass[12pt]{article}
+\usepackage[letterpaper]{geometry}
+\usepackage{amsmath}
+
+\frenchspacing
+\begin{document}
+
+\section*{\raggedright
+Another formula for the area of a triangle: Useless, but explicitly in map-reduce format}
+\noindent \textbf{David W. Hogg} and \textbf{Soledad Villar}
+
+\paragraph{Abstract:}
+It is known that any permutation-invariant function of data points $x_i$
+can be written in the form $\rho(\sum_i\phi(x_i))$,
+where $\rho$ and $\phi$ are (probably nonlinear) functions, and the function $\phi$ might output high-dimensional output (but can't depend on $i$).
+This form can be considered map--reduce, because the $\phi$ executions can be performed asynchronously and the sums can be performed hierarchically.
+The area of a triangle is a permutation-invariant function of the locations of the three corners.
+We find (embarrassingly, by symbolic regression) the formula for the area of the triangle that is explicitly in this map--reduce form.
+It is ugly.
+
+\section{Introduction}
+The area $A$ of a triangle can be written in many ways:
+\begin{align}
+A &= \frac{1}{2}\,\text{(base)}\,\text{(height)} \\
+  &= \frac{1}{2}\,|(\vec{x}_3 - \vec{x}_1) \times (\vec{x}_2 - \vec{x}_1)| \\
+  &= \frac{1}{2}\,a\,b\,\sin(C) \\
+  &= \sqrt{s\,(s-a)\,(s-b)\,(s-c)} \label{eq:Heron} ~,
+\end{align}
+where the first formula is the usual introduction to the subject,
+$(\vec{x}_1, \vec{x}_2, \vec{x}_3$ are three vectors pointing from an origin to the corners of the triangle,
+$\times$ represents the cross-product operator (or its generalization to higher dimensions),
+$a, b, c$ are side lengths of the triangle,
+$C$ is the angle between the $a$ and $b$ sides,
+and $s$ is the semi-perimeter $(a + b + c)/2$.
+
+While the area of a triangle does not depend on how its sides or corners are labeled,
+only the last of these formulae---Heron's formula \eqref{eq:Heron}---is explicitly permutation-invariant.
+The theory of permutation-invariant functions says (CITE) that any per\-mu\-tation-invariant function (under conditions??) of $N$ objects $x_i$ (with $1\leq i\leq N$) can be approximated (to arbitrary precision??) with an expression of the form
+\begin{equation}
+    \rho(\sum_{i=1}^N\phi(x_i)) \label{eq:DeepSets}
+\end{equation}
+where $\rho$ and $\phi$ are (possibly very nonlinear) functions,
+and the $x_i$ are the data points that can be permuted without changing the result.
+This result---which we associate with the subject \emph{Deep Sets} (CITE)---is not at all obvious:
+For example, even though Heron's formula \eqref{eq:Heron} is permutation-invariant, it is not actually in the form \eqref{eq:DeepSets}, if the triangle is seen as being defined by its corners (or even its sides).
+
+A few comments about this Deep-Sets form \eqref{eq:DeepSets} we'd make are the following:
+\begin{itemize}
+    \item The function $\phi$ is universal to all the points $x_i$; it's form won't depend on any properties of each point, nor any properties of the overall collection of points (the \emph{point cloud}, as it were).
+    \item The point properties $x_i$ and the output of the function $\phi$ might both be very large.
+    That is, each point $x_i$ might be a vector or even an ordered list of vectors and tensors and images and so on, and the output of the function $\phi$ might also be very large and complicated.
+    The output of the function $\phi$ is some kind of informative, latent encoding of the point $x_i$.
+    \item If a function can be written in Deep-Sets form \eqref{eq:DeepSets}, then that function can be executed in a map--reduce framework, in which the function $\phi$ is executed independently and asynchronously on each data point (maybe even in the data center) and the sums are performed hierarchically or in any order.
+    That means that for large problems executed on large data sets in large data centers, problems in this form \eqref{eq:DeepSets} can be performed in wall-clock time that scales as $\log N$.
+\end{itemize}
+
+
+
+\section{A note on our method}
+
+\section{Result and discussion}
+
+\begin{align}
+A^2 = &
+-\frac{ 54}{368}\,(\sum_{i=1}^3 x_i^2\,y_i^2) 
+-\frac{258}{368}\,(\sum_{i=1}^3 x_i\,y_i)^2 \nonumber \\ &
++\frac{285}{368}\,(\sum_{i=1}^3 x_i^2)\,(\sum_{i=1}^3 y_i^2) 
++\frac{ 36}{368}\,(\sum_{i=1}^3 y_i)\,(\sum_{i=1}^3 x_i^2\,y_i) \nonumber \\ &
++\frac{ 36}{368}\,(\sum_{i=1}^3 x_i)\,(\sum_{i=1}^3 x_i\,y_i^2) 
+-\frac{101}{368}\,(\sum_{i=1}^3 y_i)^2\,(\sum_{i=1}^3 x_i^2) \nonumber \\ &
++\frac{148}{368}\,(\sum_{i=1}^3 x_i)\,(\sum_{i=1}^3 y_i)\,(\sum_{i=1}^3 x_i\,y_i) 
+-\frac{101}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i^2) \nonumber \\ &
++\frac{  9}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i)^2 
+\end{align}
+
+\end{document}
