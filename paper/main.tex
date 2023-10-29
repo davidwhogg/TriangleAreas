@@ -2,28 +2,32 @@
 \usepackage[letterpaper]{geometry}
 \usepackage{amsmath}
 
+\newcommand{\documentname}{\textsl{Note}}
+\newcommand{\sectionname}{Section}
+\newcommand{\secref}[1]{\sectionname~\ref{#1}}
 \frenchspacing
+
 \begin{document}
 
 \section*{\raggedright
-Another formula for the area of a triangle: Useless, but explicitly in map-reduce format}
+Another formula for the area of a triangle: Useless, but explicitly in Deep-Sets and map--reduce form}
 \noindent \textbf{David W. Hogg} and \textbf{Soledad Villar}
 
 \paragraph{Abstract:}
 It is known that any permutation-invariant function of data points $x_i$
 can be written in the form $\rho(\sum_i\phi(x_i))$,
-where $\rho$ and $\phi$ are (probably nonlinear) functions, and the function $\phi$ might output high-dimensional output (but can't depend on $i$).
-This form can be considered map--reduce, because the $\phi$ executions can be performed asynchronously and the sums can be performed hierarchically.
+where $\rho$ and $\phi$ are (probably nonlinear) functions, and the function $\phi$ might output a high-dimensional latent encoding of each point $x_i$.
+This form---known in the machine-learning literature as Deep Sets---is a map--reduce form, because the $\phi$ executions can be performed asynchronously and the sums can be performed hierarchically or in any order.
 The area of a triangle is a permutation-invariant function of the locations of the three corners.
-We find (embarrassingly, by symbolic regression) the formula for the area of the triangle that is explicitly in this map--reduce form.
-It is ugly.
+We find, possibly for the first time, the formula for the area of the triangle that is explicitly in the Deep-Sets form.
+No insights of any kind were gained by this work.
 
 \section{Introduction}
 The area $A$ of a triangle can be written in many ways:
 \begin{align}
-A &= \frac{1}{2}\,\text{(base)}\,\text{(height)} \\
-  &= \frac{1}{2}\,|(\vec{x}_3 - \vec{x}_1) \times (\vec{x}_2 - \vec{x}_1)| \\
-  &= \frac{1}{2}\,a\,b\,\sin(C) \\
+A &= \frac{1}{2}\,\text{(base)}\,\text{(height)} \label{eq:school} \\
+  &= \frac{1}{2}\,|(\vec{x}_3 - \vec{x}_1) \times (\vec{x}_2 - \vec{x}_1)| \label{eq:cross} \\
+  &= \frac{1}{2}\,a\,b\,\sin(C) \label{eq:sine} \\
   &= \sqrt{s\,(s-a)\,(s-b)\,(s-c)} \label{eq:Heron} ~,
 \end{align}
 where the first formula is the usual introduction to the subject,
@@ -32,9 +36,11 @@ $\times$ represents the cross-product operator (or its generalization to higher 
 $a, b, c$ are side lengths of the triangle,
 $C$ is the angle between the $a$ and $b$ sides,
 and $s$ is the semi-perimeter $(a + b + c)/2$.
+Below, we present a new formula for the area of a triangle, which we believe may be novel.
 
 While the area of a triangle does not depend on how its sides or corners are labeled,
 only the last of these formulae---Heron's formula \eqref{eq:Heron}---is explicitly permutation-invariant.
+
 The theory of permutation-invariant functions says (CITE) that any per\-mu\-tation-invariant function (under conditions??) of $N$ objects $x_i$ (with $1\leq i\leq N$) can be approximated (to arbitrary precision??) with an expression of the form
 \begin{equation}
     \rho(\sum_{i=1}^N\phi(x_i)) \label{eq:DeepSets}
@@ -54,12 +60,27 @@ A few comments about this Deep-Sets form \eqref{eq:DeepSets} we'd make are the f
     That means that for large problems executed on large data sets in large data centers, problems in this form \eqref{eq:DeepSets} can be performed in wall-clock time that scales as $\log N$.
 \end{itemize}
 
+Although the contribution of this paper is minimal, or even zero, it was inspired by real problems in physics.
+For one very specific example, all known formulae for the gravitational potential energy of a system of $N$ point masses involve sums over pairs of points; they have not ever been written in the Deep Sets form \eqref{eq:DeepSets}.
+In cosmology, all known estimators for $k$-point functions (correlation functions, bispectra, and so on) involve sums over $k$-tuples; once again they have not been written in the Deep Sets form.
+Importantly, these kinds of problems cannot currently be performed (not even approximately) in any map--reduce framework; indeed they are very time-consuming because they involve sums over all elements of $N$-choose-$k$, which scales (badly) as $N^k$.
+Because 3-point functions involve the shapes and areas of triangles, consideration of the 3-point function led to the question answered in this \documentname:
+\emph{What is the Deep Sets (or map--reduce) expression for the area of a triangle?}
+We deliver in \secref{sec:result}.
 
+\section{A note on our method}\label{sec:method}
+What made us think $A^2$ rather than $A$?
 
-\section{A note on our method}
+What do units tell you?
 
-\section{Result and discussion}
+How to construct all the invariant polynomials.
 
+Which polynomial terms are invariant to other kinds of transformations?
+
+Symbolic regression, determination of the magic number, and checking.
+
+\section{Result and discussion}\label{sec:result}
+Our result---and only contribution---is that the area $A$ of a triangle is given by
 \begin{align}
 A^2 = &
 -\frac{ 54}{368}\,(\sum_{i=1}^3 x_i^2\,y_i^2) 
@@ -70,7 +91,28 @@ A^2 = &
 -\frac{101}{368}\,(\sum_{i=1}^3 y_i)^2\,(\sum_{i=1}^3 x_i^2) \nonumber \\ &
 +\frac{148}{368}\,(\sum_{i=1}^3 x_i)\,(\sum_{i=1}^3 y_i)\,(\sum_{i=1}^3 x_i\,y_i) 
 -\frac{101}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i^2) \nonumber \\ &
-+\frac{  9}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i)^2 
++\frac{  9}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i)^2 ~, \label{eq:result}
 \end{align}
+where the two-dimensional position of each of the three corners $i$ is $(x_i, y_i)$.
+This answer is in Deep-Sets form:
+Every expression in parentheses in \eqref{eq:result} is a pure sum over all three points.
+There are no sums over differences, and there is no ordering of the points.
+Being very explicit, this can be written in the Deep Sets form \eqref{eq:DeepSets} if we define $\rho$ and $\phi$ as follows:
+
+Note the symmetries....! See the $36/368$ terms, or the $-101/368$ terms
+
+But note that it isn't obviously invariant to arbitrary rotations.
+And it isn't obviously invariant to translations.
+Formulae \eqref{eq:cross}, \eqref{eq:sine}, and \eqref{eq:Heron} are obviously rotation-invariant and translation-invariant.
+
+Why not simplify the prefactors?
+
+What's the generalization to $d$ dimensions?
+
+Where does the factor of 23 come from?
+
+What happens if we try to do $A$ as a quadratic instead of $A^2$ as a quartic?
+
+Why not get this with computer algebra?
 
 \end{document}
