@@ -68,12 +68,12 @@ For example, even though Heron's formula \eqref{eq:Heron} is permutation-invaria
 
 A few comments about this Deep-Sets form \eqref{eq:DeepSets} we'd make are the following:
 \begin{itemize}
-    \item The function $\phi$ is universal to all the points $r_i$; it's form won't depend on any properties of each point, nor any properties of the overall collection of points (the \emph{point cloud}, as it were).
+    \item The function $\phi$ is universal to all the points $r_i$; its form won't depend on any properties of each point, nor any properties of the overall collection of points (the \emph{point cloud}, as it were).
     \item The point properties $r_i$ and the output of the function $\phi$ might both be very large.
     That is, each point $r_i$ might be a vector or even an ordered list of vectors and tensors and images and so on, and the output of the function $\phi$ might also be very large and complicated.
     The output of the function $\phi$ is some kind of informative, latent encoding of the point $r_i$.
     \item If a function can be written in Deep-Sets form \eqref{eq:DeepSets}, then that function can be executed in a map--reduce framework, in which the function $\phi$ is executed independently and asynchronously on each data point (maybe even in the data center) and the sums are performed hierarchically or in any order.
-    That means that for large problems executed on large data sets in large data centers, problems in this form \eqref{eq:DeepSets} can be performed in wall-clock time that scales as $\log N$.
+    That means that for large problems executed on large data sets in large data centers, problems in this form \eqref{eq:DeepSets} can often be performed in wall-clock time that scales as $\log N$.
 \end{itemize}
 
 Although the contribution of this paper is minimal, or even zero, it was inspired by real problems in physics.
@@ -109,7 +109,7 @@ A^2 = &
 -\frac{101}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i^2) \nonumber \\ &
 +\frac{  9}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i)^2 ~, \label{eq:result}
 \end{align}
-where the two-dimensional position of each of the three corners $i$ is $(x_i, y_i)$.
+where the two-dimensional position of each of the three corners $i$ is $\vec{r}_i = (x_i, y_i)$.
 This answer is in Deep-Sets form:
 Every expression in parentheses in \eqref{eq:result} is a pure sum over all three points.
 There are no sums over differences, and there is no ordering of the points.
