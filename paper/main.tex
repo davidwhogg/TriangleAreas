@@ -24,9 +24,11 @@
 \begin{document}
 
 \section*{\raggedright
-Another formula for the area of a triangle: Useless, but explicitly in Deep Sets and map--reduce form}
+A new formula for the area of a triangle:
+Useless, but explicitly in Deep Sets and map--reduce form}
 
-\noindent \textbf{David W. Hogg} and \textbf{Soledad Villar}
+\noindent \textbf{David W. Hogg}\footnote{Email at \texttt{<david.hogg@nyu.edu>}. DWH is at the Center for Cosmology and Particle Physics, Department of Physics, New York University; the Max-Planck-Insitut f\"ur Astronomie; and the Center for Computational Astrophysics, Flatiron Institute. The Flatiron Institute is a division of the Simons Foundation.} and
+\textbf{Soledad Villar}\footnote{SV is at the Department of Applied Mathematics and Statistics, Johns Hopkins University; and the Mathematical Institute for Data Science, Johns Hopkins University.}
 
 \paragraph{Abstract:}
 It is known that any permutation-invariant function of data points $r_i$
@@ -73,7 +75,7 @@ A few comments about this Deep Sets form \eqref{eq:DeepSets} we'd make are the f
     That is, each point $r_i$ might be a vector or even an ordered list of vectors and tensors and images and so on, and the output of the function $\phi$ might also be very large and complicated.
     The output of the function $\phi$ is some kind of informative, latent encoding of the point $r_i$.
     \item If a function can be written in Deep-Sets form \eqref{eq:DeepSets}, then that function can be executed in a map--reduce framework, in which the function $\phi$ is executed independently and asynchronously on each data point (maybe even in the data center) and the sums are performed hierarchically or in any order.
-    That means that for large problems executed on large data sets in large data centers, problems in this form \eqref{eq:DeepSets} can be performed in wall-clock time that scales as $\log N$.
+    That means that for large problems executed on large data sets in large data centers, problems in this form \eqref{eq:DeepSets} can often be performed in wall-clock time that scales as $\log N$.
 \end{itemize}
 
 Although the contribution of this paper is minimal, or even zero, it was inspired by real problems in physics.
