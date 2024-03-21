@@ -3,14 +3,11 @@
 % to-do items
 % -----------
 % - Show that there is NOT an exact solution at polynomial degree 2 order.
-% - Make the code output something that could be executed by Mathematica.
-% - Prove (maybe using Mathematica) that the formula reduces to Heron's formula.
-% - Prove that the formula is exactly translation-invariant.
-% - Prove that the formula is exactly rotation-invariant.
-% - Related: Needs a clear tikz figure showing the corners and notation.
-% - State exactly the "rules of the game" in the introdution.
-% - What are the 3-dimensional and d-dimensional generalizations of this formula?
-% - Discuss alternatives like Novara's; Thank Novara or invite him to join.
+% - Make the code output something that could be executed by Mathematica. Then prove using Mathematica that the formula reduces to Heron's formula.
+% - Make the code output explicit expressions for phi and rho, and include them in section 3.
+% - Needs a clear tikz figure showing the corners and notation.
+% - What are the 3-dimensional and d-dimensional generalizations of this formula? Are they hard to find? YES I BET THEY ARE.
+% - Discuss alternatives like Novara's; And alternatives like Kaze's.
 
 \documentclass[12pt]{article}
 \usepackage[letterpaper]{geometry}
@@ -27,7 +24,7 @@
 A new formula for the area of a triangle:
 Useless, but explicitly in Deep Sets and map--reduce form}
 
-\noindent \textbf{David W. Hogg}\footnote{Email at \texttt{<david.hogg@nyu.edu>}. DWH is at the Center for Cosmology and Particle Physics, Department of Physics, New York University; the Max-Planck-Insitut f\"ur Astronomie; and the Center for Computational Astrophysics, Flatiron Institute. The Flatiron Institute is a division of the Simons Foundation.} and
+\noindent \textbf{David W. Hogg}\footnote{The authors thank Alexander Novara (NYU), Ben Wandelt (Sorbonne), and Kaze Wong (Flatiron) for valuable discussions.}\footnote{Email at \texttt{<david.hogg@nyu.edu>}. DWH is at the Center for Cosmology and Particle Physics, Department of Physics, New York University; the Max-Planck-Insitut f\"ur Astronomie; and the Center for Computational Astrophysics, Flatiron Institute. The Flatiron Institute is a division of the Simons Foundation.} and
 \textbf{Soledad Villar}\footnote{SV is at the Department of Applied Mathematics and Statistics, Johns Hopkins University; and the Mathematical Institute for Data Science, Johns Hopkins University.}
 
 \paragraph{Abstract:}
@@ -35,20 +32,21 @@ It is known that any permutation-invariant function of data points $r_i$
 can be written in the form $\rho(\sum_i\phi(r_i))$,
 where $\rho$ and $\phi$ are (probably nonlinear) functions, and the function $\phi$ might output a high-dimensional latent encoding of each point $r_i$.
 This form---known in the machine-learning literature as Deep Sets---is a map--reduce form, because the $\phi$ executions can be performed asynchronously and the sums can be performed hierarchically or in any order.
-The area of a triangle is a permutation-invariant function of the locations of the three corners.
-We find, possibly for the first time, the formula for the area of a triangle, given the positions of the three corners, that is explicitly in the Deep Sets form.
-It is the square-root of a quartic permutation-invariant polynomial.
+The area of a triangle is a permutation-invariant function of the locations $r_i$ of the three corners $1\leq i\leq 3$.
+We find, possibly for the first time, the formula for the area of a triangle, given the positions of the three corners, that is explicitly in Deep Sets form.
+It is the square-root of a permutation-invariant quartic polynomial.
 No insights of any kind were gained by this work.
 
 \section{Introduction}
-The area $A$ of a triangle can be written in many ways:
+The area $A$ of a triangle can be written in many ways.
+Here are a few:
 \begin{align}
 A &= \frac{1}{2}\,\text{(base)}\,\text{(height)} \label{eq:school} \\
   &= \frac{1}{2}\,|(\vec{r}_3 - \vec{r}_1) \times (\vec{r}_2 - \vec{r}_1)| \label{eq:cross} \\
   &= \frac{1}{2}\,a\,b\,\sin(C) \label{eq:sine} \\
   &= \sqrt{s\,(s-a)\,(s-b)\,(s-c)} \label{eq:Heron} ~,
 \end{align}
-where the first formula is the usual introduction to the subject,
+where the first formula \eqref{eq:school} is the usual introduction to the subject,
 $\vec{r}_1, \vec{r}_2, \vec{r}_3$ are three vectors pointing from an origin to the corners of the triangle,
 $\times$ represents the cross-product operator (or its generalization to higher dimensions),
 $a, b, c$ are side lengths of the triangle,
@@ -70,7 +68,7 @@ For example, even though Heron's formula \eqref{eq:Heron} is permutation-invaria
 
 A few comments about this Deep Sets form \eqref{eq:DeepSets} we'd make are the following:
 \begin{itemize}
-    \item The function $\phi$ is universal to all the points $r_i$; its form won't depend on any properties of each point, nor any properties of the overall collection of points (the \emph{point cloud}, as it were).
+    \item The function $\phi$ is universal to all the points $r_i$; its form won't depend on label $i$ or on any properties of each point, nor any properties of the overall collection of points (the \emph{point cloud}, as it were).
     \item The point properties $r_i$ and the output of the function $\phi$ might both be very large.
     That is, each point $r_i$ might be a vector or even an ordered list of vectors and tensors and images and so on, and the output of the function $\phi$ might also be very large and complicated.
     The output of the function $\phi$ is some kind of informative, latent encoding of the point $r_i$.
@@ -87,7 +85,8 @@ Because 3-point functions involve the shapes and areas of triangles, considerati
 We deliver in \secref{sec:result}.
 
 \section{A note on our method}\label{sec:method}
-Fundamentally, our method takes the form of a symbolic regression, followed by a confirmation with computational algebra.
+How did we find the formula \eqref{eq:result} presented below in \secref{sec:result}?
+Fundamentally, our method took the form of a symbolic regression, followed by a confirmation with computational algebra.
 
 For the symbolic regression, we considered a linear combination of monomials, each of which can be written in Deep Sets form, but each of which has units of area-squared (position to the fourth power).
 We fit a linear combination of the monomials to a data set of generated triples of points, drawn from a two-dimensional Gaussian whose mean was also drawn from a Gaussian in a two-dimensional space.
@@ -130,7 +129,7 @@ A^2 = &
 -\frac{101}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i^2) \nonumber \\ &
 +\frac{  9}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i)^2 ~, \label{eq:result}
 \end{align}
-where the two-dimensional position of each of the three corners $i$ is $(x_i, y_i)$.
+where the two-dimensional position of each of the three corners $i$ is $r_i \equiv (x_i, y_i)$.
 This answer is in Deep Sets form:
 Every expression in parentheses in \eqref{eq:result} is a pure sum over all three points.
 There are no sums over differences, and there is no ordering of the points.
