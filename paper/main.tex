@@ -11,14 +11,20 @@
 
 \documentclass[12pt]{article}
 \usepackage[letterpaper]{geometry}
+\usepackage[hidelinks]{hyperref}
 \usepackage{amsmath}
 
+% typesetting issues
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
 \newcommand{\secref}[1]{\sectionname~\ref{#1}}
-\frenchspacing
+\addtolength{\topmargin}{-0.20in}
+\addtolength{\textheight}{1.40in}
+\sloppy\sloppypar\raggedbottom\frenchspacing
+\pagestyle{myheadings}
+\markboth{foo}{Hogg \& Villar / A new formula for the area of a triangle}
 
-\begin{document}
+\begin{document}\thispagestyle{empty}
 
 \section*{\raggedright
 A new formula for the area of a triangle:
@@ -91,10 +97,11 @@ Fundamentally, our method took the form of a symbolic regression, followed by a 
 For the symbolic regression, we considered a linear combination of monomials, each of which can be written in Deep Sets form, but each of which has units of area-squared (position to the fourth power).
 We fit a linear combination of the monomials to a data set of generated triples of points, drawn from a two-dimensional Gaussian whose mean was also drawn from a Gaussian in a two-dimensional space.
 For each triple we attach a label, which is the squared area, and we require the linear combination of fourth-order, Deep Sets monomials to reproduce the labels to machine precision.
+The simple code is available for re-use under an open-source license at \url{https://github.com/davidwhogg/TriangleAreas}.
 
 We choose to work with squared area $A^2$ and not area $A$ because, geometrically, areas are signed quantities.
 Indeed, the formulae \eqref{eq:school} through \eqref{eq:Heron} either (implicitly) involve square roots of polynomials, or else absolute value signs, such that the corresponding pure polynomial expression would be for the squared area.
-We restricted to monomials that contain four powers of positional coordinates because any expression for the squared area must be units covariant (equivariant to changes of length units).
+We restricted to monomials that contain four powers of positional coordinates because any expression for the squared area must be units covariant (equivariant to changes of the units used for the measurements of positions or lengths).
 
 Perhaps non-obviously, for a monomial to be in Deep Sets form, it must consist only of products of sums over the three points.
 It cannot contain any differences, or any sums over pairs of points (or edges).
@@ -151,6 +158,8 @@ Where does the factor of 23 come from?
 
 What happens if we try to do $A$ as a quadratic instead of $A^2$ as a quartic?
 
-Why not get this with computer algebra?
+What happens if you hold the formula fixed, but use more than $N=3$ points?
+The formula still returns a squared area.
+That's the area of what?
 
 \end{document}
