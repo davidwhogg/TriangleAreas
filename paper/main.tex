@@ -40,8 +40,8 @@ where $\rho$ and $\phi$ are (probably nonlinear) functions, and the function $\p
 This form---known in the machine-learning literature as Deep Sets---is a map--reduce form, because the $\phi$ executions can be performed asynchronously and the sums can be performed hierarchically or in any order.
 The area of a triangle is a permutation-invariant function of the locations $r_i$ of the three corners $1\leq i\leq 3$.
 We find, possibly for the first time, the formula for the area of a triangle, given the positions of the three corners, that is explicitly in Deep Sets form.
-It is the square-root of a permutation-invariant quartic polynomial.
-No insights of any kind were gained by this work.
+It is the square-root of a permutation-invariant quartic polynomial involving the integer 368.
+No insights of any kind were gained from this work.
 
 \section{Introduction}
 The area $A$ of a triangle can be written in many ways.
@@ -110,6 +110,8 @@ These monomials are both correct from a units perspective, but the second is not
 
 HOGG: How to construct all the invariant polynomials.
 
+HAINJE: Given data of form $(x, y)$, invariant factors are $F_{m,n} = \sum_i x_i^m y_i^n$, and the invariant monomials are any products of these factors $\prod_{i} F_{m_i,n_i}$. Do we want/need to be more specific than that?
+
 In detail, the formula for the area (or area squared) of a triangle must be invariant to permutations, translations, rotations, and reflections.
 The Deep Sets form enforces only permutation-invariance.
 Some of the monomials are invariant to reflections, but no individual monomial is invariant to translations or rotations.
@@ -144,6 +146,23 @@ Being very explicit, this can be written in the Deep Sets form \eqref{eq:DeepSet
 
 HOGG: Explicit vector $\phi()$ and explicit expression $\rho()$.
 
+HAINJE: Here it is:
+\begin{gather}
+    \phi(r_i) = (x_i, y_i, x_iy_i, x_i^2, y_i^2, x_i y_i^2, x_i^2 y_i, x_i^2 y_i^2) \\
+    \begin{aligned}
+    \rho(\textstyle\sum_{i=1}^{3}\phi(r_i)\equiv \vec{u}) = &
+    - \tfrac{54}{368} u_8
+    - \tfrac{258}{368} u_3^2
+    + \tfrac{285}{368} u_4 u_5
+    + \tfrac{36}{368} u_2 u_7
+    + \tfrac{36}{368} u_1 u_6 \\ &
+    - \tfrac{101}{368} u_2^2 u_4
+    + \tfrac{148}{368} u_1 u_2 u_3
+    - \tfrac{101}{368} u_1^2 u_5
+    + \tfrac{9}{368} u_1^2 u_2^2.
+    \end{aligned}
+\end{gather}
+
 Note the symmetries....! See the $36/368$ terms, or the $-101/368$ terms
 
 But note that it isn't obviously invariant to arbitrary rotations.
@@ -161,5 +180,43 @@ What happens if we try to do $A$ as a quadratic instead of $A^2$ as a quartic?
 What happens if you hold the formula fixed, but use more than $N=3$ points?
 The formula still returns a squared area.
 That's the area of what?
+
+\newpage
+By inspection, we have also found a simpler form of the same formula, which is given by
+\begin{align}
+    4 \, A^2 = & \
+        2 \, (\sum_{i=1}^{3} x_i ) \, (\sum_{i=1}^{3} y_i ) \, (\sum_{i=1}^{3} x_i \, y_i )
+        + 3 \, (\sum_{i=1}^{3} x_i^2 ) \, (\sum_{i=1}^{3} y_i^2 ) \nonumber \\ &
+        - \, (\sum_{i=1}^{3} x_i )^2 \, (\sum_{i=1}^{3} y_i^2 )
+        - \, (\sum_{i=1}^{3} y_i )^2 \, (\sum_{i=1}^{3} x_i^2 ) \nonumber \\ &
+        - 3 \, (\sum_{i=1}^{3} x_i \, y_i )^2.
+\end{align}
+In explicit Deep Sets notation, this can be written
+\begin{gather}
+    \phi(r_i) = (
+        x_i,
+        y_i,
+        x_i y_i,
+        x_i^2,
+        y_i^2
+    ), \\
+    \rho(\textstyle\sum_{i=1}^{3} \phi(r_i) \equiv \vec{u})
+    = \tfrac{2}{4} u_1 u_2 u_3
+    + \tfrac{3}{4} u_4 u_5
+    - \tfrac{1}{4} u_1^2 u_5
+    - \tfrac{1}{4} u_2^2 u_4
+    - \tfrac{3}{4} u_3^2.
+\end{gather}
+
+The two are related by
+\begin{equation}
+    4 u_1 u_6 + 4 u_2 u_7 - 6 u_8 = 
+    -u_1^2 u_2^2 + 4 u_1 u_2 u_3 - 2 u_3^2 + u_2^2 u_4 + u_1^2 u_5 - u_4 u_5 ;
+\end{equation}
+namely, plugging this into \eqref{eq:result} causes it to reduce immediately into this simpler form.
+
+This form was not found by the symbolic regression of \secref{sec:method} because the regression makes use of \verb+lstsq+ with more parameters than data points. In this regime, the solution that minimizes the $\mathcal{L}_2$ norm of the weights (the coefficients of the invariant monomials) is returned. The $\mathcal{L}_2$ norm of the weights of our initial formula is $2127 / 1472 \approx 1.445$, whereas the $\mathcal{L}_2$ norm of the weights of this simpler formula is $3/2 = 1.5$.
+
+HAINJE: Would lasso regression return my formula? Is there a yet simpler formula?
 
 \end{document}
