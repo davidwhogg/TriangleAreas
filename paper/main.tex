@@ -1,13 +1,12 @@
-% Note to self: Please don't work on this, ever.
+% Copyright 2025 the authors.
 
 % to-do items
 % -----------
-% - Show that there is NOT an exact solution at polynomial degree 2 order.
-% - Make the code output something that could be executed by Mathematica. Then prove using Mathematica that the formula reduces to Heron's formula.
-% - Make the code output explicit expressions for phi and rho, and include them in section 3.
-% - Needs a clear tikz figure showing the corners and notation.
-% - What are the 3-dimensional and d-dimensional generalizations of this formula? Are they hard to find? YES I BET THEY ARE.
-% - Discuss alternatives like Novara's; And alternatives like Kaze's.
+% - CH: Include the d=3, d=4 solutions and comments on d>4.
+% - CH: Rewrite to remove the Hogg solution.
+% - CH: Show that there is NOT an exact solution at polynomial degree 2 order.
+% - CH: Needs a clear tikz figure showing the corners and notation. Like an infographic.
+% - HOGG: Discuss alternatives like Novara's; And alternatives like Kaze's. Positional encodings! CH: Describe the connection to positional encodings (in, eg, transformers). Oh and cosmology and power spectrum and bispectrum.
 
 \documentclass[12pt]{article}
 \usepackage[letterpaper]{geometry}
@@ -18,19 +17,30 @@
 \newcommand{\documentname}{\textsl{Note}}
 \newcommand{\sectionname}{Section}
 \newcommand{\secref}[1]{\sectionname~\ref{#1}}
+\setlength{\textwidth}{5.50in}
+\setlength{\oddsidemargin}{3.25in}\addtolength{\oddsidemargin}{-0.5\textwidth}
 \addtolength{\topmargin}{-0.20in}
 \addtolength{\textheight}{1.40in}
 \sloppy\sloppypar\raggedbottom\frenchspacing
 \pagestyle{myheadings}
-\markboth{foo}{Hogg \& Villar / A new formula for the area of a triangle}
+\markboth{foo}{\sffamily Hainje, Hogg, \& Villar / A new formula for the area of a triangle}
+
+\usepackage{natbib}
+\usepackage{aas_macros}
+\bibliographystyle{aasjournal}
+\setcitestyle{aysep={}}
+\usepackage{setspace}
+\setlength{\bibsep}{0pt plus 0.3ex}
 
 \begin{document}\thispagestyle{empty}
 
 \section*{\raggedright
 A new formula for the area of a triangle:
-Useless, but explicitly in Deep Sets and map--reduce form}
+Useless, but explicitly in Deep Sets and map--reduce form\footnote{%
+The authors thank Alexander Novara (NYU), Ben Wandelt (Sorbonne), and Kaze Wong (Flatiron) for valuable discussions.}}
 
-\noindent \textbf{David W. Hogg}\footnote{The authors thank Alexander Novara (NYU), Ben Wandelt (Sorbonne), and Kaze Wong (Flatiron) for valuable discussions.}\footnote{Email at \texttt{<david.hogg@nyu.edu>}. DWH is at the Center for Cosmology and Particle Physics, Department of Physics, New York University; the Max-Planck-Insitut f\"ur Astronomie; and the Center for Computational Astrophysics, Flatiron Institute. The Flatiron Institute is a division of the Simons Foundation.} and
+\noindent \textbf{Connor Hainje},\footnote{Email at \href{mailto:connor.hainje@nyu.edu}{connor.hainje@nyu.edu}. CH is at the Center for Cosmology and Particle Physics, Department of Physics, New York University.}
+\noindent \textbf{David W. Hogg},\footnote{DWH is at the Center for Cosmology and Particle Physics, Department of Physics, New York University; the Max-Planck-Insitut f\"ur Astronomie; and the Center for Computational Astrophysics, Flatiron Institute. The Flatiron Institute is a division of the Simons Foundation.} and
 \textbf{Soledad Villar}\footnote{SV is at the Department of Applied Mathematics and Statistics, Johns Hopkins University; and the Mathematical Institute for Data Science, Johns Hopkins University.}
 
 \paragraph{Abstract:}
@@ -40,7 +50,7 @@ where $\rho$ and $\phi$ are (probably nonlinear) functions, and the function $\p
 This form---known in the machine-learning literature as Deep Sets---is a map--reduce form, because the $\phi$ executions can be performed asynchronously and the sums can be performed hierarchically or in any order.
 The area of a triangle is a permutation-invariant function of the locations $r_i$ of the three corners $1\leq i\leq 3$.
 We find, possibly for the first time, the formula for the area of a triangle, given the positions of the three corners, that is explicitly in Deep Sets form.
-It is the square-root of a permutation-invariant quartic polynomial involving the integer 368.
+% It is the square-root of a permutation-invariant quartic polynomial involving the integer 368.
 No insights of any kind were gained from this work.
 
 \section{Introduction}
@@ -63,7 +73,7 @@ Below, we present a new formula for the area of a triangle, which we believe may
 While the area of a triangle does not depend on how its sides or corners are labeled,
 only the last of these formulae---Heron's formula \eqref{eq:Heron}---is explicitly permutation-invariant.
 
-The theory of permutation-invariant functions says (CITE) that any per\-mu\-tation-invariant function (under conditions??) of $N$ objects $r_i$ (with $1\leq i\leq N$) can be approximated (to arbitrary precision??) with an expression of the form
+The theory of permutation-invariant functions says that any per\-mu\-tation-invariant function (under conditions??) of $N$ objects $r_i$ (with $1\leq i\leq N$) can be approximated (to arbitrary precision??) with an expression of the form \citep{zaheer+17-Deep-Sets}
 \begin{equation}
     \rho(\sum_{i=1}^N\phi(r_i)) \label{eq:DeepSets}
 \end{equation}
@@ -83,9 +93,11 @@ A few comments about this Deep Sets form \eqref{eq:DeepSets} we'd make are the f
 \end{itemize}
 
 Although the contribution of this paper is minimal, or even zero, it was inspired by real problems in physics.
-For one very specific example, all known formulae for the gravitational potential energy of a system of $N$ point masses involve sums over pairs of points; they have not ever been written in the Deep Sets form \eqref{eq:DeepSets}.
-In cosmology, all known estimators for $k$-point functions (correlation functions, bispectra, and so on) involve sums over $k$-tuples; once again they have not been written in the Deep Sets form.
-Importantly, these kinds of problems cannot currently be performed (not even approximately) in any map--reduce framework; indeed they are very time-consuming because they involve sums over all elements of $N$-choose-$k$, which scales (badly) as $N^k$.
+For one very specific example, all known exact formulae for the gravitational potential energy of a system of $N$ point masses involve sums over pairs of points (and also require taking differences of points); they have not ever been written in Deep Sets form \eqref{eq:DeepSets} to our knowledge.
+CH: THAT SAID, THERE ARE MULTIPOLE-LIKE EXPRESSIONS THAT MIGHT BE IN DEEPSETS AND APPROXIMATE THIS CALCULATION; SEE THE DISCUSSION?
+In cosmology, standard estimators for $k$-point functions (correlation functions, bispectra, and so on) involve sums over $k$-tuples; once again they have not been written in the Deep Sets form.
+CH: DO THE PHILCOX PAPERS ADDRESS THIS PREVIOUS POINT?
+Importantly, when these statistics are computed in their naive forms, they are very time-consuming because they involve sums over all elements of $N$-choose-$k$, which scales (badly) as $N^k$.
 Because 3-point functions involve the shapes and areas of triangles, consideration of the 3-point function led to the question answered in this \documentname:
 \emph{What is the Deep Sets (or map--reduce) expression for the area of a triangle?}
 We deliver in \secref{sec:result}.
@@ -108,9 +120,12 @@ It cannot contain any differences, or any sums over pairs of points (or edges).
 Thus $(\sum_{i=1}^2 x_i^2)\,(\sum_{i=1}^3 x_i\,y_i)$ is a permitted monomial, but $(\sum_{i=1}^3\sum_{j=1}^3 x_i^2\,y_j^2)$ is not a permitted monomial.
 These monomials are both correct from a units perspective, but the second is not in Deep Sets form, because it contains products of position coordinates from different points.
 
-HOGG: How to construct all the invariant polynomials.
+In order to generate all the possible invariant monomials, we first note that they are made of products of factors of the form $F_{m,n} = \sum_i x_i^m y_i^n$.
+The invariant monomials of degree $d$ are then all products $\prod_i F_{m_i, n_i}$ such that $\sum_i m_i + n_i = d$.
 
-HAINJE: Given data of form $(x, y)$, invariant factors are $F_{m,n} = \sum_i x_i^m y_i^n$, and the invariant monomials are any products of these factors $\prod_{i} F_{m_i,n_i}$. Do we want/need to be more specific than that?
+% HOGG: How to construct all the invariant polynomials.
+
+% HAINJE: Given data of form $(x, y)$, invariant factors are $F_{m,n} = \sum_i x_i^m y_i^n$, and the invariant monomials are any products of these factors $\prod_{i} F_{m_i,n_i}$. Do we want/need to be more specific than that?
 
 In detail, the formula for the area (or area squared) of a triangle must be invariant to permutations, translations, rotations, and reflections.
 The Deep Sets form enforces only permutation-invariance.
@@ -148,18 +163,18 @@ HOGG: Explicit vector $\phi()$ and explicit expression $\rho()$.
 
 HAINJE: Here it is:
 \begin{gather}
-    \phi(r_i) = (x_i, y_i, x_iy_i, x_i^2, y_i^2, x_i y_i^2, x_i^2 y_i, x_i^2 y_i^2) \\
+    \phi(r_i) = (x_i, y_i, x_i\,y_i, x_i^2, y_i^2, x_i\,y_i^2, x_i^2\,y_i, x_i^2\,y_i^2) \\
     \begin{aligned}
     \rho(\textstyle\sum_{i=1}^{3}\phi(r_i)\equiv \vec{u}) = &
     - \tfrac{54}{368} u_8
     - \tfrac{258}{368} u_3^2
-    + \tfrac{285}{368} u_4 u_5
-    + \tfrac{36}{368} u_2 u_7
-    + \tfrac{36}{368} u_1 u_6 \\ &
-    - \tfrac{101}{368} u_2^2 u_4
-    + \tfrac{148}{368} u_1 u_2 u_3
-    - \tfrac{101}{368} u_1^2 u_5
-    + \tfrac{9}{368} u_1^2 u_2^2.
+    + \tfrac{285}{368} u_4\,u_5
+    + \tfrac{36}{368} u_2\,u_7
+    + \tfrac{36}{368} u_1\,u_6 \\ &
+    - \tfrac{101}{368} u_2^2\,u_4
+    + \tfrac{148}{368} u_1\,u_2\,u_3
+    - \tfrac{101}{368} u_1^2\,u_5
+    + \tfrac{9}{368} u_1^2\,u_2^2.
     \end{aligned}
 \end{gather}
 
@@ -169,48 +184,45 @@ But note that it isn't obviously invariant to arbitrary rotations.
 And it isn't obviously invariant to translations.
 Formulae \eqref{eq:cross}, \eqref{eq:sine}, and \eqref{eq:Heron} are obviously rotation-invariant and translation-invariant.
 
-Why not simplify the prefactors?
-
-What's the generalization to $d$ dimensions?
-
-Where does the factor of 23 come from?
-
-What happens if we try to do $A$ as a quadratic instead of $A^2$ as a quartic?
-
-What happens if you hold the formula fixed, but use more than $N=3$ points?
+HOGG SAY: CH: EXPAND THIS INTO AN OPEN QUESTIONS LIST:
+\begin{itemize}
+\item CH should answer this question: What's the generalization to $d$ dimensions? That is, what if the three points are each in d dimensions?
+\item questionable: What happens if we try to do $A$ as a quadratic instead of $A^2$ as a quartic?
+\item What happens if you hold the formula fixed, but use more than $N=3$ points?
 The formula still returns a squared area.
 That's the area of what?
+\item What about areas of quadrangles or larger polygons?
+\item What about volumes and hypervolumes of larger objects?
+\end{itemize}
 
 \newpage
 By inspection, we have also found a simpler form of the same formula, which is given by
 \begin{align}
     4 \, A^2 = & \
         2 \, (\sum_{i=1}^{3} x_i ) \, (\sum_{i=1}^{3} y_i ) \, (\sum_{i=1}^{3} x_i \, y_i )
-        + 3 \, (\sum_{i=1}^{3} x_i^2 ) \, (\sum_{i=1}^{3} y_i^2 ) \nonumber \\ &
-        - \, (\sum_{i=1}^{3} x_i )^2 \, (\sum_{i=1}^{3} y_i^2 )
-        - \, (\sum_{i=1}^{3} y_i )^2 \, (\sum_{i=1}^{3} x_i^2 ) \nonumber \\ &
+        \nonumber \\ &
+        + 3 \, (\sum_{i=1}^{3} x_i^2 ) \, (\sum_{i=1}^{3} y_i^2 )
         - 3 \, (\sum_{i=1}^{3} x_i \, y_i )^2.
+        \nonumber \\ &
+        - \, (\sum_{i=1}^{3} x_i )^2 \, (\sum_{i=1}^{3} y_i^2 )
+        - \, (\sum_{i=1}^{3} y_i )^2 \, (\sum_{i=1}^{3} x_i^2 )
 \end{align}
 In explicit Deep Sets notation, this can be written
-\begin{gather}
-    \phi(r_i) = (
-        x_i,
-        y_i,
-        x_i y_i,
-        x_i^2,
-        y_i^2
-    ), \\
-    \rho(\textstyle\sum_{i=1}^{3} \phi(r_i) \equiv \vec{u})
-    = \tfrac{2}{4} u_1 u_2 u_3
-    + \tfrac{3}{4} u_4 u_5
-    - \tfrac{1}{4} u_1^2 u_5
-    - \tfrac{1}{4} u_2^2 u_4
+\begin{align}
+    \phi(r_i) &= \begin{bmatrix}
+        x_i & y_i & x_i\,y_i & x_i^2 & y_i^2 \end{bmatrix}^\top
+        \equiv \vec{u}^\top, \\
+    \rho(\sum_{i=1}^{3} \phi(r_i))
+    &= \tfrac{2}{4} u_1\,u_2\,u_3
+    + \tfrac{3}{4} u_4\,u_5
+    - \tfrac{1}{4} u_1^2\,u_5
+    - \tfrac{1}{4} u_2^2\,u_4
     - \tfrac{3}{4} u_3^2.
-\end{gather}
+\end{align}
 
 The two are related by
 \begin{equation}
-    4 u_1 u_6 + 4 u_2 u_7 - 6 u_8 = 
+    4\,u_1\,u_6 + 4\,u_2\,u_7 - 6\,u_8 = 
     -u_1^2 u_2^2 + 4 u_1 u_2 u_3 - 2 u_3^2 + u_2^2 u_4 + u_1^2 u_5 - u_4 u_5 ;
 \end{equation}
 namely, plugging this into \eqref{eq:result} causes it to reduce immediately into this simpler form.
@@ -218,5 +230,92 @@ namely, plugging this into \eqref{eq:result} causes it to reduce immediately int
 This form was not found by the symbolic regression of \secref{sec:method} because the regression makes use of \verb+lstsq+ with more parameters than data points. In this regime, the solution that minimizes the $\mathcal{L}_2$ norm of the weights (the coefficients of the invariant monomials) is returned. The $\mathcal{L}_2$ norm of the weights of our initial formula is $2127 / 1472 \approx 1.445$, whereas the $\mathcal{L}_2$ norm of the weights of this simpler formula is $3/2 = 1.5$.
 
 HAINJE: Would lasso regression return my formula? Is there a yet simpler formula?
+
+\newpage
+
+Define the ``invariant factor'' in $d$ dimensions
+\begin{equation}
+    F_{m_1 \, m_2 \, \cdots} \equiv \sum_{1=1}^{3} \prod_{k=1}^{d} (\vec{r}_{i})_{k}^{m_k}.
+\end{equation}
+This is the sum over all three particles of the product of the $d$ components of each $\vec{r}_i$, each component raised to a power. For example, in 2D, $d=2$ and this expands to
+\begin{equation}
+    F_{\ell m} = \sum_{i=1}^{3} x_i^\ell \, y_i^m.
+\end{equation}
+In 3D, $d=3$ and this gives
+\begin{equation}
+    F_{\ell m n} = \sum_{i=1}^{3} x_i^\ell \, y_i^m \, z_i^n.
+\end{equation}
+Then, the area formula found above can be extended to more dimensions with the following formulae.
+
+For reference, the 2D formula was
+\begin{equation}
+4 A_{\rm 2D}^2 = +3 F_{02} F_{20} -3 F_{11}^2 - F_{20} F_{01}^2 +2 F_{11} F_{10} F_{01} - F_{02} F_{10}^2.
+\end{equation}
+In 3D, we have
+\begin{equation}
+\begin{aligned}
+4 A_{\rm 3D}^2 = &
++3 F_{020} F_{002} 
++3 F_{200} F_{002} 
++3 F_{020} F_{200} \\&
+-3 F_{011}^2 
+-3 F_{101}^2 
+-3 F_{110}^2 \\&
++2 F_{011} F_{001} F_{010} 
++2 F_{100} F_{001} F_{101}
++2 F_{100} F_{010} F_{110} \\&
+-F_{002} F_{010}^2 
+-F_{002} F_{100}^2 
+-F_{020} F_{001}^2 
+-F_{020} F_{100}^2
+-F_{200} F_{010}^2
+-F_{200} F_{001}^2. 
+\end{aligned}
+\end{equation}
+And in 4D, we have
+\begin{equation}
+\begin{aligned}
+4 A_{\rm 4D}^2 = &
++3 F_{0002} F_{0020} 
++3 F_{0002} F_{0200} 
++3 F_{0002} F_{2000} 
+\\&
++3 F_{0200} F_{2000} 
++3 F_{0200} F_{0020} 
++3 F_{0020} F_{2000} 
+\\&
+-3 F_{0011}^2
+-3 F_{0101}^2
+-3 F_{0110}^2
+-3 F_{1001}^2 
+-3 F_{1010}^2 
+-3 F_{1100}^2
+\\&
++2 F_{0010} F_{0011} F_{0001} 
++2 F_{0101} F_{0100} F_{0001} 
++2 F_{1001} F_{1000} F_{0001}
+\\&
++2 F_{0010} F_{0100} F_{0110} 
++2 F_{0010} F_{1010} F_{1000}
++2 F_{1100} F_{0100} F_{1000} 
+\\&
+- F_{0020} F_{0001}^2
+- F_{0200} F_{0001}^2
+- F_{2000} F_{0001}^2
+- F_{0002} F_{0010}^2
+- F_{0200} F_{0010}^2
+- F_{2000} F_{0010}^2
+\\&
+- F_{0002} F_{0100}^2 
+- F_{0020} F_{0100}^2 
+- F_{2000} F_{0100}^2
+- F_{0002} F_{1000}^2 
+- F_{0020} F_{1000}^2 
+- F_{0200} F_{1000}^2
+\end{aligned}
+\end{equation}
+
+\newpage
+{\small\singlespacing\bibliography{main}}
 
 \end{document}
