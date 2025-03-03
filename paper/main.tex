@@ -11,7 +11,7 @@
 \documentclass[12pt]{article}
 \usepackage[letterpaper]{geometry}
 \usepackage[hidelinks]{hyperref}
-\usepackage{amsmath}
+\usepackage{amsmath,amsfonts}
 
 % typesetting issues
 \newcommand{\documentname}{\textsl{Note}}
@@ -73,18 +73,20 @@ Below, we present a new formula for the area of a triangle, which we believe may
 While the area of a triangle does not depend on how its sides or corners are labeled,
 only the last of these formulae---Heron's formula \eqref{eq:Heron}---is explicitly permutation-invariant.
 
-The theory of permutation-invariant functions says that any per\-mu\-tation-invariant function (under conditions??) of $N$ objects $r_i$ (with $1\leq i\leq N$) can be approximated (to arbitrary precision??) with an expression of the form \citep{zaheer+17-Deep-Sets}
+Theorem 2 of \citet{zaheer+17-Deep-Sets} states that a function $f(X)$ operating on a set $X$ is invariant to the permutation of instances in $X$ if and only if it can be decomposed in the form
 \begin{equation}
-    \rho(\sum_{i=1}^N\phi(r_i)) \label{eq:DeepSets}
+    \textstyle f(X) = \rho \left( \sum_{x \in X} \phi(x) \right), \label{eq:DeepSets}
 \end{equation}
-where $\rho$ and $\phi$ are (possibly very nonlinear) functions,
-and the $r_i$ are the data points that can be permuted without changing the result.
-This result---which we associate with the subject \emph{Deep Sets} (CITE)---is not at all obvious:
+for some functions $\rho$ and $\phi$.
+This is proven for the cases where the elements of $X$ are from a countable universe and the size of $X$ is unlimited, and for the case where the elements of $X$ are from an uncountable universe but the size of $X$ is finite.
+This result---often known by the name of the machine learning architecture derived from it, \emph{Deep Sets} \citep{zaheer+17-Deep-Sets}---is not at all obvious:
 For example, even though Heron's formula \eqref{eq:Heron} is permutation-invariant, it is not actually in the form \eqref{eq:DeepSets}, if the triangle is seen as being defined by its corners (or even its sides).
+
+
 
 A few comments about this Deep Sets form \eqref{eq:DeepSets} we'd make are the following:
 \begin{itemize}
-    \item The function $\phi$ is universal to all the points $r_i$; its form won't depend on label $i$ or on any properties of each point, nor any properties of the overall collection of points (the \emph{point cloud}, as it were).
+    \item The function $\phi$ is universal to all the elements $x$; its form won't depend on label $i$ or on any properties of each point, nor any properties of the overall collection of points (the \emph{point cloud}, as it were).
     \item The point properties $r_i$ and the output of the function $\phi$ might both be very large.
     That is, each point $r_i$ might be a vector or even an ordered list of vectors and tensors and images and so on, and the output of the function $\phi$ might also be very large and complicated.
     The output of the function $\phi$ is some kind of informative, latent encoding of the point $r_i$.
@@ -118,8 +120,7 @@ We restricted to monomials that contain four powers of positional coordinates be
 Perhaps non-obviously, for a monomial to be in Deep Sets form, it must consist only of products of sums over the three points.
 It cannot contain any differences, or any sums over pairs of points (or edges).
 Thus $(\sum_{i=1}^2 x_i^2)\,(\sum_{i=1}^3 x_i\,y_i)$ is a permitted monomial, but $(\sum_{i=1}^3\sum_{j=1}^3 x_i^2\,y_j^2)$ is not a permitted monomial.
-These monomials are both correct from a units perspective, but the second is not in Deep Sets form, because it contains products of position coordinates from different points.
-
+These monomials are both correct from a units perspective, but the second is not in Deep Sets form, because it contains products of position coordinates from different points. 
 In order to generate all the possible invariant monomials, we first note that they are made of products of factors of the form $F_{m,n} = \sum_i x_i^m y_i^n$.
 The invariant monomials of degree $d$ are then all products $\prod_i F_{m_i, n_i}$ such that $\sum_i m_i + n_i = d$.
 
@@ -133,56 +134,149 @@ Some of the monomials are invariant to reflections, but no individual monomial i
 It is left as an exercise to the reader to show that our solution \eqref{eq:result} below is invariant to translations, rotations, and reflections.
 
 The symbolic regression produces a linear combination of monomials with real-valued coefficients.
-Trial-and-error delivered the integer 368, which makes all of the coefficients obviously rational.
-We have no theory of this number; we leave it as a second exercise to the reader to explain this large, non-prime integer.
+We systematically search for an integer which, when multiplied by all of the coefficients, brings all coefficients very near integers.
+We then round the coefficients to these nearest integers and check that we reproduce $({\rm denom}) A^2$ to better precision than the least-square result.
+% Trial-and-error delivered the integer 368, which makes all of the coefficients obviously rational.
+% We have no theory of this number; we leave it as a second exercise to the reader to explain this large, non-prime integer.
 
-Finally, the expression found is output by the code in LaTeX form, to create the typesetting commands for \eqref{eq:result} and also output by the code in Mathematica form, to permit computational algebra operations.
-A Mathematica \texttt{simplify} operation [HOGG NO NOT REALLY] is used to show that the Deep Sets expression \eqref{eq:result} is identical to the classic formulae for a triangle's squared area $A^2$.
+% Finally, the expression found is output by the code in LaTeX form, to create the typesetting commands for \eqref{eq:result} and also output by the code in Mathematica form, to permit computational algebra operations.
+% A Mathematica \texttt{simplify} operation [HOGG NO NOT REALLY] is used to show that the Deep Sets expression \eqref{eq:result} is identical to the classic formulae for a triangle's squared area $A^2$.
 
 \section{Result and discussion}\label{sec:result}
+
 Our result---and only contribution---is that the area $A$ of a triangle is given by
+% \begin{align}
+% A^2 = &
+% -\frac{ 54}{368}\,(\sum_{i=1}^3 x_i^2\,y_i^2) 
+% -\frac{258}{368}\,(\sum_{i=1}^3 x_i\,y_i)^2 \nonumber \\ &
+% +\frac{285}{368}\,(\sum_{i=1}^3 x_i^2)\,(\sum_{i=1}^3 y_i^2) 
+% +\frac{ 36}{368}\,(\sum_{i=1}^3 y_i)\,(\sum_{i=1}^3 x_i^2\,y_i) \nonumber \\ &
+% +\frac{ 36}{368}\,(\sum_{i=1}^3 x_i)\,(\sum_{i=1}^3 x_i\,y_i^2) 
+% -\frac{101}{368}\,(\sum_{i=1}^3 y_i)^2\,(\sum_{i=1}^3 x_i^2) \nonumber \\ &
+% +\frac{148}{368}\,(\sum_{i=1}^3 x_i)\,(\sum_{i=1}^3 y_i)\,(\sum_{i=1}^3 x_i\,y_i) 
+% -\frac{101}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i^2) \nonumber \\ &
+% +\frac{  9}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i)^2 ~, \label{eq:result}
+% \end{align}
 \begin{align}
-A^2 = &
--\frac{ 54}{368}\,(\sum_{i=1}^3 x_i^2\,y_i^2) 
--\frac{258}{368}\,(\sum_{i=1}^3 x_i\,y_i)^2 \nonumber \\ &
-+\frac{285}{368}\,(\sum_{i=1}^3 x_i^2)\,(\sum_{i=1}^3 y_i^2) 
-+\frac{ 36}{368}\,(\sum_{i=1}^3 y_i)\,(\sum_{i=1}^3 x_i^2\,y_i) \nonumber \\ &
-+\frac{ 36}{368}\,(\sum_{i=1}^3 x_i)\,(\sum_{i=1}^3 x_i\,y_i^2) 
--\frac{101}{368}\,(\sum_{i=1}^3 y_i)^2\,(\sum_{i=1}^3 x_i^2) \nonumber \\ &
-+\frac{148}{368}\,(\sum_{i=1}^3 x_i)\,(\sum_{i=1}^3 y_i)\,(\sum_{i=1}^3 x_i\,y_i) 
--\frac{101}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i^2) \nonumber \\ &
-+\frac{  9}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i)^2 ~, \label{eq:result}
+    A^2 = & \
+    \frac{2}{4} \, (\sum_{i=1}^{3} x_i ) \, (\sum_{i=1}^{3} y_i ) \, (\sum_{i=1}^{3} x_i \, y_i )
+    \nonumber \\ &
+    + \frac{3}{4} \, (\sum_{i=1}^{3} x_i^2 ) \, (\sum_{i=1}^{3} y_i^2 )
+    - \frac{3}{4} \, (\sum_{i=1}^{3} x_i \, y_i )^2.
+    \nonumber \\ &
+    - \, \frac{1}{4} \, (\sum_{i=1}^{3} x_i )^2 \, (\sum_{i=1}^{3} y_i^2 )
+    - \, \frac{1}{4} \, (\sum_{i=1}^{3} y_i )^2 \, (\sum_{i=1}^{3} x_i^2 )
+     ~, \label{eq:result}
 \end{align}
 where the two-dimensional position of each of the three corners $i$ is $r_i \equiv (x_i, y_i)$.
 This answer is in Deep Sets form:
-Every expression in parentheses in \eqref{eq:result} is a pure sum over all three points.
+Every expression in parentheses in \eqref{eq:result} is a pure sum over all three points and can be written in the form of $F_{mn}$ for some choice of $m$ and $n$.
 There are no sums over differences, and there is no ordering of the points.
 Being very explicit, this can be written in the Deep Sets form \eqref{eq:DeepSets} if we define $\rho$ and $\phi$ as follows:
-
-HOGG: Explicit vector $\phi()$ and explicit expression $\rho()$.
-
-HAINJE: Here it is:
 \begin{gather}
-    \phi(r_i) = (x_i, y_i, x_i\,y_i, x_i^2, y_i^2, x_i\,y_i^2, x_i^2\,y_i, x_i^2\,y_i^2) \\
-    \begin{aligned}
-    \rho(\textstyle\sum_{i=1}^{3}\phi(r_i)\equiv \vec{u}) = &
-    - \tfrac{54}{368} u_8
-    - \tfrac{258}{368} u_3^2
-    + \tfrac{285}{368} u_4\,u_5
-    + \tfrac{36}{368} u_2\,u_7
-    + \tfrac{36}{368} u_1\,u_6 \\ &
-    - \tfrac{101}{368} u_2^2\,u_4
-    + \tfrac{148}{368} u_1\,u_2\,u_3
-    - \tfrac{101}{368} u_1^2\,u_5
-    + \tfrac{9}{368} u_1^2\,u_2^2.
-    \end{aligned}
+    \phi(\vec{r}_i) = (
+        x_i, \,
+        y_i, \,
+        x_i^2, \,
+        x_i \, y_i, \,
+        y_i^2
+    ), \\
+    {\textstyle \sum_i} \phi(\vec{r}_i) = (
+        F_{10}, \,
+        F_{01}, \,
+        F_{20}, \,
+        F_{11}, \,
+        F_{02}
+    ), \\
+    \rho \left( {\textstyle \sum_i} \phi(\vec{r}_i) \right)
+    = \tfrac{2}{4} \, F_{10} \, F_{01} \, F_{11}
+    + \tfrac{3}{4} \, F_{20} \, F_{02}
+    - \tfrac{3}{4} \, F_{11}^2
+    - \tfrac{1}{4} \, F_{10}^2 \, F_{02}
+    - \tfrac{1}{4} \, F_{01}^2 \, F_{20}.
 \end{gather}
 
-Note the symmetries....! See the $36/368$ terms, or the $-101/368$ terms
+
+% HOGG: Explicit vector $\phi()$ and explicit expression $\rho()$.
+
+% HAINJE: Here it is:
+% \begin{gather}
+%     \phi(r_i) = (x_i, y_i, x_i\,y_i, x_i^2, y_i^2, x_i\,y_i^2, x_i^2\,y_i, x_i^2\,y_i^2) \\
+%     \begin{aligned}
+%     \rho(\textstyle\sum_{i=1}^{3}\phi(r_i)\equiv \vec{u}) = &
+%     - \tfrac{54}{368} u_8
+%     - \tfrac{258}{368} u_3^2
+%     + \tfrac{285}{368} u_4\,u_5
+%     + \tfrac{36}{368} u_2\,u_7
+%     + \tfrac{36}{368} u_1\,u_6 \\ &
+%     - \tfrac{101}{368} u_2^2\,u_4
+%     + \tfrac{148}{368} u_1\,u_2\,u_3
+%     - \tfrac{101}{368} u_1^2\,u_5
+%     + \tfrac{9}{368} u_1^2\,u_2^2.
+%     \end{aligned}
+% \end{gather}
+
+% Note the symmetries....! See the $36/368$ terms, or the $-101/368$ terms
 
 But note that it isn't obviously invariant to arbitrary rotations.
 And it isn't obviously invariant to translations.
 Formulae \eqref{eq:cross}, \eqref{eq:sine}, and \eqref{eq:Heron} are obviously rotation-invariant and translation-invariant.
+
+If the triangle is embedded in a higher-dimensional space with the positions of the three vertices given by $\vec{r}_i \in \mathbb{R}^{d}$ for $d \geq 2$, we note that the area of the triangle can be determined by summing in quadrature the areas of the triangles made by all projections to two axes. For example, in three dimensions, the area of the triangle is given by
+\begin{equation}
+    A_{\rm 3D}^2 =
+    A_{12}^2 + A_{13}^2 + A_{23}^2,
+\end{equation}
+and, in four dimensions, it is given by
+\begin{equation}
+    A_{\rm 4D}^2 =
+    A_{12}^2 + A_{13}^2 + A_{14}^2
+    + A_{23}^2 + A_{24}^2
+    + A_{34}^2,
+\end{equation}
+where we have introduced $A_{jk}$ the area of the triangle formed by just the $j^{\rm th}$ and $k^{\rm th}$ components of the position vectors.
+
+Our method also extends to the hypervolume of a $d$-simplex. Our findings are simplified by the realization that our result is a polynomial with \emph{integer} coefficients for the squared area of a parallelogram. Expecting this to generalize, we note that the hypervolume of the $d$-simplex ($S$) formed by vectors $\{ \vec{v}_{0}, \vec{v}_{1}, \cdots, \vec{v}_{d} \}$ is related to the hypervolume of the $d$-parallelotope ($P$) spanned by the vectors $\{ \vec{v}_{1} - \vec{v}_0, \cdots, \vec{v}_d - \vec{v}_0 \}$ by
+\begin{equation}
+    {\rm volume}(P)
+    = (d!) \, {\rm volume}(S)
+\end{equation}
+The squared hypervolume of a $d$-parallelotope is given by the determinant of the Gram matrix of its constituent vectors, e.g.,
+\begin{equation}
+    {\rm volume}(P)^2
+    = \det G, \quad
+    G_{ij} \equiv (\vec{v}_i - \vec{v}_0) \cdot (\vec{v}_j - \vec{v}_0).
+\end{equation}
+In the two-dimensional case, our formula \eqref{eq:result} gives an integer polynomial for the area of the parallelogram, equal to $4 A^2$ for $A$ the area of the triangle. To find the hypervolumes of higher-dimensional simplexes, we modify our symbolic regression to seek integer polynomials for the squared volume of the related parallelotope.
+
+In three dimensions, four vectors form the vertices of a simplex. We find an analogous Deep Sets-form formula for the volume of the simplex to be
+\begin{align}
+(6 V)^2 = &
++8 \, F_{1100} \, F_{1010} \, F_{0110}
++4 \, F_{200} \, F_{020} \, F_{0020}
+\nonumber \\ &
+-4 \, F_{200} \, F_{011}^2
+-4 \, F_{020} \, F_{101}^2
+-4 \, F_{002} \, F_{110}^2
+\nonumber \\ &
++2 \, F_{200} \, F_{011} \, F_{010} \, F_{001}
++2 \, F_{020} \, F_{101} \, F_{100} \, F_{001}
++2 \, F_{002} \, F_{110} \, F_{100} \, F_{010}
+\nonumber \\ &
+-2 \, F_{110} \, F_{101} \, F_{010} \, F_{001}
+-2 \, F_{110} \, F_{011} \, F_{100} \, F_{001}
+-2 \, F_{101} \, F_{011} \, F_{100} \, F_{010}
+\nonumber \\ &
++1 \, F_{110}^2 \, F_{001}^2
++1 \, F_{101}^2 \, F_{010}^2
++1 \, F_{011}^2 \, F_{100}^2
+\nonumber \\ &
+-1 \, F_{200} \, F_{020} \, F_{001}^2
+-1 \, F_{200} \, F_{002} \, F_{010}^2
+-1 \, F_{020} \, F_{002} \, F_{100}^2
+\label{eq:simplex}
+\end{align}
+
 
 HOGG SAY: CH: EXPAND THIS INTO AN OPEN QUESTIONS LIST:
 \begin{itemize}
@@ -196,40 +290,6 @@ That's the area of what?
 \end{itemize}
 
 \newpage
-By inspection, we have also found a simpler form of the same formula, which is given by
-\begin{align}
-    4 \, A^2 = & \
-        2 \, (\sum_{i=1}^{3} x_i ) \, (\sum_{i=1}^{3} y_i ) \, (\sum_{i=1}^{3} x_i \, y_i )
-        \nonumber \\ &
-        + 3 \, (\sum_{i=1}^{3} x_i^2 ) \, (\sum_{i=1}^{3} y_i^2 )
-        - 3 \, (\sum_{i=1}^{3} x_i \, y_i )^2.
-        \nonumber \\ &
-        - \, (\sum_{i=1}^{3} x_i )^2 \, (\sum_{i=1}^{3} y_i^2 )
-        - \, (\sum_{i=1}^{3} y_i )^2 \, (\sum_{i=1}^{3} x_i^2 )
-\end{align}
-In explicit Deep Sets notation, this can be written
-\begin{align}
-    \phi(r_i) &= \begin{bmatrix}
-        x_i & y_i & x_i\,y_i & x_i^2 & y_i^2 \end{bmatrix}^\top
-        \equiv \vec{u}^\top, \\
-    \rho(\sum_{i=1}^{3} \phi(r_i))
-    &= \tfrac{2}{4} u_1\,u_2\,u_3
-    + \tfrac{3}{4} u_4\,u_5
-    - \tfrac{1}{4} u_1^2\,u_5
-    - \tfrac{1}{4} u_2^2\,u_4
-    - \tfrac{3}{4} u_3^2.
-\end{align}
-
-The two are related by
-\begin{equation}
-    4\,u_1\,u_6 + 4\,u_2\,u_7 - 6\,u_8 = 
-    -u_1^2 u_2^2 + 4 u_1 u_2 u_3 - 2 u_3^2 + u_2^2 u_4 + u_1^2 u_5 - u_4 u_5 ;
-\end{equation}
-namely, plugging this into \eqref{eq:result} causes it to reduce immediately into this simpler form.
-
-This form was not found by the symbolic regression of \secref{sec:method} because the regression makes use of \verb+lstsq+ with more parameters than data points. In this regime, the solution that minimizes the $\mathcal{L}_2$ norm of the weights (the coefficients of the invariant monomials) is returned. The $\mathcal{L}_2$ norm of the weights of our initial formula is $2127 / 1472 \approx 1.445$, whereas the $\mathcal{L}_2$ norm of the weights of this simpler formula is $3/2 = 1.5$.
-
-HAINJE: Would lasso regression return my formula? Is there a yet simpler formula?
 
 \newpage
 
@@ -247,71 +307,141 @@ In 3D, $d=3$ and this gives
 \end{equation}
 Then, the area formula found above can be extended to more dimensions with the following formulae.
 
-For reference, the 2D formula was
-\begin{equation}
-4 A_{\rm 2D}^2 = +3 F_{02} F_{20} -3 F_{11}^2 - F_{20} F_{01}^2 +2 F_{11} F_{10} F_{01} - F_{02} F_{10}^2.
-\end{equation}
-In 3D, we have
 \begin{equation}
 \begin{aligned}
-4 A_{\rm 3D}^2 = &
-+3 F_{020} F_{002} 
-+3 F_{200} F_{002} 
-+3 F_{020} F_{200} \\&
--3 F_{011}^2 
--3 F_{101}^2 
--3 F_{110}^2 \\&
-+2 F_{011} F_{001} F_{010} 
-+2 F_{100} F_{001} F_{101}
-+2 F_{100} F_{010} F_{110} \\&
--F_{002} F_{010}^2 
--F_{002} F_{100}^2 
--F_{020} F_{001}^2 
--F_{020} F_{100}^2
--F_{200} F_{010}^2
--F_{200} F_{001}^2. 
+V^2 = &
++8 F_{110} F_{101} F_{011}
++4 F_{200} F_{020} F_{002}
+\\ &
+-4 F_{200} F_{011}^2
+-4 F_{020} F_{101}^2
+-4 F_{002} F_{110}^2
+\\ &
++2 F_{200} F_{011} F_{010} F_{001}
++2 F_{020} F_{101} F_{100} F_{001}
++2 F_{002} F_{110} F_{100} F_{010}
+\\ &
+-2 F_{110} F_{101} F_{010} F_{001}
+-2 F_{110} F_{011} F_{100} F_{001}
+-2 F_{101} F_{011} F_{100} F_{010}
+\\ &
++1 F_{110}^2 F_{001}^2
++1 F_{101}^2 F_{010}^2
++1 F_{011}^2 F_{100}^2
+\\ &
+-1 F_{200} F_{020} F_{001}^2
+-1 F_{200} F_{002} F_{010}^2
+-1 F_{020} F_{002} F_{100}^2
 \end{aligned}
 \end{equation}
-And in 4D, we have
+
+
 \begin{equation}
 \begin{aligned}
-4 A_{\rm 4D}^2 = &
-+3 F_{0002} F_{0020} 
-+3 F_{0002} F_{0200} 
-+3 F_{0002} F_{2000} 
-\\&
-+3 F_{0200} F_{2000} 
-+3 F_{0200} F_{0020} 
-+3 F_{0020} F_{2000} 
-\\&
--3 F_{0011}^2
--3 F_{0101}^2
--3 F_{0110}^2
--3 F_{1001}^2 
--3 F_{1010}^2 
--3 F_{1100}^2
-\\&
-+2 F_{0010} F_{0011} F_{0001} 
-+2 F_{0101} F_{0100} F_{0001} 
-+2 F_{1001} F_{1000} F_{0001}
-\\&
-+2 F_{0010} F_{0100} F_{0110} 
-+2 F_{0010} F_{1010} F_{1000}
-+2 F_{1100} F_{0100} F_{1000} 
-\\&
-- F_{0020} F_{0001}^2
-- F_{0200} F_{0001}^2
-- F_{2000} F_{0001}^2
-- F_{0002} F_{0010}^2
-- F_{0200} F_{0010}^2
-- F_{2000} F_{0010}^2
-\\&
-- F_{0002} F_{0100}^2 
-- F_{0020} F_{0100}^2 
-- F_{2000} F_{0100}^2
-- F_{0002} F_{1000}^2 
-- F_{0020} F_{1000}^2 
-- F_{0200} F_{1000}^2
+V^2 = &
++8 F_{1100} F_{1010} F_{0110}
++4 F_{2000} F_{0200} F_{0020}
+\\ &
+-4 F_{2000} F_{0110}^2
+-4 F_{0200} F_{1010}^2
+-4 F_{0020} F_{1100}^2
+\\ &
++2 F_{2000} F_{0110} F_{0100} F_{0010}
++2 F_{0200} F_{1010} F_{1000} F_{0010}
++2 F_{0020} F_{1100} F_{1000} F_{0100}
+\\ &
+-2 F_{1100} F_{1010} F_{0100} F_{0010}
+-2 F_{1100} F_{0110} F_{1000} F_{0010}
+-2 F_{1010} F_{0110} F_{1000} F_{0100}
+\\ &
++1 F_{1100}^2 F_{0010}^2
++1 F_{1010}^2 F_{0100}^2
++1 F_{0110}^2 F_{1000}^2
+\\ &
+-1 F_{2000} F_{0200} F_{0010}^2
+-1 F_{2000} F_{0020} F_{0100}^2
+-1 F_{0200} F_{0020} F_{1000}^2
+\\ &
+\\ &
++8 F_{1100} F_{1001} F_{0101}
+\\ &
++4 F_{2000} F_{0200} F_{0002}
+-4 F_{2000} F_{0101}^2
+\\ &
+-4 F_{1100}^2 F_{0002}
+-4 F_{0200} F_{1001}^2
+\\ &
++2 F_{2000} F_{0001} F_{0100} F_{0101}
+-2 F_{1100} F_{1001} F_{0001} F_{0100}
+\\ &
++2 F_{1100} F_{1000} F_{0100} F_{0002}
+-2 F_{1001} F_{1000} F_{0100} F_{0101}
+\\ &
+-2 F_{1000} F_{1100} F_{0001} F_{0101}
++2 F_{1000} F_{0200} F_{1001} F_{0001}
+\\ &
+-1 F_{2000} F_{0200} F_{0001}^2
+-1 F_{2000} F_{0100}^2 F_{0002}
+\\ &
++1 F_{1100}^2 F_{0001}^2
++1 F_{1001}^2 F_{0100}^2
+\\ &
++1 F_{1000}^2 F_{0101}^2
+-1 F_{0200} F_{1000}^2 F_{0002}
+\\ &
+\\ &
++8 F_{1010} F_{1001} F_{0011}
+\\ &
++4 F_{2000} F_{0020} F_{0002}
+-4 F_{2000} F_{0011}^2
+\\ &
+-4 F_{1010}^2 F_{0002}
+-4 F_{1001}^2 F_{0020}
+\\ &
++2 F_{2000} F_{0010} F_{0001} F_{0011}
++2 F_{1010} F_{0010} F_{1000} F_{0002}
+\\ &
+-2 F_{1000} F_{1010} F_{0001} F_{0011}
++2 F_{1000} F_{1001} F_{0001} F_{0020}
+\\ &
+-2 F_{0010} F_{1000} F_{1001} F_{0011}
+-2 F_{0010} F_{0001} F_{1001} F_{1010}
+\\ &
+-1 F_{2000} F_{0010}^2 F_{0002}
+-1 F_{2000} F_{0001}^2 F_{0020}
+\\ &
++1 F_{1000}^2 F_{0011}^2
+-1 F_{0020} F_{1000}^2 F_{0002}
+\\ &
++1 F_{0010}^2 F_{1001}^2
++1 F_{0001}^2 F_{1010}^2
+\\ &
+\\ &
++8 F_{0101} F_{0110} F_{0011}
+\\ &
++4 F_{0200} F_{0020} F_{0002}
+-4 F_{0200} F_{0011}^2
+\\ &
+-4 F_{0110}^2 F_{0002}
+-4 F_{0020} F_{0101}^2
+\\ &
++2 F_{0200} F_{0010} F_{0001} F_{0011}
+-2 F_{0110} F_{0010} F_{0001} F_{0101}
+\\ &
+-2 F_{0110} F_{0001} F_{0100} F_{0011}
++2 F_{0101} F_{0001} F_{0100} F_{0020}
+\\ &
++2 F_{0010} F_{0110} F_{0100} F_{0002}
+-2 F_{0010} F_{0101} F_{0100} F_{0011}
+\\ &
+-1 F_{0200} F_{0010}^2 F_{0002}
+-1 F_{0200} F_{0001}^2 F_{0020}
+\\ &
++1 F_{0100}^2 F_{0011}^2
+-1 F_{0020} F_{0100}^2 F_{0002}
+\\ &
++1 F_{0010}^2 F_{0101}^2
++1 F_{0001}^2 F_{0110}^2
 \end{aligned}
 \end{equation}
 
