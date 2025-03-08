@@ -1099,16 +1099,21 @@ FUNCTION {format.aaspublisher}
 STRINGS {oldname}
 
 FUNCTION {name.or.dash}
-{ 's :=
-   oldname empty$
-     { s 'oldname := s }
-     { s oldname =
-         { "---" }
-         { s 'oldname := s }
-       if$
-     }
-   if$
+{ 's := 
+  s 'oldname :=  % Update oldname with new input
+  oldname        % Return oldname (which now equals the input)
 }
+
+% { 's := 
+%    oldname empty$
+%      { s 'oldname := s }
+%      { s oldname =
+%          { "---" }
+%          { s 'oldname := s }
+%        if$
+%      }
+%    if$
+% }
 
 %%%%%%%%  Functions added from astrobib
 
@@ -1177,6 +1182,7 @@ FUNCTION {article}
   name.or.dash
   format.date "year" output.check
   date.block
+  format.title "title" output.check
   crossref missing$
     { journal
       "journal" output.check
@@ -1310,6 +1316,7 @@ FUNCTION {inproceedings}
   author format.key output            % added
   format.date "year" output.check
   date.block
+  format.title "title" output.check
   bbl.in " " * booktitle format.full.book.spec * output
 %  crossref missing$
 %    { format.in.ed.booktitle "booktitle" output.check

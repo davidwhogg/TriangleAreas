@@ -2,10 +2,7 @@
 
 % to-do items
 % -----------
-% - CH: Include the d=3, d=4 solutions and comments on d>4.
-% - CH: Rewrite to remove the Hogg solution.
 % - CH: Show that there is NOT an exact solution at polynomial degree 2 order.
-% - CH: Needs a clear tikz figure showing the corners and notation. Like an infographic.
 % - HOGG: Discuss alternatives like Novara's; And alternatives like Kaze's. Positional encodings! CH: Describe the connection to positional encodings (in, eg, transformers). Oh and cosmology and power spectrum and bispectrum.
 
 \documentclass[12pt]{article}
@@ -13,6 +10,10 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{amsmath,amsfonts,tikz}
 \usetikzlibrary{angles,calc,quotes}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
 
 % typesetting issues
 \newcommand{\documentname}{\textsl{Note}}
@@ -26,44 +27,101 @@
 \pagestyle{myheadings}
 \markboth{foo}{\sffamily Hainje, Hogg, \& Villar / A new formula for the area of a triangle}
 
-\usepackage{natbib}
-\usepackage{aas_macros}
+\renewcommand{\paragraph}[1]{\par\addvspace{1.5ex}\noindent\textbf{#1}~---}
+
+\usepackage{natbib,setspace,aas_macros}
 \bibliographystyle{aasjournal}
 \setcitestyle{aysep={}}
-\usepackage{setspace}
 \setlength{\bibsep}{0pt plus 0.3ex}
 
 \usepackage{xcolor}
-\newcommand{\CH}[1]{{\color{blue} (CH: #1)}}
+\newcommand{\CH}[1]{{\color{blue} (CH says: #1)}}
+\newcommand{\Hogg}[1]{{\color{violet} (Hogg says: #1)}}
+\newcommand{\pseudosection}[1]
+{\noindent{\color{green!66!black} (\textit{#1})}\par}
+
+% define the affiliation symbols
+\newcommand{\aOne}{\textsuperscript{\textasteriskcentered}}
+\newcommand{\aTwo}{\textsuperscript{\textdagger}}
+\newcommand{\aThree}{\textsuperscript{\textdaggerdbl}}
+\newcommand{\aFour}{\textsuperscript{\textsection}}
+\newcommand{\aFive}{\textsuperscript{\textbardbl}}
+\newcommand{\aSix}{\textsuperscript{\textparagraph}}
+
 
 \begin{document}\thispagestyle{empty}
 
 \section*{\raggedright
 A new formula for the area of a triangle:
-Useless, but explicitly in Deep Sets form\footnote{%
-The authors thank Alexander Novara (NYU), Ben Wandelt (Sorbonne), and Kaze Wong (JHU) for valuable discussions.}}
+Useless, but explicitly in Deep Sets form}%\footnote{%
+%The authors thank Alexander Novara (NYU), Ben Wandelt (JHU), Kaze Wong (JHU), and the Blanton--Hogg group meeting at NYU for valuable discussions.}}
 
-\noindent \textbf{Connor Hainje},\footnote{Email at \href{mailto:connor.hainje@nyu.edu}{connor.hainje@nyu.edu}. CH is at the Center for Cosmology and Particle Physics, Department of Physics, New York University.}
-\noindent \textbf{David W. Hogg},\footnote{DWH is at the Center for Cosmology and Particle Physics, Department of Physics, New York University; the Max-Planck-Insitut f\"ur Astronomie; and the Center for Computational Astrophysics, Flatiron Institute. The Flatiron Institute is a division of the Simons Foundation.} and
-\textbf{Soledad Villar}\footnote{SV is at the Department of Applied Mathematics and Statistics, Johns Hopkins University; and the Mathematical Institute for Data Science, Johns Hopkins University.}
+\noindent 
+\textbf{Connor Hainje}\aOne\aSix,
+\textbf{David W. Hogg}\aOne\aTwo\aThree, and
+\textbf{Soledad Villar}\aFour\aFive
 
-\paragraph{Abstract:}
+\vspace{0.5em}
+{\footnotesize\par\noindent \aOne\textsl{
+Center for Cosmology and Particle Physics, Department of Physics, New York University}}
+{\footnotesize\par\noindent \aTwo\textsl{
+Max-Planck-Insitut f\"ur Astronomie}}
+{\footnotesize\par\noindent \aThree\textsl{
+Center for Computational Astrophysics, Flatiron Institute}}
+{\footnotesize\par\noindent \aFour\textsl{
+Department of Applied Mathematics and Statistics, Johns Hopkins University}}
+{\footnotesize\par\noindent \aFive\textsl{
+Mathematical Institute for Data Science, Johns Hopkins University}}
+{\footnotesize\par\noindent \aSix\textsl{
+Email:} \texttt{\href{mailto:connor.hainje@nyu.edu}{connor.hainje@nyu.edu}}}
+{\footnotesize\par}  % needed to prevent some weird spacing issue
+
+% \noindent \textbf{Connor Hainje},\footnote{Email at \href{mailto:connor.hainje@nyu.edu}{connor.hainje@nyu.edu}. CH is at the Center for Cosmology and Particle Physics, Department of Physics, New York University.}
+% \noindent \textbf{David W. Hogg},\footnote{DWH is at the Center for Cosmology and Particle Physics, Department of Physics, New York University; the Max-Planck-Insitut f\"ur Astronomie; and the Center for Computational Astrophysics, Flatiron Institute. The Flatiron Institute is a division of the Simons Foundation.} and
+% \textbf{Soledad Villar}\footnote{SV is at the Department of Applied Mathematics and Statistics, Johns Hopkins University; and the Mathematical Institute for Data Science, Johns Hopkins University.}
+
+\bigskip
+\paragraph{Abstract}
 It is known that any permutation-invariant function of data points $r_i$
 can be written in the form $\rho(\sum_i\phi(r_i))$,
-where $\rho$ and $\phi$ are (probably nonlinear) functions, and the function $\phi$ might output a high-dimensional latent encoding of each point $r_i$.
-This form---known in the machine-learning literature as Deep Sets---is also a map--reduce, because the $\phi$ executions can be performed asynchronously and the sums can be performed hierarchically or in any order.
+where $\rho$ and $\phi$ are functions.
+%, and the function $\phi$ might output a high-dimensional latent encoding of each point $r_i$.
+This form---known in the machine-learning literature as Deep Sets---is also a map--reduce algorithm, because the $\phi$ executions can be performed asynchronously and the sums can be performed hierarchically or in any order.
 The area of a triangle is a permutation-invariant function of the locations $r_i$ of the three corners $1\leq i\leq 3$.
-We find, possibly for the first time, the formula for the area of a triangle, given the positions of the three corners, that is explicitly in Deep Sets form.
-This project was motivated by questions about the fundamental computational complexity of n-point statistics in cosmology; that said, no insights of any kind were gained from these results.
+We find, possibly for the first time, the formula for the area of a triangle, given the Cartesian coordinates of the three corners, that is explicitly in Deep Sets form.
+This project was motivated by questions about the fundamental computational complexity of $n$-point statistics in cosmology; that said, no insights of any kind were gained from these results.
 
-\section{Introduction}
+\bigskip
+{\centering $\ast~\ast~\ast$ \par}
+\bigskip
 
-\begin{figure}
+\pseudosection{Areas}
+\noindent
+The area $\Delta$ of a triangle can be written in many ways.
+Here are a few:
+\begin{align}
+\Delta 
+&= \frac{1}{2} \, \text{(base)} \, \text{(height)} \label{eq:school} \\
+&= \frac{1}{2}\,a\,b\,\sin(C) \label{eq:sine} \\
+&= \frac{1}{2}\, \left| \vec{a} \times \vec{b} \right|
+    = \frac{1}{2}\, \left| \vec{a} \wedge \vec{b} \right| \label{eq:cross} \\
+&= \sqrt{s\,(s-a)\,(s-b)\,(s-c)} \label{eq:Heron} ~,
+\end{align}
+where the quantities used are defined in Figure~\ref{fig:triangle}, apart from the side lengths of the triangle
+$a = | \vec{a} |$, $b = | \vec{b} |$, $c = | \vec{c} |$
+and the semi-perimeter $s = (a + b + c)/2$.
+\eqref{eq:school} is the usual introduction to the subject.
+% \eqref{eq:sine} is the side-angle-side formula.
+\eqref{eq:cross} generalizes to triangles in higher dimensional spaces, using the fact that the cross/wedge product has magnitude equal to the area of the parallelogram spanned by $\vec{a}$ and $\vec{b}$, which is twice the area of the triangle with $\vec{a}$ and $\vec{b}$ as sides.
+Lastly, \eqref{eq:Heron} is Heron's formula, which elegantly computes the area from the side lengths alone.
+For a collection of 110 unique triangle area formulae, see \citet{baker1885a,baker1885b}.
+
+\begin{figure}[t!]
     \centering
     \begin{tikzpicture}
     \coordinate (O) at (0,0);
-    \coordinate (A) at (3,4);
-    \coordinate (B) at (5,1);
+    \coordinate (A) at (3.5,4);
+    \coordinate (B) at (6,1);
 
     \pgfmathsetmacro{\a}{sqrt(3*3 + 4*4)}
     \pgfmathsetmacro{\b}{sqrt(5*5 + 1*1)}
@@ -103,7 +161,7 @@ This project was motivated by questions about the fundamental computational comp
         ($(O)!\pad!(B)$) -- ($(B)!\pad!(O)$)
         node[midway, below, xshift=+1mm, yshift=-0.5mm] {$\vec{b}$};
     \draw[->, line width=0.4mm]
-        ($(B)!\pad!(A)$) -- ($(A)!\pad!(B)$)
+        ($(A)!\pad!(B)$) -- ($(B)!\pad!(A)$)
         node[midway, right, xshift=+1mm, yshift=+1mm] {$\vec{c}$};
 
     % draw arc for angle
@@ -128,142 +186,127 @@ This project was motivated by questions about the fundamental computational comp
     \label{fig:triangle}
 \end{figure}
 
-In Figure~\ref{fig:triangle}, we present a triangle.
-The area $\Delta$ of this triangle can be written in many ways.
-Here are a few:
-\begin{align}
-\Delta 
-&= \frac{1}{2} \, \text{(base)} \, \text{(height)} \label{eq:school} \\
-&= \frac{1}{2}\, \| \vec{a} \times \vec{b} \| \label{eq:cross} \\
-&= \frac{1}{2}\,a\,b\,\sin(C) \label{eq:sine} \\
-&= \sqrt{s\,(s-a)\,(s-b)\,(s-c)} \label{eq:Heron} ~,
-\end{align}
-where the first formula \eqref{eq:school} is the usual introduction to the subject,
-$\times$ represents the cross-product operator,
-$a = \| \vec{a} \|$, $b = \| \vec{b} \|$, $c = \| \vec{c} \|$ are side lengths of the triangle,
-% $C$ is the angle between $\vec{a}$ and $\vec{b}$,
-and $s$ is the semi-perimeter $(a + b + c)/2$.
-For a rather exhaustive list of 110 unique formulae, see \citet{baker1885a,baker1885b}.
-
 While the area of the triangle does not depend on how its sides or corners are labeled,
-only the last of these formulae---Heron's formula \eqref{eq:Heron}---is explicitly permutation-invariant.
+only Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant.
 
-Permutation invariance is an important symmetry in a number of fields for problems defined on \textit{sets}.
-In machine learning, one area of relevance is deep learning on point clouds (e.g., sets of three-dimensional position vectors) \citep{guo2020pointclouds}, which is particularly useful for problems such as 3D shape classification and object detection.
-In physics, many fundamental problems are invariant to permutation.
-For example, the gravitational/electric potential is invariant to the labeling of point masses/charges \CH{citation needed?}.
-Further, permutation invariance lies at the heart of all modern cosmological statistics, such as the power spectrum and the bispectrum \CH{cite}.
+\CH{struggling to find a segue here} \Hogg{We could call out symmetries: These formulae are for a quantity that obeys permutation, translation, rotation, and reflection symmetries. But these symmetries aren't always visible. Then go to the point (above) about Heron's formula.}
 
-There is a simple and powerful result which is useful for constructing and characterizing permutation-invariant functions.
-Given a function $f(r_1, \cdots, r_N)$, Theorem 2 of \citet{zaheer+17deepsets} states that $f$ is invariant to permutation of its arguments if and only if it can be decomposed in the form
+\pseudosection{Deep Sets} There is a simple result that is useful for constructing, characterizing, or learning permutation-invariant functions:
+given a function $f(r_1, \cdots, r_N)$, Theorem 2 of \citet{zaheer+17deepsets} states that $f$ is invariant to permutation of its arguments if and only if it can be decomposed in the form
 \begin{equation}
     f(r_1, \cdots, r_N) = \rho \left( {\textstyle \sum_{i=1}^{N}} \, \phi(r_i) \right), \label{eq:DeepSets}
 \end{equation}
-for some functions $\rho$ and $\phi$.
+for some functions $\rho$ and $\phi$. This result---often known by the name of the deep learning architecture derived from it, \emph{Deep Sets} \citep{zaheer+17deepsets}---is not at all obvious.
+For example, even though Heron's formula \eqref{eq:Heron} is permutation-invariant, it is not actually in the form of \eqref{eq:DeepSets}. 
 
-This result---often known by the name of the deep learning architecture derived from it, \emph{Deep Sets} \citep{zaheer+17deepsets}---is not at all obvious:
-For example, even though Heron's formula \eqref{eq:Heron} is permutation-invariant, it is not actually in the form of \eqref{eq:DeepSets}. Consider instead the formula
-\begin{equation}
-    \Delta = \frac{1}{4} \sqrt{
-        \left( a^2 + b^2 + c^2 \right)^2
-        - 2 \left( a^4 + b^4 + c^4 \right)
-    }.
-\end{equation}
-It is simple to show that this formula is exactly equivalent to Heron's formula when expanded, but it is now precisely in Deep Sets form. Explicitly,
-\begin{equation}
-    \phi(x) = (x^2, x^4), \quad
-    \vec{u} = {\textstyle \sum_{x \in \{ a, b, c \}}} \, \phi(x), \quad
-    \Delta = \rho(\vec{u}) = \frac{1}{4} \sqrt{ u_1^2 - 2 \, u_2 }.
-\end{equation}
+% A few comments about this Deep Sets form \eqref{eq:DeepSets} we'd make are the following:
+% \begin{itemize}
+%     \item The function $\phi$ is universal to all the elements $r_i$; its form won't depend on label $i$ or on any properties of each point, nor any properties of the overall collection of points (the \emph{point cloud}, as it were).
+%     \item The point properties $r_i$ and the output of the function $\phi$ might both be very large.
+%     That is, each point $r_i$ might be a vector or even an ordered list of vectors and tensors and images and so on, and the output of the function $\phi$ might also be very large and complicated.
+%     The output of the function $\phi$ is some kind of informative, latent encoding of the point $r_i$.
+%     \item If a function can be written in Deep Sets form \eqref{eq:DeepSets}, then that function can be executed in a map--reduce framework, in which the function $\phi$ is executed independently and asynchronously on each data point (maybe even in the data center) and the sums are performed hierarchically or in any order.
+%     That means that for large problems executed on large data sets in large data centers, problems in this form \eqref{eq:DeepSets} can often be performed in wall-clock time that scales as $\log N$.
+% \end{itemize}
 
-A few comments about this Deep Sets form \eqref{eq:DeepSets} we'd make are the following:
-\begin{itemize}
-    \item The function $\phi$ is universal to all the elements $r_i$; its form won't depend on label $i$ or on any properties of each point, nor any properties of the overall collection of points (the \emph{point cloud}, as it were).
-    \item The point properties $r_i$ and the output of the function $\phi$ might both be very large.
-    That is, each point $r_i$ might be a vector or even an ordered list of vectors and tensors and images and so on, and the output of the function $\phi$ might also be very large and complicated.
-    The output of the function $\phi$ is some kind of informative, latent encoding of the point $r_i$.
-    \item If a function can be written in Deep Sets form \eqref{eq:DeepSets}, then that function can be executed in a map--reduce framework, in which the function $\phi$ is executed independently and asynchronously on each data point (maybe even in the data center) and the sums are performed hierarchically or in any order.
-    That means that for large problems executed on large data sets in large data centers, problems in this form \eqref{eq:DeepSets} can often be performed in wall-clock time that scales as $\log N$.
-\end{itemize}
+\pseudosection{Computational motivations}
 
-Although the contribution of this paper is minimal, or even zero, it was inspired by real problems in physics.
-For one very specific example, all known exact formulae for the gravitational potential energy of a system of $N$ point masses involve sums over pairs of points (and also require taking differences of points); they have not ever been written in Deep Sets form \eqref{eq:DeepSets} to our knowledge.
-CH: THAT SAID, THERE ARE MULTIPOLE-LIKE EXPRESSIONS THAT MIGHT BE IN DEEPSETS AND APPROXIMATE THIS CALCULATION; SEE THE DISCUSSION?
-In cosmology, standard estimators for $k$-point functions (correlation functions, bispectra, and so on) involve sums over $k$-tuples; once again they have not been written in the Deep Sets form.
-CH: DO THE PHILCOX PAPERS ADDRESS THIS PREVIOUS POINT?
-Importantly, when these statistics are computed in their naive forms, they are very time-consuming because they involve sums over all elements of $N$-choose-$k$, which scales (badly) as $N^k$.
-Because 3-point functions involve the shapes and areas of triangles, consideration of the 3-point function led to the question answered in this \documentname:
-\emph{What is the Deep Sets (or map--reduce) expression for the area of a triangle?}
-We deliver in \secref{sec:result}.
+Although the contribution of this paper is minimal, or even zero, it was inspired by real problems in machine learning and physics. \CH{another bad segue}
 
-\section{A note on our method}\label{sec:method}
-How did we find the formula \eqref{eq:result} presented below in \secref{sec:result}?
-Fundamentally, our method took the form of a symbolic regression, followed by a confirmation with computational algebra.
+Permutation invariance is important for problems defined on \emph{sets}.
+In machine learning, one area of relevance is deep learning on point clouds (\textit{e.g.,} sets of three-dimensional position vectors) \citep{guo2020pointclouds}, which is used for problems such as three-dimensional shape classification and object detection.
 
-For the symbolic regression, we considered a linear combination of monomials, each of which can be written in Deep Sets form, but each of which has units of area-squared (position to the fourth power).
-We fit a linear combination of the monomials to a data set of generated triples of points, drawn from a two-dimensional Gaussian whose mean was also drawn from a Gaussian in a two-dimensional space.
-For each triple we attach a label, which is the squared area, and we require the linear combination of fourth-order, Deep Sets monomials to reproduce the labels to machine precision.
-The simple code is available for re-use under an open-source license at \url{https://github.com/davidwhogg/TriangleAreas}.
+\pseudosection{Cosmology motivations}
 
-We choose to work with squared area $A^2$ and not area $A$ because, geometrically, areas are signed quantities.
-Indeed, the formulae \eqref{eq:school} through \eqref{eq:Heron} either (implicitly) involve square roots of polynomials, or else absolute value signs, such that the corresponding pure polynomial expression would be for the squared area.
-We restricted to monomials that contain four powers of positional coordinates because any expression for the squared area must be units covariant (equivariant to changes of the units used for the measurements of positions or lengths).
+In physics, many fundamental problems are invariant to permutation.
+For example, the gravitational/electric potential is invariant to the labeling of point masses/charges \CH{citation needed?}.
+Further, and important to our motivations, cosmological clustering statistics such as 
+the correlation function \citep{},
+the power spectrum \citep{},
+the bispectrum \citep{},
+and higher-order statistics \citep{}
+used for precision measurement in cosmology \citep{}
+are all permutation-invariant.
+Na\"ively, k-point statistics involve sums that scale as $N^k$, where $N$ is the number of points in the set.
 
-Perhaps non-obviously, for a monomial to be in Deep Sets form, it must consist only of products of sums over the three points.
-It cannot contain any differences, or any sums over pairs of points (or edges).
-Thus $(\sum_{i=1}^2 x_i^2)\,(\sum_{i=1}^3 x_i\,y_i)$ is a permitted monomial, but $(\sum_{i=1}^3\sum_{j=1}^3 x_i^2\,y_j^2)$ is not a permitted monomial.
-These monomials are both correct from a units perspective, but the second is not in Deep Sets form, because it contains products of position coordinates from different points. 
-All the possible monomials are made of permutation-invariant factors of the form 
-\begin{equation}
-F_{mn} = \sum_{i=1}^{3} x_i^m \, y_i^n.
-\end{equation}
-The invariant monomials of degree $d$ are then all products $\prod_j F_{m_j n_j}$ such that $\sum_j m_j + n_j = d$.
+\pseudosection{Scalings}
 
-In detail, the formula for the area (or area squared) of a triangle must be invariant to permutations, translations, rotations, and reflections.
-The Deep Sets form enforces only permutation-invariance.
-Some of the monomials are invariant to reflections, but no individual monomial is invariant to translations or rotations.
-It is left as an exercise to the reader to show that our solution \eqref{eq:result} below is invariant to translations, rotations, and reflections.
+Na\"ively, Deep Sets form \eqref{eq:DeepSets} seems to imply that the function $f$ can be computed in linear time. 
+For problems like the computation of the gravitational potential for a system of point masses, all known solutions scale as the square of the number of points, and yet they are permutation-invariant functions and can thus be put in Deep Sets form.
+How can this be?
+There is no free lunch.
+The resolution must be either that $\phi$ will be very large in dimension---its dimensionality may even depend directly on $N$---or else that the complexity of $rho$ may grow rapidly with $N$.
 
-The symbolic regression produces a linear combination of monomials with real-valued coefficients.
-We systematically search for an integer which, when multiplied by all of the coefficients, brings all coefficients very near integers.
-We then round the coefficients to these nearest integers and check that we reproduce $({\rm denom}) A^2$ to better precision than the least-square result.
+Still, Deep Sets form \eqref{eq:DeepSets} has a computational advantage in that it is explicitly in map--reduce form.
+Map--reduce is a model for parallelizing and distributed a calculation over a large dataset.
+In our case, $\phi$ is the ``map'':
+It can be executed independently and asynchronously on each data point.
+The sums are then the ``reduce'', which can be performed hierarchically across a data center such that the runtime of the sums scales only logarithmically with the number of points. 
+(Granted, a triangle will never have more than three points!)
+
+% HOGG TO CH: THIS PARAGRAPH REPEATS CONTENT FROM ABOVE. COMBINE HERE I THINK; THAT IS, MOVE IT DOWN TO HERE, BELOW DEEP SETS.
+% For one very specific example, all known exact formulae for the gravitational potential energy of a system of $N$ point masses involve sums over pairs of points (and also require taking differences of points); they have not ever been written in Deep Sets form \eqref{eq:DeepSets} to our knowledge.
+% CH: THAT SAID, THERE ARE MULTIPOLE-LIKE EXPRESSIONS THAT MIGHT BE IN DEEPSETS AND APPROXIMATE THIS CALCULATION; SEE THE DISCUSSION?
+% In cosmology, standard estimators for $k$-point functions (correlation functions, bispectra, and so on) involve sums over $k$-tuples; once again they have not been written in the Deep Sets form.
+% CH: DO THE PHILCOX PAPERS ADDRESS THIS PREVIOUS POINT?
+% Importantly, when these statistics are computed in their naive forms, they are very time-consuming because they involve sums over all elements of $N$-choose-$k$, which scales (badly) as $N^k$.
+% Because 3-point functions involve the shapes and areas of triangles, consideration of the 3-point function led to the question answered in this \documentname:
+% \emph{What is the Deep Sets (or map--reduce) expression for the area of a triangle?}
+% We deliver in \secref{sec:result}.
+
+% \section{A note on our method}\label{sec:method}
+% How did we find the formula \eqref{eq:result} presented below in \secref{sec:result}?
+% Fundamentally, our method took the form of a symbolic regression, followed by a confirmation with computational algebra.
+% CH THIS ISN'T TRUE ANY MORE?? OR IS IT?
+
+% For the symbolic regression, we considered a linear combination of monomials, each of which can be written in Deep Sets form, but each of which has units of area-squared (position to the fourth power).
+% We fit a linear combination of the monomials to a data set of generated triples of points, drawn from a two-dimensional Gaussian whose mean was also drawn from a Gaussian in a two-dimensional space.
+% For each triple we attach a label, which is the squared area, and we require the linear combination of fourth-order, Deep Sets monomials to reproduce the labels to machine precision.
+% The simple code is available for re-use under an open-source license at \url{https://github.com/davidwhogg/TriangleAreas}.
+
+% We choose to work with squared area $A^2$ and not area $A$ because, geometrically, areas are signed quantities.
+% Indeed, the formulae \eqref{eq:school} through \eqref{eq:Heron} either (implicitly) involve square roots of polynomials, or else absolute value signs, such that the corresponding pure polynomial expression would be for the squared area.
+% We restricted to monomials that contain four powers of positional coordinates because any expression for the squared area must be units covariant (equivariant to changes of the units used for the measurements of positions or lengths).
+
+% Perhaps non-obviously, for a monomial to be in Deep Sets form, it must consist only of products of sums over the three points.
+% It cannot contain any differences, or any sums over pairs of points (or edges).
+% Thus $(\sum_{i=1}^2 x_i^2)\,(\sum_{i=1}^3 x_i\,y_i)$ is a permitted monomial, but $(\sum_{i=1}^3\sum_{j=1}^3 x_i^2\,y_j^2)$ is not a permitted monomial.
+% These monomials are both correct from a units perspective, but the second is not in Deep Sets form, because it contains products of position coordinates from different points. 
+% All the possible monomials are made of permutation-invariant factors of the form 
+% \begin{equation}
+% F_{mn} = \sum_{i=1}^{3} x_i^m \, y_i^n.
+% \end{equation}
+% The invariant monomials of degree $d$ are then all products $\prod_j F_{m_j n_j}$ such that $\sum_j m_j + n_j = d$.
+
+% The symbolic regression produces a linear combination of monomials with real-valued coefficients.
+% We systematically search for an integer which, when multiplied by all of the coefficients, brings all coefficients very near integers.
+% We then round the coefficients to these nearest integers and check that we reproduce $({\rm denom}) A^2$ to better precision than the least-square result.
 % Trial-and-error delivered the integer 368, which makes all of the coefficients obviously rational.
 % We have no theory of this number; we leave it as a second exercise to the reader to explain this large, non-prime integer.
 
 % Finally, the expression found is output by the code in LaTeX form, to create the typesetting commands for \eqref{eq:result} and also output by the code in Mathematica form, to permit computational algebra operations.
 % A Mathematica \texttt{simplify} operation [HOGG NO NOT REALLY] is used to show that the Deep Sets expression \eqref{eq:result} is identical to the classic formulae for a triangle's squared area $A^2$.
 
-\section{Result and discussion}\label{sec:result}
+\pseudosection{Result}
 
-Our result is that the area $A$ of a triangle is given by
-% \begin{align}
-% A^2 = &
-% -\frac{ 54}{368}\,(\sum_{i=1}^3 x_i^2\,y_i^2) 
-% -\frac{258}{368}\,(\sum_{i=1}^3 x_i\,y_i)^2 \nonumber \\ &
-% +\frac{285}{368}\,(\sum_{i=1}^3 x_i^2)\,(\sum_{i=1}^3 y_i^2) 
-% +\frac{ 36}{368}\,(\sum_{i=1}^3 y_i)\,(\sum_{i=1}^3 x_i^2\,y_i) \nonumber \\ &
-% +\frac{ 36}{368}\,(\sum_{i=1}^3 x_i)\,(\sum_{i=1}^3 x_i\,y_i^2) 
-% -\frac{101}{368}\,(\sum_{i=1}^3 y_i)^2\,(\sum_{i=1}^3 x_i^2) \nonumber \\ &
-% +\frac{148}{368}\,(\sum_{i=1}^3 x_i)\,(\sum_{i=1}^3 y_i)\,(\sum_{i=1}^3 x_i\,y_i) 
-% -\frac{101}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i^2) \nonumber \\ &
-% +\frac{  9}{368}\,(\sum_{i=1}^3 x_i)^2\,(\sum_{i=1}^3 y_i)^2 ~, \label{eq:result}
-% \end{align}
-\begin{align}
-    A^2 = & \
-    \frac{2}{4} \, (\sum_{i=1}^{3} x_i \, y_i ) \, (\sum_{i=1}^{3} x_i ) \, (\sum_{i=1}^{3} y_i )
-    \nonumber \\ &
-    + \frac{3}{4} \, (\sum_{i=1}^{3} x_i^2 ) \, (\sum_{i=1}^{3} y_i^2 )
-    - \frac{3}{4} \, (\sum_{i=1}^{3} x_i \, y_i )^2.
-    \nonumber \\ &
+Our primary result is that area $\Delta$ of a triangle can be written in Deep Sets form as
+\begin{multline} \label{eq:result}
+    \Delta^2 = \
+    \frac{3}{4} \, (\sum_{i=1}^{3} x_i^2 ) \, (\sum_{i=1}^{3} y_i^2 )
+    - \frac{3}{4} \, (\sum_{i=1}^{3} x_i \, y_i )^2 
+    + \frac{2}{4} \, (\sum_{i=1}^{3} x_i \, y_i ) \, (\sum_{i=1}^{3} x_i ) \, (\sum_{i=1}^{3} y_i )
+    \\
     - \, \frac{1}{4} \, (\sum_{i=1}^{3} y_i^2 ) \, (\sum_{i=1}^{3} x_i )^2
     - \, \frac{1}{4} \, (\sum_{i=1}^{3} x_i^2 ) \, (\sum_{i=1}^{3} y_i )^2
-     ~, \label{eq:result}
-\end{align}
+     ~,
+\end{multline}
 where the two-dimensional position of each of the three corners $i$ is $r_i \equiv (x_i, y_i)$.
-This answer is in Deep Sets form:
-Every expression in parentheses in \eqref{eq:result} is a pure sum over all three points and can be written in the form of $F_{mn}$ for some choice of $m$ and $n$.
-There are no sums over differences, and there is no ordering of the points.
-Being very explicit, this is written in the Deep Sets form \eqref{eq:DeepSets} for $\rho$ and $\phi$ defined as follows:
+We verified this equation by using computational algebra to expand the formula and check its equivalence to \eqref{eq:cross}.
+
+This formula is in Deep Sets form, since
+every expression in parentheses in \eqref{eq:result} is a pure sum over all three points.
+% There are no sums over differences, and there is no ordering of the points.
+Being very explicit, it matches \eqref{eq:DeepSets} if we define $\rho$ and $\phi$ as follows:
 \begin{gather}
     \phi(\vec{r}_i) = (
         x_i, \,
@@ -280,56 +323,63 @@ Being very explicit, this is written in the Deep Sets form \eqref{eq:DeepSets} f
         F_{02}
     ), \\
     \rho \left( {\textstyle \sum_i} \phi(\vec{r}_i) \right)
-    = \tfrac{2}{4} \, F_{11} \, F_{10} \, F_{01}
-    + \tfrac{3}{4} \, F_{20} \, F_{02}
+    = \tfrac{3}{4} \, F_{20} \, F_{02}
     - \tfrac{3}{4} \, F_{11}^2
+    + \tfrac{2}{4} \, F_{11} \, F_{10} \, F_{01}
     - \tfrac{1}{4} \, F_{02} \, F_{10}^2
     - \tfrac{1}{4} \, F_{20} \, F_{01}^2.
 \end{gather}
 
-% HOGG: Explicit vector $\phi()$ and explicit expression $\rho()$.
+\pseudosection{A note on symbolic regression}
 
-% HAINJE: Here it is:
-% \begin{gather}
-%     \phi(r_i) = (x_i, y_i, x_i\,y_i, x_i^2, y_i^2, x_i\,y_i^2, x_i^2\,y_i, x_i^2\,y_i^2) \\
-%     \begin{aligned}
-%     \rho(\textstyle\sum_{i=1}^{3}\phi(r_i)\equiv \vec{u}) = &
-%     - \tfrac{54}{368} u_8
-%     - \tfrac{258}{368} u_3^2
-%     + \tfrac{285}{368} u_4\,u_5
-%     + \tfrac{36}{368} u_2\,u_7
-%     + \tfrac{36}{368} u_1\,u_6 \\ &
-%     - \tfrac{101}{368} u_2^2\,u_4
-%     + \tfrac{148}{368} u_1\,u_2\,u_3
-%     - \tfrac{101}{368} u_1^2\,u_5
-%     + \tfrac{9}{368} u_1^2\,u_2^2.
-%     \end{aligned}
-% \end{gather}
+Note that a triangle defined by three points has the one-half the area of the parallelogram spanned by the vectors $\vec{r}_2 - \vec{r}_1$ and $\vec{r}_3 - \vec{r}_1$. Multiplying both sides by 4 then reveals that \eqref{eq:result} is an integer polynomial of invariant factors for the area of the parallelogram. Using this fact, we have written a program to perform a symbolic regression which recovers our result. 
 
-% Note the symmetries....! See the $36/368$ terms, or the $-101/368$ terms
+For the symbolic regression, we considered a linear combination of monomials, each of which can be written in Deep Sets form, but each of which has units of area-squared (position to the fourth power).
+All the possible monomials are made of permutation-invariant factors of the form 
+\begin{equation}
+F_{mn} = \sum_{i=1}^{3} x_i^m \, y_i^n.
+\end{equation}
+Such a factor has degree $m + n$.
+The invariant monomials of degree $d$ are then products $\prod_j F_{m_j n_j}$ such that $\sum_j m_j + n_j = d$.
+We generated all factors $F_{mn}$ with degree $1 \leq m + n \leq 4$, then formed all products of these factors with total degree four.
+However, these monomials are not all linearly-independent;
+the five monomials made of a single degree-four factor ($F_{40}$, $F_{31}$, $F_{22}$, $F_{13}$, $F_{04}$) can be written as linear combinations of the others and are thus removed.
+This leaves \CH{number?} monomials.
 
-% But note that it isn't obviously invariant to arbitrary rotations.
-% And it isn't obviously invariant to translations.
-% Formulae \eqref{eq:cross}, \eqref{eq:sine}, and \eqref{eq:Heron} are obviously rotation-invariant and translation-invariant.
+We fit a linear combination of the monomials to a data set of generated triples of points, drawn from a two-dimensional Gaussian whose mean was also drawn from a Gaussian in a two-dimensional space.
+Each triple defines a parallelogram whose squared area we use as a label for regression.
+We then perform least-squares regression to fit a linear combination of the invariant monomials.
+We require that the labels are reproduced to machine precision after rounding the coefficients to the nearest integers.
+% For each triple we attach a label, which is the squared area of the parallelogram spanned by the two difference vectors \CH{?}, and we require the linear combination of fourth-order, Deep Sets monomials to reproduce the labels to machine precision with integer coefficients.
+The simple code is available for re-use under an open-source license at \url{https://github.com/davidwhogg/TriangleAreas}.
 
-Note that a triangle defined by three points has the one-half the area of the parallelogram spanned by the vectors $\vec{r}_2 - \vec{r}_1$ and $\vec{r}_3 - \vec{r}_1$. Multiplying both sides by 4 then reveals that \eqref{eq:result} is an integer polynomial of invariant factors for the area of the parallelogram.
+
+\pseudosection{Generalizations: higher dimensions}
 
 If the triangle is embedded in a higher-dimensional space with the positions of the three vertices given by $\vec{r}_i \in \mathbb{R}^{d}$ for $d \geq 2$, the area of the triangle can be determined by summing in quadrature the areas of the triangles made by all projections to two axes. For example, in three dimensions, the area of the triangle is given by
 \begin{equation}
-    A_{\rm 3D}^2 =
-    A_{12}^2 + A_{13}^2 + A_{23}^2,
+    \Delta_{\rm 3D}^2 =
+    \Delta_{12}^2 + \Delta_{13}^2 + \Delta_{23}^2,
 \end{equation}
 and, in four dimensions, it is given by
 \begin{equation}
-    A_{\rm 4D}^2 =
-    A_{12}^2 + A_{13}^2 + A_{14}^2
-    + A_{23}^2 + A_{24}^2
-    + A_{34}^2,
+    \Delta_{\rm 4D}^2 =
+    \Delta_{12}^2 + \Delta_{13}^2 + \Delta_{14}^2
+    + \Delta_{23}^2 + A_{24}^2
+    + \Delta_{34}^2,
 \end{equation}
-where we have introduced $A_{jk}$, the area of the triangle formed by just the $j^{\rm th}$ and $k^{\rm th}$ components of the position vectors. By using \eqref{eq:result} for each of the two-dimensional sub-areas, each can be computed in a permutation-invariant way and the entire result is thus permutation invariant (and in Deep Sets form).
+where we have introduced $\Delta_{jk}$, the area of the triangle formed by just the $j^{\rm th}$ and $k^{\rm th}$ components of the position vectors.
+By using \eqref{eq:result} for each of the two-dimensional sub-areas, each can be computed in a permutation-invariant way and the entire result is thus permutation invariant and in Deep Sets form. 
+\Hogg{This last result somehow is related to the meaning of the square of the magnitude of a bivector.}
+
+\pseudosection{Generalizations: simplex volume}
 
 Our method also extends to the volume of a simplex. In three dimensions, four vectors $\{ \vec{r}_1, \vec{r}_2, \vec{r}_3, \vec{r}_4 \}$ determine the vertices of a simplex. 
-Like the area of a triangle is related to the area of a parallelogram, the volume of a simplex is one-sixth the volume of the parallelepiped spanned by the vectors $\{ \vec{r}_2 - \vec{r}_1, \vec{r}_3 - \vec{r}_1, \vec{r}_4 - \vec{r}_1 \}$. Hoping for an integer solution once again, we modify our symbolic regression to search for polynomials of the invariant factors which yield the volume of the parallelepiped. This gives an analogous Deep Sets formula for the volume of a simplex to be
+Like the area of a triangle is one-half the area of a related parallelogram, the volume of a simplex is one-sixth the volume of the parallelepiped spanned by the vectors $\{ \vec{r}_2 - \vec{r}_1, \vec{r}_3 - \vec{r}_1, \vec{r}_4 - \vec{r}_1 \}$. 
+
+Expecting an integer solution once again, we modified our symbolic regression to generate 4-tuples of points, using the squared volumes of the parallelepipeds they produce as labels. 
+The invariant factors then have three indices, $F_{\ell m n} = \sum_i x_i^\ell \, y_i^m \, z_i^n$, and we form all invariant monomials of degree six.
+The result, which we have verified by computational algebra, is that the volume of the simplex $V$ is given by
 \begin{align}
 (6 V)^2 = &
 +8 \, F_{110} \, F_{101} \, F_{011}
@@ -357,6 +407,52 @@ Like the area of a triangle is related to the area of a parallelogram, the volum
 \label{eq:simplex}
 \end{align}
 
+\pseudosection{Generalizations: Heron symmetrized}
+
+We have stated above that Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant, and yet it is not represented in Deep Sets form. Consider instead
+\begin{equation}
+\label{eq:HeronDeepSets}
+    \Delta = \frac{1}{4} \, \sqrt{
+        \left( a^2 + b^2 + c^2 \right)^2
+        - 2 \left( a^4 + b^4 + c^4 \right)
+    }.
+\end{equation}
+It is simple to show that this is exactly equivalent to Heron's formula when expanded, but it is now in Deep Sets form. Explicitly,
+\begin{equation}
+    \phi(x) = (x^2, x^4), \quad
+    \vec{u} = {\textstyle \sum_{x \in \{ a, b, c \}}} \, \phi(x), \quad
+    \Delta = \rho(\vec{u}) = \frac{1}{4} \sqrt{ u_1^2 - 2 \, u_2 }.
+\end{equation}
+
+This is not novel. Heron's formula is a special case of Brahmagupta's formula, which gives the area $K$ of a convex cyclic quadrilateral to be \citep{coolidge1939}
+\begin{equation}
+    K = \sqrt{
+        (s - a) \,
+        (s - b) \,
+        (s - c) \,
+        (s - d)
+    }~,
+\end{equation}
+where $a, b, c, d$ are the four side lengths and $s = (a+b+c+d)/2$ is the semi-perimeter. This formula has been alternatively written as \CH{seems like someone just put this on Wikipedia?}
+\begin{equation}
+    K = \frac{1}{4} \, \sqrt{
+        \left( a^2 + b^2 + c^2 + d^2 \right)^2
+        + 8 \, a\,b\,c\,d
+        - 2 \left( a^4 + b^4 + c^4 + d^4 \right)
+    }~,
+\end{equation}
+which is exactly \eqref{eq:HeronDeepSets} if the fourth side-length $d$ is zero. Note that this expression is in Deep Sets form if the product $a \, b \, c \, d$ is taken to be the exponential of the sum of logarithms.
+
+\pseudosection{Discussion: other symmetries}
+
+The area of a triangle is not only invariant to permutation, but also to translation, rotation, and reflection.
+Formulae \eqref{eq:sine} and \eqref{eq:Heron}, by virtue of referencing only side-lengths and angles, are obviously invariant to these other symmetries.
+While true, it is not obvious that our solution \eqref{eq:result} is invariant. An explicit proof of this is left to the reader.
+
+\pseudosection{Discussion: sines and cosines}
+
+\pseudosection{Discussion: open questions}
+
 % HOGG SAY: CH: EXPAND THIS INTO AN OPEN QUESTIONS LIST:
 % \begin{itemize}
 % \item questionable: What happens if we try to do $A$ as a quadratic instead of $A^2$ as a quartic?
@@ -376,8 +472,14 @@ We leave the reader with the following open questions:
     \item In both the triangle area and simplex volume formulae, the only invariant factors used are of degree $2$, and the factors never appear with exponents larger than $2$. Does this generalize? Can it be shown that higher order factors aren't needed?
 \end{itemize}
 
+\CH{conclude}
 
-\newpage
+The authors thank Alexander Novara (NYU), Ben Wandelt (JHU), Kaze Wong (JHU), and the Blanton--Hogg group meeting at NYU for valuable discussions. The authors would also like to note that, while we believe that this result is novel, it is difficult to be sure, given the impossibility of conducting a complete literature review for such an ancient topic.
+
+\bigskip
+{\centering $\ast~\ast~\ast$ \par}
+
+\renewcommand{\section}[2]{}%
 {\small\singlespacing\bibliography{main}}
 
 \end{document}
