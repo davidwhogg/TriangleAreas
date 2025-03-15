@@ -5,6 +5,11 @@
 % - CH: Show that there is NOT an exact solution at polynomial degree 2 order.
 % - HOGG: Discuss alternatives like Novara's; And alternatives like Kaze's. Positional encodings! CH: Describe the connection to positional encodings (in, eg, transformers). Oh and cosmology and power spectrum and bispectrum.
 
+% style notes
+% -----------
+% - Use \abs{} not |
+% - Put variable names next to the precise thing they label.
+
 \documentclass[12pt]{article}
 \usepackage[letterpaper]{geometry}
 \usepackage[hidelinks]{hyperref}
@@ -27,12 +32,13 @@
 \pagestyle{myheadings}
 \markboth{foo}{\sffamily Hainje, Hogg, \& Villar / A new formula for the area of a triangle}
 
-\renewcommand{\paragraph}[1]{\par\addvspace{1.5ex}\noindent\textbf{#1}~---}
-
 \usepackage{natbib,setspace,aas_macros}
 \bibliographystyle{aasjournal}
 \setcitestyle{aysep={}}
 \setlength{\bibsep}{0pt plus 0.3ex}
+
+\newcommand{\abs}[1]{|\,{#1}\,|}
+\renewcommand{\paragraph}[1]{\par\addvspace{1.5ex}\noindent\textsl{#1}~---}
 
 \usepackage{xcolor}
 \newcommand{\CH}[1]{{\color{blue} (CH says: #1)}}
@@ -48,7 +54,6 @@
 \newcommand{\aFour}{\textsuperscript{\textsection}}
 \newcommand{\aFive}{\textsuperscript{\textbardbl}}
 \newcommand{\aSix}{\textsuperscript{\textparagraph}}
-
 
 \begin{document}\thispagestyle{empty}
 
@@ -79,8 +84,8 @@ Email:} \texttt{\href{mailto:connor.hainje@nyu.edu}{connor.hainje@nyu.edu}}}
 
 \bigskip
 \paragraph{Abstract}
-It is known that any permutation-invariant function of data points $r_i$
-can be written in the form $\rho(\sum_i\phi(r_i))$,
+It is known that any permutation-invariant function of data points $\vec{r}_i$
+can be written in the form $\rho(\sum_i\phi(\vec{r}_i))$,
 where $\rho$ and $\phi$ are functions.
 %, and the function $\phi$ might output a high-dimensional latent encoding of each point $r_i$.
 This form---known in the machine-learning literature as Deep Sets---generates a map--reduce algorithm, because the $\phi$ executions can be performed asynchronously and the sums can be performed in any order.
@@ -100,22 +105,29 @@ Here are a few:
 \Delta 
 &= \frac{1}{2} \, \text{(base)} \, \text{(height)} \label{eq:school} \\
 &= \frac{1}{2}\,a\,b\,\sin(C) \label{eq:sine} \\
-&= \frac{1}{2}\, \left| \vec{a} \times \vec{b} \right|
-    = \frac{1}{2}\, \left| \vec{a} \wedge \vec{b} \right| \label{eq:cross} \\
+&= \frac{1}{2}\, \abs{\vec{a} \times \vec{b}}
+    = \frac{1}{2}\, \abs{\vec{a} \wedge \vec{b}}\label{eq:cross} \\
+&= \frac{1}{2}\, \abs{
+    x_1 \, y_2 - x_2 \, y_1 +
+    x_2 \, y_3 - x_3 \, y_2 +
+    x_3 \, y_1 - x_1 \, y_3
+}\label{eq:polynomial} \\
 &= \sqrt{s\,(s-a)\,(s-b)\,(s-c)} \label{eq:Heron} ~,
 \end{align}
-where the quantities used are defined in Figure~\ref{fig:triangle}, apart from the side lengths of the triangle
-$a = | \vec{a} |$, $b = | \vec{b} |$, $c = | \vec{c} |$
+where the quantities used are defined in Figure~\ref{fig:triangle}, apart from the side lengths
+$a = \abs{\vec{a}}$, $b = \abs{\vec{b}}$, $c = \abs{\vec{c}}$
 and the semi-perimeter $s = (a + b + c)/2$.
-\eqref{eq:school} is the usual introduction to the subject, traceable back even to Euclid.
+Formula~\eqref{eq:school} is the usual introduction to the subject, traceable back even to Euclid.
 % \eqref{eq:sine} is the side-angle-side formula.
-\eqref{eq:cross} generalizes to triangles in higher dimensional spaces, using the fact that the cross/wedge product has magnitude equal to the area of the parallelogram spanned by $\vec{a}$ and $\vec{b}$, which is twice the area of the triangle with $\vec{a}$ and $\vec{b}$ as sides.
-Lastly, \eqref{eq:Heron} is Heron's formula, which elegantly computes the area from the side lengths alone.
+Formula~\eqref{eq:cross} generalizes to triangles in higher dimensional spaces, using the fact that the cross or wedge product has a magnitude equal to the area of the parallelogram spanned by $\vec{a}$ and $\vec{b}$.
+Formula~\eqref{eq:polynomial} gives a polynomial in terms of the Cartesian coordinates of the corners in two dimensions; it is equal to an expansion of \eqref{eq:cross}.
+Formula~\eqref{eq:Heron} is Heron's formula, which elegantly computes the area from the side lengths alone.
 For a collection of 110 unique triangle area formulae, see \citet{baker1885a,baker1885b}.
 
 \begin{figure}[t!]
     \centering
     \begin{tikzpicture}
+    \coordinate (F) at (-1.5,4.2);
     \coordinate (O) at (0,0);
     \coordinate (A) at (3.5,4);
     \coordinate (B) at (6,1);
@@ -148,6 +160,7 @@ For a collection of 110 unique triangle area formulae, see \citet{baker1885a,bak
     \fill (O) circle (1.2pt) node[below right]{$(x_1, y_1)$};
     \fill (A) circle (1.2pt) node[above, yshift=+1mm]{$(x_2, y_2)$};
     \fill (B) circle (1.2pt) node[below right]{$(x_3, y_3)$};
+    \fill[gray] (F) circle (1.2pt) node[above left]{$(0, 0)$};
 
     % draw vectors
     \def\pad{1.5mm}
@@ -161,14 +174,24 @@ For a collection of 110 unique triangle area formulae, see \citet{baker1885a,bak
         ($(A)!\pad!(B)$) -- ($(B)!\pad!(A)$)
         node[midway, right, xshift=+1mm, yshift=+1mm] {$\vec{c}$};
 
+    \draw[->, line width=0.1mm, gray]
+        ($(F)!\pad!(O)$) -- ($(O)!2mm!(F)$)
+        node[near start, left, xshift=-1mm, yshift=0mm, black] {$\vec{r}_1$};
+    \draw[->, line width=0.1mm, gray]
+        ($(F)!\pad!(A)$) -- ($(A)!2mm!(F)$)
+        node[near start, above, xshift=+1mm, yshift=+1mm, black] {$\vec{r}_2$};
+    \draw[->, line width=0.1mm, gray]
+        ($(F)!\pad!(B)$) -- ($(B)!3mm!(F)$)
+        node[very near start, right, xshift=-2mm, yshift=-4mm, black] {$\vec{r}_3$};
+
     % draw arc for angle
     \draw pic["$C$", draw=black, angle radius=12mm, angle eccentricity=1.3] {angle=B--O--A};
 
     % draw base, height guide lines
-    \draw ($(O)!\pad!(BaseO)$) -- ($(BaseO)$);
-    \draw ($(B)!\pad!(BaseB)$) -- ($(BaseB)$);
-    \draw ($(B)!\pad!(HeightO)$) -- ($(HeightO)$);
-    \draw ($(A)!\pad!(HeightA)$) -- ($(HeightA)$);
+    \draw[dotted, line width=0.3mm]($(O)!\pad!(BaseO)$) -- ($(BaseO)$);
+    \draw[dotted, line width=0.3mm]($(B)!\pad!(BaseB)$) -- ($(BaseB)$);
+    \draw[dotted, line width=0.3mm]($(B)!\pad!(HeightO)$) -- ($(HeightO)$);
+    \draw[dotted, line width=0.3mm]($(A)!\pad!(HeightA)$) -- ($(HeightA)$);
 
     % draw base, height size lines
     \draw[<->]
@@ -183,19 +206,19 @@ For a collection of 110 unique triangle area formulae, see \citet{baker1885a,bak
     \label{fig:triangle}
 \end{figure}
 
-The area of a triangle has many symmetries. It is invariant to translation, rotation, and reflection, as well as to the labeling of sides or corners. However, these symmetries are not always obvious from a given formula; for example, of those listed above, only Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant. 
+The area of a triangle has many symmetries. It is invariant to translation, rotation, and reflection, as well as to the labeling of sides or corners. However, these symmetries are not always obvious from a given formula; for example, of those listed above, only Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant. \Hogg{Isn't formula \eqref{eq:polynomial} also explicitly permutation invariant?}
 
 % \CH{struggling to find a segue here} \Hogg{We could call out symmetries: These formulae are for a quantity that obeys permutation, translation, rotation, and reflection symmetries. But these symmetries aren't always visible. Then go to the point (above) about Heron's formula.}
 
 \pseudosection{Deep Sets}
 
-A function $f(r_1, \dots, r_N)$ is invariant to permutation of its arguments if and only if it can be decomposed in the form
+A function $f(\vec{r}_1, \dots, \vec{r}_N)$ is invariant to permutation of its arguments if and only if it can be decomposed in the form
 \begin{equation}
-    f(r_1, \dots, r_N) = \rho \left( {\textstyle \sum_{i=1}^{N}} \, \phi(r_i) \right), \label{eq:DeepSets}
+    f(r_1, \dots, r_N) = \rho \, \big( \sum_{i=1}^{N} \, \phi(\vec{r}_i) \big), \label{eq:DeepSets}
 \end{equation}
 for some functions $\rho$ and $\phi$. This result---often known by the name of the deep learning architecture derived from it, \emph{Deep Sets} (\citealt{zaheer+17deepsets}; see Theorem~2)---is not at all obvious.
-For example, even though Heron's formula \eqref{eq:Heron} is permutation-invariant, it is not actually in the form of \eqref{eq:DeepSets}. 
-Further, despite the triangle area being permutation-invariant, there is no existing formula for the area of triangle which is explicitly in this form.
+For example, even though Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant, it is not actually in the form of \eqref{eq:DeepSets}. 
+Further, despite the triangle area being permutation-invariant, there is no existing \Hogg{previously known?} formula for the area of triangle which is explicitly in this form.
 
 \pseudosection{Computational motivations}
 
@@ -240,60 +263,58 @@ side lengths, as in Heron's formula \eqref{eq:Heron};
 angles, as in \eqref{eq:sine};
 or point displacements, as in \eqref{eq:cross}.
 In this search, we find the following Deep Sets-form formula for the area $\Delta$ of a triangle:
-\begin{equation}
-\label{eq:result}
-\begin{multlined}
-    \Delta^2 = \
-    \frac{3}{4} \, (\sum_{i=1}^{3} x_i^2 ) \, (\sum_{i=1}^{3} y_i^2 )
-    - \frac{3}{4} \, (\sum_{i=1}^{3} x_i \, y_i )^2 
-    + \frac{2}{4} \, (\sum_{i=1}^{3} x_i \, y_i ) \, (\sum_{i=1}^{3} x_i ) \, (\sum_{i=1}^{3} y_i )
-    \\
-    - \, \frac{1}{4} \, (\sum_{i=1}^{3} y_i^2 ) \, (\sum_{i=1}^{3} x_i )^2
-    - \, \frac{1}{4} \, (\sum_{i=1}^{3} x_i^2 ) \, (\sum_{i=1}^{3} y_i )^2
+\begin{align}
+    \Delta^2 = \ &
+    \frac{3}{4} \, \big( \sum_{i=1}^{3} x_i^2 \big) \, \big( \sum_{i=1}^{3} y_i^2 \big)
+    - \frac{3}{4} \, \big( \sum_{i=1}^{3} x_i \, y_i \big)^2 
+    + \frac{2}{4} \, \big( \sum_{i=1}^{3} x_i \, y_i \big) \, \big( \sum_{i=1}^{3} x_i \big) \, \big( \sum_{i=1}^{3} y_i \big)
+    \nonumber\\ &
+    - \, \frac{1}{4} \, \big( \sum_{i=1}^{3} y_i^2 \big) \, \big( \sum_{i=1}^{3} x_i \big)^2
+    - \, \frac{1}{4} \, \big( \sum_{i=1}^{3} x_i^2 \big) \, \big( \sum_{i=1}^{3} y_i \big)^2
      ~,
-\end{multlined}
-\end{equation}
+\label{eq:result}
+\end{align}
 where the two-dimensional position of corner $i$ is $\vec{r}_i \equiv (x_i, y_i)$.
 This equation \eqref{eq:result} is the primary contribution of this \documentname.
 
-We verified equation \eqref{eq:result} via computational algebra, expanding and simplifying the formula to demonstrate its equivalence to \eqref{eq:cross}.
-\Hogg{Perhaps we should re-write cross to be in terms of differences again? Also, Figure~1 doesn't define the $\vec{r}_i$ variables, which in principle should be shown as displacements from an origin.}
+We verified equation \eqref{eq:result} via computational algebra, expanding and simplifying the formula to demonstrate its equivalence to \eqref{eq:polynomial}.
+% \Hogg{Perhaps we should re-write cross to be in terms of differences again? Also, Figure~1 doesn't define the $\vec{r}_i$ variables, which in principle should be shown as displacements from an origin.}
 \Hogg{Try to make this text less narrative, and always stay in present tense! We are not telling a story of our lives.}
 The formula is in Deep Sets form, since
 every expression in parentheses in \eqref{eq:result} is a pure sum over all three points.
 % There are no sums over differences, and there is no ordering of the points.
 Being very explicit, it matches \eqref{eq:DeepSets} if we define $\rho$ and $\phi$ as follows:
-\begin{equation}
-\begin{gathered}
+\begin{gather}
     \phi(\vec{r}_i) = (
         x_i, \,
         y_i, \,
         x_i^2, \,
         x_i \, y_i, \,
         y_i^2
-    ), \\
-    {\textstyle \sum_i} \phi(\vec{r}_i) = (
+    ), \quad
+    (
         F_{10}, \,
         F_{01}, \,
         F_{20}, \,
         F_{11}, \,
         F_{02}
-    ), \\
-    \rho \left( {\textstyle \sum_i} \phi(\vec{r}_i) \right)
+    ) = \sum_i \phi(\vec{r}_i),
+    \nonumber\\
+    \rho \, \big( \sum_i \phi(\vec{r}_i) \big)
     = \tfrac{3}{4} \, F_{20} \, F_{02}
     - \tfrac{3}{4} \, F_{11}^2
     + \tfrac{2}{4} \, F_{11} \, F_{10} \, F_{01}
     - \tfrac{1}{4} \, F_{02} \, F_{10}^2
     - \tfrac{1}{4} \, F_{20} \, F_{01}^2.
-\end{gathered}
-\end{equation}
+\end{gather}
 
 \pseudosection{A note on symbolic regression}
 
-Note that a triangle defined by three points has one-half the area of the parallelogram spanned by the vectors $\vec{r}_2 - \vec{r}_1$ and $\vec{r}_3 - \vec{r}_1$.
+Note that a triangle defined by three points has one-half the area of the parallelogram spanned by the vectors $\vec{a} = \vec{r}_2 - \vec{r}_1$ and $\vec{b} = \vec{r}_3 - \vec{r}_1$.
 Multiplying both sides by 4 reveals that \eqref{eq:result} is an integer polynomial of invariant factors for the squared area of the parallelogram.
-Using this fact, we have written a program to perform a symbolic regression which recovers our result.
-\Hogg{Say here in a footnote maybe what the URL to the code is?}
+Using this fact, we have written a program to perform a symbolic regression which recovers our result.\footnote{
+    The simple code is available for re-use under an open-source license at \url{https://github.com/davidwhogg/TriangleAreas}.
+}
 
 In this symbolic regression, we considered a linear combination of monomials, each of which can be written in Deep Sets form, but each of which has units of area-squared (position to the fourth power).
 All the possible monomials are made of permutation-invariant factors of the form 
@@ -311,21 +332,18 @@ We fit a linear combination of the monomials to a data set of generated triples 
 Each triple defines a parallelogram whose squared area we use as a label for regression.
 We then perform least-squares regression to fit a linear combination of the invariant monomials.
 We require that the labels are reproduced to machine precision after rounding the coefficients to the nearest integers.
-The simple code is available for re-use under an open-source license at \url{https://github.com/davidwhogg/TriangleAreas}.
 
 \pseudosection{Generalizations: higher dimensions}
 
 If the triangle is embedded in a higher-dimensional space with the positions of the three vertices given by $\vec{r}_i \in \mathbb{R}^{d}$ for $d \geq 2$, the area of the triangle can be determined by summing in quadrature the areas of the triangles made by all projections to two axes. This is easiest to see starting from \eqref{eq:cross}, using the wedge product for vectors $\vec{a}, \vec{b}$ in a higher-dimensional space, as
-\begin{equation}
-\begin{aligned}
+\begin{align}
     \Delta^2
-    &= \tfrac{1}{4}\, | \vec{a} \wedge \vec{b} |^2 \\
-    &= \tfrac{1}{4}\, | \vec{a} |^2 \, | \vec{b} |^2 - \tfrac{1}{4}\, ( \vec{a} \cdot \vec{b} )^2 \\
-    &= \tfrac{1}{4} \sum_{1 \leq j, k \leq d} ( a_j \, a_j \, b_k \, b_k - a_j \, b_j \, a_k \, b_k ) \\
-    &= \tfrac{1}{4} \sum_{1 \leq j < k \leq d} ( a_j \, b_k - a_k \, b_j)^2 \\
+    &= \frac{1}{4}\, \abs{\vec{a} \wedge \vec{b}}^2 \nonumber\\
+    &= \frac{1}{4}\, \abs{\vec{a}}^2 \, \abs{\vec{b}}^2 - \frac{1}{4}\, \abs{\vec{a} \cdot \vec{b}}^2 \nonumber\\
+    &= \frac{1}{4} \sum_{1 \leq j, k \leq d} ( a_j \, a_j \, b_k \, b_k - a_j \, b_j \, a_k \, b_k ) \nonumber\\
+    &= \frac{1}{4} \sum_{1 \leq j < k \leq d} ( a_j \, b_k - a_k \, b_j)^2 \nonumber\\
     &= \sum_{1 \leq j < k \leq d} \Delta_{jk}^2,
-\end{aligned}
-\end{equation}
+\end{align}
 where in the last line we have introduced $\Delta_{jk}$, the area of the triangle formed by just the $j^{\rm th}$ and $k^{\rm th}$ components of the position vectors.
 % For example, in three dimensions, the area of the triangle is given by
 % \begin{equation}
@@ -349,7 +367,7 @@ Like the area of a triangle is one-half the area of a related parallelogram, the
 
 Expecting an integer solution once again, we modified our symbolic regression to generate 4-tuples of points, using the squared volumes of the parallelepipeds they produce as labels. 
 The invariant factors then have three indices, $F_{\ell m n} = \sum_i x_i^\ell \, y_i^m \, z_i^n$, and we form all invariant monomials of degree six.
-The result, which we have verified by computational algebra, is that the volume of the simplex $V$ is given by
+The result, which we have verified by computational algebra, is that the volume of the simplex $V$ is \Hogg{Since it is the volume that is $V$ not the simplex, it should say ``The volume $V$ of the simplex...''} given by
 \begin{align}
 (6 V)^2 = &
 +8 \, F_{110} \, F_{101} \, F_{011}
@@ -388,37 +406,26 @@ We stated above that Heron's formula \eqref{eq:Heron} is explicitly permutation-
         - 2 \left( a^4 + b^4 + c^4 \right)
     }~.
 \end{equation}
-It is simple to show that this is exactly equivalent to Heron's formula when expanded, but it is now in Deep Sets form. Explicitly,
-\begin{equation}
-    \phi(x) = (x^2, x^4), \quad
-    {\textstyle \sum_{x \in \{ a, b, c \}}} \, \phi(x)
-    \equiv (F_2, F_4) , \quad
-    \Delta = \rho(\vec{u}) = \frac{1}{4} \sqrt{ F_2^2 - 2 \, F_4 }~.
-\end{equation}
-
-This is not novel. Heron's formula is a special case of Brahmagupta's formula, which gives the area $K$ of a convex cyclic quadrilateral to be \citep{coolidge1939}
-\begin{equation}
-    K = \sqrt{
-        (s - a) \,
-        (s - b) \,
-        (s - c) \,
-        (s - d)
-    }~,
-\end{equation}
-where $a, b, c, d$ are the four side lengths and $s = (a+b+c+d)/2$ is the semi-perimeter. This formula has been alternatively written as \CH{seems like someone just put this on Wikipedia?}
-\begin{equation}
-    K = \frac{1}{4} \, \sqrt{
-        \left( a^2 + b^2 + c^2 + d^2 \right)^2
-        + 8 \, a\,b\,c\,d
-        - 2 \left( a^4 + b^4 + c^4 + d^4 \right)
-    }~,
-\end{equation}
-which is exactly \eqref{eq:HeronDeepSets} if the fourth side-length $d$ is zero. Note that this expression is in Deep Sets form if the product $a \, b \, c \, d$ is taken to be the exponential of the sum of logarithms.
+It is simple to show that this is exactly equivalent to Heron's formula when expanded, but it is now in Deep Sets form.\footnote{
+    This is not novel. Heron's formula is a special case of Brahmagupta's formula, which gives the area $K$ of a convex cyclic quadrilateral in terms of its four side lengths $a, b, c, d$ \citep{coolidge1939}.
+    On Wikipedia, it has been written
+    \begin{equation}
+        K = \frac{1}{4} \, \sqrt{
+            \left( a^2 + b^2 + c^2 + d^2 \right)^2
+            + 8 \, a\,b\,c\,d
+            - 2 \left( a^4 + b^4 + c^4 + d^4 \right)
+        }~,
+    \end{equation}
+    which is exactly \eqref{eq:HeronDeepSets} if $d$ is zero.
+    This expression is in Deep Sets form, with the product $a \, b \, c \, d$ 
+    representable as $\exp( \sum_{x \in \{ a,b,c,d \}} \log x )$.
+    % taken to be the exponential of the sum of logarithms.
+}
 
 \pseudosection{Discussion: other symmetries}
 
 The area of a triangle is not only invariant to permutation, but also to translation, rotation, and reflection.
-Formulae \eqref{eq:sine} and \eqref{eq:Heron}, by virtue of referencing only side-lengths and angles, are obviously invariant to these other symmetries.
+Formulae \eqref{eq:sine} and \eqref{eq:Heron}, by virtue of referencing only side-lengths and angles, are invariant to these other symmetries.
 While true, it is not obvious that our solution \eqref{eq:result} is invariant. An explicit proof of this is left to the reader.
 
 \pseudosection{Discussion: sines and cosines}
