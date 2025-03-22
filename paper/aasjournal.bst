@@ -1,20 +1,5 @@
-%% AASJournal.bst June 3, 2019
 %%
-%% Revision 1.18 2019/6/3 Amy Hendrickson
-%% Took out `v' preceding version number in @misc
-%%
-%% Rewrote format.pid to implement this precedence:
-%% if doi, print that, if eprint print that, if neither
-%% and there is a url, use the url
-
-%% Took out format.url output generally because it is included in format.pid,
-%% so undesirable to call for it a second time.
-
-%%
-%% Revision 1.17 2019/3/15 Amy Hendrickson
-%% Added DOI to every field where format.url was found. Kept format.url in case
-%% it is needed.
-%%
+%% $Log: aasjournal.bst $
 
 %% Revision 1.16 2017/10/26 Amy Hendrickson
 %% `url' only active when used in misc
@@ -315,8 +300,15 @@ FUNCTION {field.or.null}
   if$
 }
 
+% FUNCTION {emphasize}
+% { skip$ }
+
 FUNCTION {emphasize}
-{ skip$ }
+{ duplicate$ empty$
+    { pop$ "" }
+    { "{\em " swap$ * "}" * }
+  if$
+}
 
 FUNCTION {capitalize}
 { "u" change.case$ "t" change.case$ }
@@ -368,6 +360,7 @@ FUNCTION {bbl.page}
 
 FUNCTION {bbl.chapter}
 { "Ch." }
+%{ "chap." }
 
 FUNCTION {bbl.techrep}
 { "Tech. Rep." }
@@ -582,7 +575,7 @@ FUNCTION {format.in.editors}
 FUNCTION {format.title}
 { title empty$
     { "" }
-    { title
+    { title emphasize
     }
   if$
 }
@@ -720,20 +713,17 @@ FUNCTION {format.eprint}
 % gets picked
 %
 
-% FUNCTION {format.doi}
-% { doi empty$
-%     { "" }
-%     { "\dodoi{" doi * "}" * }
-%   if$
-% }
+FUNCTION {format.doi}
+{ doi empty$
+    { "" }
+    { "\dodoi{" doi * "}" * }
+  if$
+}
 
 FUNCTION {format.pid}
 { doi empty$
-{eprint empty$ 
-     { url empty$ 
-       { "" }
-       { format.url }
-     if$}
+  {eprint empty$ 
+     { "" }
      { format.eprint }
     if$}
   { format.doi }
@@ -1104,17 +1094,6 @@ FUNCTION {name.or.dash}
   oldname        % Return oldname (which now equals the input)
 }
 
-% { 's := 
-%    oldname empty$
-%      { s 'oldname := s }
-%      { s oldname =
-%          { "---" }
-%          { s 'oldname := s }
-%        if$
-%      }
-%    if$
-% }
-
 %%%%%%%%  Functions added from astrobib
 
 FUNCTION {format.edn.btitle} % Title should be on stack.
@@ -1186,11 +1165,11 @@ FUNCTION {article}
   crossref missing$
     { journal
       "journal" output.check
-       format.vol.num.pages output
-     }
-     { format.article.crossref output.nonnull
-       format.pages output
-     }
+      format.vol.num.pages output
+    }
+    { format.article.crossref output.nonnull
+      format.pages output
+    }
   if$
   pages empty$
     'skip$
@@ -1217,7 +1196,7 @@ FUNCTION {book}
   if$
   format.date "year" output.check
   date.block
-  title format.full.book.spec output
+  title emphasize format.full.book.spec output
 %  format.btitle "title" output.check
 %  crossref missing$
 %    { format.bvolume output
@@ -1231,6 +1210,7 @@ FUNCTION {book}
 %  if$
   format.pages output
   format.pid output
+  format.url output
   fin.entry
 }
 
@@ -1245,6 +1225,7 @@ FUNCTION {booklet}
   howpublished output
   address output
   format.pid output
+  format.url output
   fin.entry
 }
 
@@ -1281,7 +1262,7 @@ FUNCTION {inbook}
 %    }
 %  if$
   format.pages "pages" output.check
-  format.pid output
+  format.url output
   fin.entry
 }
 
@@ -1306,7 +1287,7 @@ FUNCTION {incollection}
 %    }
 %  if$
   format.pages "pages" output.check
-  format.pid output
+  format.url output
   fin.entry
 }
 
@@ -1317,7 +1298,8 @@ FUNCTION {inproceedings}
   format.date "year" output.check
   date.block
   format.title "title" output.check
-  bbl.in " " * booktitle format.full.book.spec * output
+  bbl.in " " * booktitle 
+  format.full.book.spec * output
 %  crossref missing$
 %    { format.in.ed.booktitle "booktitle" output.check
 %      format.bvolume output
@@ -1335,12 +1317,11 @@ FUNCTION {inproceedings}
 %    }
 %  if$
   format.pages output
-  format.pid output
+  format.url output
   fin.entry
 }
 
 FUNCTION {conference} { inproceedings }
-
 
 FUNCTION {manual}
 { output.bibitem
@@ -1354,6 +1335,7 @@ FUNCTION {manual}
   organization output
   address output
   format.pid output
+%%  format.url output
   fin.entry
 }
 
@@ -1369,6 +1351,7 @@ FUNCTION {mastersthesis}
   school "school" output.check
   address output
   format.pid output
+  format.url output
   fin.entry
 }
 
@@ -1384,7 +1367,7 @@ FUNCTION {misc}
 %% new
   version empty$
         'skip$
- {bbl.version version * output}
+ { version output}
  if$
 %%
   howpublished output
@@ -1393,6 +1376,7 @@ FUNCTION {misc}
    {format.aaspublisher}
    if$
   format.pid output
+  format.url output
   fin.entry
 }
 
@@ -1408,6 +1392,7 @@ FUNCTION {phdthesis}
   school "school" output.check
   address output
   format.pid output
+  format.url output
   fin.entry
 }
 
@@ -1440,7 +1425,7 @@ FUNCTION {proceedings}
 %  organization output
 %  publisher output
   format.pages output
-  format.pid output
+  format.url output
   fin.entry
 }
 
@@ -1456,6 +1441,7 @@ FUNCTION {techreport}
   institution "institution" output.check
   address output
   format.pid output
+%%  format.url output
   fin.entry
 }
 
@@ -1468,6 +1454,7 @@ FUNCTION {unpublished}
   date.block
 %  format.title "title" output.check
   format.pid output
+%%  format.url output
   fin.entry
 }
 
