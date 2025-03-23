@@ -20,31 +20,35 @@
 \usepackage{amsmath,amsfonts,lmodern,mathtools,nameref,setspace,tikz,titlesec}
 \usetikzlibrary{angles,calc,quotes}
 
-% typesetting issues
+% page typesetting issues
 \newcommand{\documentname}{\textsl{Note}}
-\newcommand{\sectionname}{Section}
-\newcommand{\secref}[1]{\sectionname~\ref{#1}}
 \setlength{\textwidth}{4.75in}
 \setlength{\oddsidemargin}{3.25in}\addtolength{\oddsidemargin}{-0.5\textwidth}
 \addtolength{\topmargin}{-0.20in}
 \addtolength{\textheight}{1.40in}
 \sloppy\sloppypar\raggedbottom\frenchspacing
 \setstretch{1.08}
+
+% document formatting and sectioning issues
 \pagestyle{myheadings}
+\renewcommand{\paragraph}[1]{\par\addvspace{1.5ex}\noindent\textsl{#1}~---}
+\newcommand{\secbreak}{\bigskip{\centering\footnotesize $\triangle~~~\triangle~~~\triangle$\par}\bigskip\noindent}
+\titleformat*{\subsection}{\normalfont\normalsize\slshape}
+\titlespacing*{\subsection}{0pt}{0pt}{0pt}
 \markboth{foo}{\scshape hainje {\footnotesize\&} hogg / useless formula for the area of a triangle}
 % \markboth{foo}{\scshape hainje et al. / useless formula for the area of a triangle}
 
-\titleformat*{\subsection}{\normalfont\normalsize\slshape}
-\titlespacing*{\subsection}{0pt}{0pt}{0pt}
-
+% bibliography issues
 \usepackage{natbib}
 \bibliographystyle{aasjournal}
 \setcitestyle{aysep={}}
 \setlength{\bibsep}{0pt plus 0.3ex}
 
+% math issues
+\renewcommand{\d}{\mathrm{d}}
 \newcommand{\abs}[1]{|\,{#1}\,|}
-\renewcommand{\paragraph}[1]{\par\addvspace{1.5ex}\noindent\textsl{#1}~---}
 
+% issues
 \usepackage{xcolor}
 \newcommand{\CH}[1]{{\color{blue} (CH says: #1)}}
 \newcommand{\Hogg}[1]{{\color{violet} (Hogg says: #1)}}
@@ -57,21 +61,16 @@
 \newcommand{\aFive}{\textsuperscript{\textbardbl}}
 \newcommand{\aSix}{\textsuperscript{\textparagraph}}
 
-\renewcommand{\d}{\mathrm{d}}
-
-\newcommand{\secbreak}{\bigskip{\centering\footnotesize $\triangle~~~\triangle~~~\triangle$\par}\bigskip\noindent}
-
-\begin{document}\thispagestyle{empty}
-\setcounter{secnumdepth}{0}
+\begin{document}\thispagestyle{empty}\setcounter{secnumdepth}{0}
 
 \section*{\centering\normalsize\uppercase{
 A formula for the area of a triangle:\\
 Useless, but explicitly in Deep Sets form}}
 
-\bigskip
+\medskip
 \noindent
 \textbf{Connor Hainje}\aOne\aSix{}
-\&
+\textsl{and}
 \textbf{David W. Hogg}\aOne\aTwo\aThree%, and
 %\textbf{Soledad Villar}\aFour\aFive
 
@@ -311,16 +310,16 @@ Being very explicit, it matches \eqref{eq:DeepSets} for $\rho$ and $\phi$ define
 
 Note that a triangle defined by three points has one-half the area of the parallelogram spanned by the vectors $\vec{a} = \vec{r}_2 - \vec{r}_1$ and $\vec{b} = \vec{r}_3 - \vec{r}_1$.
 Multiplying both sides by 4 reveals that \eqref{eq:result} is an integer polynomial of permutation-invariant factors for the squared area of the parallelogram.
-Using this fact, we have written code to perform a symbolic regression which recovers our result.\footnote{
+Using this fact, we have written code to perform a symbolic regression that recovers our result.\footnote{
     The simple code is available for re-use under an open-source license at \url{https://github.com/davidwhogg/TriangleAreas}.
 }
 
 In this symbolic regression, we consider a linear combination of monomials, each of which can be written in Deep Sets form, but each of which has units of area-squared (position to the fourth power).
 All the possible monomials are made of permutation-invariant factors of the form 
 \begin{equation}
-F_{mn} = \sum_{i=1}^{3} x_i^m \, y_i^n~.
+F_{mn} = \sum_{i=1}^{3} x_i^m \, y_i^n~;
 \end{equation}
-Such a factor has degree $m + n$.
+each such a factor has degree $m + n$.
 The invariant monomials of degree $d$ are then products $\prod_j F_{m_j n_j}$ such that $\sum_j m_j + n_j = d$.
 We generate all factors $F_{mn}$ with degree $1 \leq m + n \leq 4$, then form all products of these factors with total degree four.
 However, these monomials are not all linearly-independent;
@@ -500,7 +499,7 @@ which implies the following relationship between their Fourier transforms
 \begin{equation}
     -k^2 \, \mathcal{F}[\Phi] = 4 \pi G \, \mathcal{F}[\rho]~,
 \end{equation}
-with $k^2 \equiv |\vec{k}|^2$.
+with $k^2 \equiv \abs{\vec{k}}^2$.
 Using the convolution theorem, we then have
 \begin{align}
     \mathcal{F}[\mathcal{E}] 

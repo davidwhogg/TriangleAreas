@@ -1,3 +1,6 @@
+%% WARNING: THIS FILE WAS MODIFIED IN 2025 March
+%% by HAINJE AND HOGG (NYU).
+
 %%
 %% $Log: aasjournal.bst $
 
@@ -778,7 +781,7 @@ FUNCTION {format.btitle}
 { title emphasize
 }
 
-FUNCTION {format.journal}
+FUNCTION {format.journal} % HOGG WAS HERE
 { journal emphasize
 }
 
@@ -1170,7 +1173,7 @@ FUNCTION {article}
   date.block
   format.title "title" output.check
   crossref missing$
-    { format.journal 
+    { format.journal % HOGG WAS HERE
       "journal" output.check
       format.vol.num.pages output
     }
@@ -1305,7 +1308,7 @@ FUNCTION {inproceedings}
   format.date "year" output.check
   date.block
   format.title "title" output.check
-  bbl.in " " * booktitle 
+  bbl.in " " * booktitle emphasize % HOGG WAS HERE
   format.full.book.spec * output
 %  crossref missing$
 %    { format.in.ed.booktitle "booktitle" output.check
