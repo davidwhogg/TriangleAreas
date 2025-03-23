@@ -575,7 +575,7 @@ FUNCTION {format.in.editors}
 FUNCTION {format.title}
 { title empty$
     { "" }
-    { title emphasize
+    { title
     }
   if$
 }
@@ -689,7 +689,8 @@ FUNCTION {output.bibitem}
 FUNCTION {format.url}
 { url empty$
     { "" }
-    { new.block "\url{" url * "}" * }
+    { "" } % HOGG REMOVED URL
+    % { new.block "\url{" url * "}" * }
   if$
 }
 
@@ -698,9 +699,10 @@ FUNCTION {format.eprint}
     { "" }
     { archivePrefix empty$
         { "" }
-        { archivePrefix "arXiv" =
-        {new.block "\doarXiv{" eprint * "}" * }
-        {new.block "\doeprint{" eprint * "}" * }
+        { "" } % HOGG REMOVED EPRINT
+        %{ archivePrefix "arXiv" =
+        %{new.block "\doarXiv{" eprint * "}" * }
+        %{new.block "\doeprint{" eprint * "}" * }
         if$}
       if$
     }
@@ -716,7 +718,8 @@ FUNCTION {format.eprint}
 FUNCTION {format.doi}
 { doi empty$
     { "" }
-    { "\dodoi{" doi * "}" * }
+    { "" } % HOGG REMOVED DOI
+    % { "\dodoi{" doi * "}" * }
   if$
 }
 
@@ -772,7 +775,11 @@ FUNCTION {format.date}
 }
 
 FUNCTION {format.btitle}
-{ title
+{ title emphasize
+}
+
+FUNCTION {format.journal}
+{ journal emphasize
 }
 
 FUNCTION {tie.or.space.connect}
@@ -1163,7 +1170,7 @@ FUNCTION {article}
   date.block
   format.title "title" output.check
   crossref missing$
-    { journal
+    { format.journal 
       "journal" output.check
       format.vol.num.pages output
     }

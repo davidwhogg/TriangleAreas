@@ -31,12 +31,13 @@
 \sloppy\sloppypar\raggedbottom\frenchspacing
 \setstretch{1.08}
 \pagestyle{myheadings}
-\markboth{foo}{\scshape hainje \& hogg / A useless formula for the area of a triangle}
+\markboth{foo}{\scshape hainje {\footnotesize\&} hogg / useless formula for the area of a triangle}
+% \markboth{foo}{\scshape hainje et al. / useless formula for the area of a triangle}
 
 \titleformat*{\subsection}{\normalfont\normalsize\slshape}
 \titlespacing*{\subsection}{0pt}{0pt}{0pt}
 
-\usepackage{natbib,aas_macros}
+\usepackage{natbib}
 \bibliographystyle{aasjournal}
 \setcitestyle{aysep={}}
 \setlength{\bibsep}{0pt plus 0.3ex}
@@ -67,7 +68,7 @@
 A formula for the area of a triangle:\\
 Useless, but explicitly in Deep Sets form}}
 
-% \bigskip
+\bigskip
 \noindent
 \textbf{Connor Hainje}\aOne\aSix{}
 \&
@@ -128,7 +129,7 @@ For a collection of 110 unique triangle area formulae, see \citet{Baker1885a,Bak
 \begin{figure}[t!]
     \centering
     \begin{tikzpicture}
-    \coordinate (F) at (-1.5,4.2);
+    \coordinate (F) at (-1.5,4.4);
     \coordinate (O) at (0,0);
     \coordinate (A) at (3.5,4);
     \coordinate (B) at (6,1);
@@ -223,7 +224,7 @@ Further, the permutation-invariant polynomials on a set of one-dimensional data 
 This matches onto the Deep Sets form, as it states that a permutation-invariant polynomial of any-dimensional data $f(\{r_i\})$ can be decomposed into a polynomial ($\rho$) of polarizations of the power sums ($\sum_i \phi(\vec{r}_i)$).
 \CH{this is mostly plagiarized from BBS email; need to understand it better to massage it.} \Hogg{Important to emphasize that there is a proof of universality, and it's old.}
 
-Although such a formula for the area of a triangle is of minimal, or even zero, practical interest, our search is motivated by real problems in physics.
+Although a Deep Sets formula for the area of a triangle is of minimal, or even zero, practical interest, our search is motivated by real problems in physics.
 The laws of classical physics are generally invariant to permutation.
 For example, the gravitational (or electric) potential energy of a set of point masses (or charges) is invariant to the ordering or labeling of the points. 
 Specifically, for a system of $N$ point particles with masses $m_i$ at positions $\vec{r}_i$, the gravitational potential energy is
@@ -398,7 +399,7 @@ It is simple to show that this is exactly equivalent to Heron's formula when exp
     representable as $\exp( \sum_{x \in \{ a,b,c,d \}} \log x )$.
 }
 
-\CH{feels out of place...}
+\CH{feels out of place...} \Hogg{This can be deleted.}
 The area of a triangle is not only invariant to permutation, but also to translation, rotation, and reflection.
 Formulae \eqref{eq:sine} and \eqref{eq:Heron}, by virtue of referencing only side-lengths and angles, are explicitly invariant to these other symmetries.
 While true, it is not obvious that our solution \eqref{eq:result} is so invariant.
@@ -443,17 +444,9 @@ We have discussed the general value of a map function $\phi$ which Fourier trans
 \Hogg{The Deep Sets version of the Fourier transform is reminiscent of a positional encoding (CITE), similar to those used to preserve ordering information in (otherwise permutation invariant) transformers (CITE).}}
 does a formula like \eqref{eq:EnergyDeepSets} exist for the area of a triangle?
 
-% \Hogg{Maybe drop this and replace it with a negative conclusion about learning nothing.}
-% In this \documentname,
-% we presented a new Deep Sets formula for the area of a triangle \eqref{eq:result} given the coordinates of the triangle's vertices.
-% We extended it to triangles in higher-dimensional spaces \eqref{eq:quadrature}
-% and to compute the volume of a simplex \eqref{eq:simplex}.
-% We also considered other applications of the Deep Sets form, including to Heron's formula \eqref{eq:HeronDeepSets}
-% and the gravitational potential energy of a system of point masses \eqref{eq:EnergyDeepSets}.
-
 {\footnotesize\par\bigskip\noindent
 This project would not have been possible without originating inspiration and discussions with Soledad Villar (JHU).
-The authors also thank Ben Blum-Smith (JHU), Jonathan Goodman (NYU), Wilson Gregory (JHU), Teresa Huang (Flatiron), Mike O'Neil (NYU), Alexander Novara (NYU), Ben Wandelt (JHU), Kaze Wong (JHU), and the Blanton--Hogg group meeting at NYU for valuable discussions.
+The authors thank Ben Blum-Smith (JHU), Jonathan Goodman (NYU), Wilson Gregory (JHU), Teresa Huang (Flatiron), Mike O'Neil (NYU), Alexander Novara (NYU), Ben Wandelt (JHU), Kaze Wong (JHU), and the Blanton--Hogg group meeting at NYU for valuable discussions.
 The authors also note that, while we believe the formula is (barely) novel, it is difficult to be sure, given the challenge of conducting a complete literature review for this ancient topic.\par}
 
 \secbreak
