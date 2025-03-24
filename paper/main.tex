@@ -91,10 +91,10 @@ Email:} \texttt{\href{mailto:connor.hainje@nyu.edu}{connor.hainje@nyu.edu}}}
 
 \medskip
 \paragraph{Abstract}
-It is known that any permutation-invariant function of data points $\vec{r}_i$
+Any permutation-invariant function of data points $\vec{r}_i$
 can be written in the form $\rho(\sum_i\phi(\vec{r}_i))$,
 where $\rho$ and $\phi$ are functions.
-This form---known in the machine-learning literature as Deep Sets---also directly generates a map--reduce algorithm.
+This form---known in the machine-learning literature as Deep Sets---also generates a map--reduce algorithm.
 The area of a triangle is a permutation-invariant function of the locations $\vec{r}_i$ of the three corners $1\leq i\leq 3$.
 We find the formula for the area of a triangle that is explicitly in Deep Sets form.
 This project was motivated by questions about the fundamental computational complexity of $n$-point statistics in cosmology; that said, no insights of any kind were gained from these results.
@@ -116,7 +116,7 @@ Here are a few:
 &= \sqrt{s\,(s-a)\,(s-b)\,(s-c)} \label{eq:Heron} ~,
 \end{align}
 where the quantities used are defined in Figure~\ref{fig:triangle}, apart from the side lengths
-$a = \abs{\vec{a}}$, $b = \abs{\vec{b}}$, $c = \abs{\vec{c}}$
+$a, b, c = \abs{\vec{a}}, \abs{\vec{b}}, \abs{\vec{c}}$
 and the semi-perimeter $s = (a + b + c)/2$.
 Formula~\eqref{eq:school} is the usual introduction to the subject, traceable back to \citet{Euclid300BC}.
 Formula~\eqref{eq:sine} makes use of the fact that the height can be found from $\sin(C) = (\text{height}) / a$, commonly seen in introductory geometry courses.
@@ -446,6 +446,8 @@ does a formula like \eqref{eq:EnergyDeepSets} exist for the area of a triangle?
 {\footnotesize\par\bigskip\noindent
 This project would not have been possible without originating inspiration and discussions with Soledad Villar (JHU).
 The authors thank Ben Blum-Smith (JHU), Jonathan Goodman (NYU), Wilson Gregory (JHU), Teresa Huang (Flatiron), Mike O'Neil (NYU), Alexander Novara (NYU), Ben Wandelt (JHU), Kaze Wong (JHU), and the Blanton--Hogg group meeting at NYU for valuable discussions.
+The Flatiron Institute is a division of the Simons Foundation.
+\Hogg{CH: You need to acknowledge a grant number here, I believe.}
 The authors also note that, while we believe the formula is (barely) novel, it is difficult to be sure, given the challenge of conducting a complete literature review for this ancient topic.\par}
 
 \secbreak
