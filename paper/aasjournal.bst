@@ -177,6 +177,7 @@ ENTRY
     school
     series
     title
+    translator % HOGG
     misctitle
     type
     volume
@@ -800,6 +801,14 @@ FUNCTION {either.or.check}
   if$
 }
 
+%%%% HOGG
+FUNCTION {format.translator}
+{ translator empty$
+    { "" }
+    { translator }
+    if$
+}
+
 FUNCTION {format.bvolume}
 { volume empty$
     { "" }
@@ -1218,6 +1227,7 @@ FUNCTION {book}
 %      format.book.crossref output.nonnull
 %    }
 %  if$
+  format.translator output % Hogg
   format.pages output
   format.pid output
   format.url output
