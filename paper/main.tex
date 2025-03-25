@@ -39,7 +39,7 @@
 % \markboth{foo}{\scshape hainje et al. / useless formula for the area of a triangle}
 
 % bibliography issues
-\usepackage{natbib}
+\usepackage{aas_macros,natbib}
 \bibliographystyle{aasjournal}
 \setcitestyle{aysep={}}
 \setlength{\bibsep}{0pt plus 0.3ex}
@@ -92,8 +92,7 @@ Email:} \texttt{\href{mailto:connor.hainje@nyu.edu}{connor.hainje@nyu.edu}}}
 \medskip
 \paragraph{Abstract}
 Any permutation-invariant function of data points $\vec{r}_i$
-can be written in the form $\rho(\sum_i\phi(\vec{r}_i))$,
-where $\rho$ and $\phi$ are functions.
+can be written in the form $\rho(\sum_i\phi(\vec{r}_i))$ for suitable functions $\rho$ and $\phi$.
 This form---known in the machine-learning literature as Deep Sets---also generates a map--reduce algorithm.
 The area of a triangle is a permutation-invariant function of the locations $\vec{r}_i$ of the three corners $1\leq i\leq 3$.
 We find the formula for the area of a triangle that is explicitly in Deep Sets form.
@@ -211,17 +210,26 @@ The area of a triangle has many symmetries. It is invariant to translation, rota
 
 A function $f(\vec{r}_1, \dots, \vec{r}_N)$ is invariant to permutation of its arguments if and only if it can be decomposed in the form
 \begin{equation}
-    f(r_1, \dots, r_N) = \rho \, \big( \sum_{i=1}^{N} \, \phi(\vec{r}_i) \big)~,\label{eq:DeepSets}
+    f(\vec{r}_1, \dots, \vec{r}_N) = \rho \, \big( \sum_{i=1}^{N} \, \phi(\vec{r}_i) \big)~,\label{eq:DeepSets}
 \end{equation}
-for some functions $\rho$ and $\phi$. This result---often known by the name of the deep learning architecture derived from it, \emph{Deep Sets} (\citealt{Zaheer+17deepsets}; see Theorem~2)---is not at all obvious.
+for some functions $\rho$ and $\phi$, where $\phi$ is usually vector valued.
+This result---often known by the name of the deep learning architecture derived from it, \emph{Deep Sets} (\citealt{Zaheer+17deepsets}; see Theorem~2)---is not at all obvious.
 For example, even though Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant, it is not actually in the form of \eqref{eq:DeepSets}. 
 Further, despite the triangle area being permutation-invariant, there is no known (prior to this work) formula for the area of a triangle that is explicitly in Deep Sets form.
 
 While this result was recently popularized as Deep Sets, it follows from the classical theory of invariant polynomials.
-Specifically, it is known that the permutation-invariant polynomials on a set of any-dimensional data are representable in terms of the polarizations of the permutation-invariant polynomials on a corresponding set of one-dimensional data \citep{Weyl1939}.
-Further, the permutation-invariant polynomials on a set of one-dimensional data are representable in terms of the power sums $\sum_{i=1}^{n} r_i^j$ \citep{Waring1782}.
-This matches onto the Deep Sets form, as it states that a permutation-invariant polynomial of any-dimensional data $f(\{r_i\})$ can be decomposed into a polynomial ($\rho$) of polarizations of the power sums ($\sum_i \phi(\vec{r}_i)$).
-\CH{this is mostly plagiarized from BBS email; need to understand it better to massage it.} \Hogg{Important to emphasize that there is a proof of universality, and it's old.}
+It has long been known that any permutation-invariant (or symmetric) polynomial of scalar data $f(\{r_i\})$ can be written as a polynomial of the power sums $\sum_i r_i^m$ \citep{Waring1782}.
+Further, symmetric polynomials of any-dimensional data are decomposable into \emph{polarizations} of the scalar symmetric polynomials \citep{Weyl1939}.
+Together, these imply that a permutation-invariant polynomial of vector data is a polynomial in the polarizations of the power sums; e.g., the power sums of the components of the vectors.
+This result is \emph{universal}, in the sense that it is true for all symmetric polynomials.
+It also matches onto the Deep Sets form, where the polarizations of the power sums are the components of the vector $\sum_i \phi(\vec{r}_i)$, which are combined in a polynomial $\rho$.
+
+% Specifically, it is known that the permutation-invariant polynomials on a set of any-dimensional data are representable in terms of the polarizations of the permutation-invariant polynomials on a corresponding set of one-dimensional data \citep{Weyl1939}.
+% Further, the permutation-invariant polynomials on a set of one-dimensional data are representable in terms of the power sums $\sum_{i=1}^{n} r_i^j$ \citep{Waring1782}.
+% Note that this decomposition is \emph{universal}, in the sense that it is true for \emph{all} symmetric polynomials of any-dimensional data. 
+% This also matches onto the Deep Sets form, as it states that a permutation-invariant polynomial of any-dimensional data $f(\{r_i\})$ can be decomposed into a polynomial ($\rho$) of polarizations of the power sums ($\sum_i \phi(\vec{r}_i)$).
+% \CH{this is mostly plagiarized from BBS email; need to understand it better to massage it.} 
+% \Hogg{Important to emphasize that there is a proof of universality, and it's old.}
 
 Although a Deep Sets formula for the area of a triangle is of minimal, or even zero, practical interest, our search is motivated by real problems in physics.
 The laws of classical physics are generally invariant to permutation.
@@ -238,7 +246,7 @@ the power spectrum \citep{Peebles1973},
 the three-point correlation function \citep{PeeblesGroth1975},
 the bispectrum \citep{FrySeldner1982},
 and higher-order statistics \citep{Peebles1980book}
-used for precision measurement in cosmology \citep[e.g.,][]{Planck18CosmoParams,Planck18PNG,Planck18Inflation,Cabass+2022}
+used for precision measurement in cosmology \citep[e.g.,][]{Eisenstein+2005BAO,Planck18PNG,Planck18Inflation,Cabass+2022}
 are all permutation-invariant.
 Calculating these statistics na\"ively involves loops over all $k$-tuplets of points, which is not only inconsistent with Deep Sets form, but also has a runtime that scales as $N^k$, where $N$ the number of points in the set.
 
@@ -308,6 +316,12 @@ Being very explicit, it matches \eqref{eq:DeepSets} for $\rho$ and $\phi$ define
     \nonumber
 \end{gather}
 
+\CH{moved this to here from farther down}
+The area of a triangle is not only invariant to permutation, but also to translation, rotation, and reflection.
+Formulae \eqref{eq:sine} and \eqref{eq:Heron}, by virtue of referencing only side-lengths and angles, are explicitly invariant to these other symmetries.
+While true, it is not obvious that our solution \eqref{eq:result} is so invariant.
+An explicit proof of this is left to the reader.
+
 Note that a triangle defined by three points has one-half the area of the parallelogram spanned by the vectors $\vec{a} = \vec{r}_2 - \vec{r}_1$ and $\vec{b} = \vec{r}_3 - \vec{r}_1$.
 Multiplying both sides by 4 reveals that \eqref{eq:result} is an integer polynomial of permutation-invariant factors for the squared area of the parallelogram.
 Using this fact, we have written code to perform a symbolic regression that recovers our result.\footnote{
@@ -374,42 +388,37 @@ The result, verifiable by computational algebra, is that the volume $V$ of the s
 There are many similarities between this and our result for the triangle area \eqref{eq:result}, which we believe may indicate a way to generalize this result to the hypervolume of a $d$-simplex.
 
 \secbreak
-We now consider two more applications of the Deep Sets form to Heron's formula and to the potential energy of a system of point masses.
-We stated above that Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant, and yet it is not represented in Deep Sets form. Consider instead
-\begin{equation}
-\label{eq:HeronDeepSets}
-    \Delta = \frac{1}{4} \, \sqrt{
-        \left( a^2 + b^2 + c^2 \right)^2
-        - 2 \left( a^4 + b^4 + c^4 \right)
-    }~.
-\end{equation}
-It is simple to show that this is exactly equivalent to Heron's formula when expanded, but it is now in Deep Sets form.\footnote{
-    This is not novel. Heron's formula is a special case of Brahmagupta's formula, which gives the area $K$ of a convex cyclic quadrilateral in terms of its four side lengths $a, b, c, d$ \citep{coolidge1939}.
-    On Wikipedia, it has been written
-    \begin{equation}
-        K = \frac{1}{4} \, \sqrt{
-            \left( a^2 + b^2 + c^2 + d^2 \right)^2
-            + 8 \, a\,b\,c\,d
-            - 2 \left( a^4 + b^4 + c^4 + d^4 \right)
-        }~,
-    \end{equation}
-    which is exactly \eqref{eq:HeronDeepSets} if $d$ is zero.
-    This expression is in Deep Sets form, with the product $a \, b \, c \, d$ 
-    representable as $\exp( \sum_{x \in \{ a,b,c,d \}} \log x )$.
-}
+% We now consider two more applications of the Deep Sets form to Heron's formula and to the potential energy of a system of point masses.
 
-\CH{feels out of place...} \Hogg{This can be deleted.}
-The area of a triangle is not only invariant to permutation, but also to translation, rotation, and reflection.
-Formulae \eqref{eq:sine} and \eqref{eq:Heron}, by virtue of referencing only side-lengths and angles, are explicitly invariant to these other symmetries.
-While true, it is not obvious that our solution \eqref{eq:result} is so invariant.
-An explicit proof of this is left to the reader.
-
-While the triangle area is related to physics problems, the polynomial methods we employ to find the Deep Sets form for the triangle area \eqref{eq:result} are not relevant in a physical context.
+% \CH{I want to cut this?}
+% We stated above that Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant, and yet it is not represented in Deep Sets form. Consider instead
+% \begin{equation}
+% \label{eq:HeronDeepSets}
+%     \Delta = \frac{1}{4} \, \sqrt{
+%         \left( a^2 + b^2 + c^2 \right)^2
+%         - 2 \left( a^4 + b^4 + c^4 \right)
+%     }~.
+% \end{equation}
+% It is simple to show that this is exactly equivalent to Heron's formula when expanded, but it is now in Deep Sets form.\footnote{
+%     This is not novel. Heron's formula is a special case of Brahmagupta's formula, which gives the area $K$ of a convex cyclic quadrilateral in terms of its four side lengths $a, b, c, d$ \citep{coolidge1939}.
+%     On Wikipedia, it has been written
+%     \begin{equation}
+%         K = \frac{1}{4} \, \sqrt{
+%             \left( a^2 + b^2 + c^2 + d^2 \right)^2
+%             + 8 \, a\,b\,c\,d
+%             - 2 \left( a^4 + b^4 + c^4 + d^4 \right)
+%         }~,
+%     \end{equation}
+%     which is exactly \eqref{eq:HeronDeepSets} if $d$ is zero.
+%     This expression is in Deep Sets form, with the product $a \, b \, c \, d$ 
+%     representable as $\exp( \sum_{x \in \{ a,b,c,d \}} \log x )$.
+% }
+% 
+While the triangle area is in a form similar to some physics problems, the polynomial methods we employ to find the Deep Sets form for the triangle area \eqref{eq:result} are not so relevant for those problems.
 More relevant instead is to consider a $\phi$ which Fourier transforms the input data.
-In doing so, translation symmetry is encoded as well, since the Fourier basis $\exp (i\, \vec{k}\cdot\vec{x})$ is the eigenbasis of the translation operator.
-Below, we show that this can be used to produce a Deep Sets form for the gravitational potential energy of a system of point masses.
+In doing so, translation symmetry is encoded as well as permutation symmetry, since the Fourier basis $\exp (i\, \vec{k}\cdot\vec{x})$ is the eigenbasis of the translation operator.
 
-Consider a system of $N$ point particles with masses $m_i$ and positions $\vec{r}_i$.
+For example, this can be used to produce a Deep Sets form for the gravitational potential energy of a system of point masses. Explicitly, consider a system of $N$ point particles with masses $m_i$ and positions $\vec{r}_i$.
 The total energy is given in Deep Sets form by
 \begin{align}
     \phi_{\vec{k}}(m_j, \vec{r}_j)
@@ -434,20 +443,66 @@ To avoid making this infinite-dimensional $\phi$, one can instead evaluate $\mat
 The approximation will improve as the size of $\phi$ grows.
 Approaches akin to this Fourier approach can be used \citep[and are used; e.g.,][]{Portillo+2018,Philcox+2022ENCORE} to estimate or approximate $k$-point statistics in cosmology, which was our motivating question.
 
+We can even use these methods to find another formula for the area $\Delta$ of a triangle.
+\begin{align}
+    \phi_{\vec{k}} (\vec{r}_j) &= e^{-i \, \vec{k} \cdot \vec{r}_j}~,
+    \quad
+    \mathcal{F}[\rho](\vec{k}) = \sum_{j=1}^{3} \phi_{\vec{k}}(\vec{r}_j)~,
+    \nonumber\\
+    \mathcal{P}(\vec{r}) &= (2\pi)^d \, \mathcal{F}^{-1} \left[ 
+    \abs{ \mathcal{F}[\rho] }^2 \right]~,
+    \quad
+    F_m = \int_{\mathbb{R}^d} \d^d r \, \mathcal{P}(\vec{r}) \, \frac{\abs{\vec{r}}^m}{2}~,
+    \nonumber\\
+    \Delta
+    &= \frac{1}{4} \, \sqrt{F_2^2 - 2 \, F_4}~.
+\end{align}
+A complete derivation is provided in the \nameref{sec:appendix}.
+Briefly, $\mathcal{P}$ is the Patterson function of X-ray crystallography \citep{Patterson1934} which has 6 delta function peaks corresponding to the three displacement vectors and their negatives. 
+Multiplying the Patterson function by a function of the magnitude $r \equiv \vec{r}$ and integrating over all space gives a sum of the values of the function evaluated at the three side lengths. 
+Choosing this function properly allows us to write the power sums of the side lengths $F_m = a^m+b^m+c^m$ in this form.
+
+To verify this formula, note that we can write it in terms of the side lengths as
+\begin{equation}
+\label{eq:HeronDeepSets}
+    \Delta = \frac{1}{4} \, \sqrt{
+        F_2^2
+        - 2 \, F_4
+    }
+    = \frac{1}{4} \, \sqrt{
+        \left( a^2 + b^2 + c^2 \right)^2
+        - 2 \, \left( a^4 + b^4 + c^4 \right)
+    }~.
+\end{equation}
+This formula is equivalent to Heron's formula \eqref{eq:Heron} by expansion.
+Note that it is also in Deep Sets form as a function of the side lengths.
+
+\CH{I don't like this ending ... thinking about other ways to conclude}
+
 We leave the reader with the following questions. 
 It is trivial to take the form of \eqref{eq:result} and evaluate the sums for more than three vectors; does the result have any meaning?
 Is there a generalization of the triangle area \eqref{eq:result} and simplex volume \eqref{eq:simplex} results to a $d$-simplex?
 Our formulae \eqref{eq:result} and \eqref{eq:simplex} only used invariant factors of degree $2$, with exponents that are larger than $2$. Does this generalize to higher dimension simplexes, and can it be shown that higher order factors aren't needed?
 One can replace the sum in \eqref{eq:DeepSets} with any other permutation-invariant aggregator (e.g., max or product), though we do not know if there are any claims to universality in these cases. Does another area formula exist for these other aggregators?
-We have discussed the general value of a map function $\phi$ which Fourier transforms the points;\footnote{%
-\Hogg{The Deep Sets version of the Fourier transform is reminiscent of a positional encoding (CITE), similar to those used to preserve ordering information in (otherwise permutation invariant) transformers (CITE).}}
-does a formula like \eqref{eq:EnergyDeepSets} exist for the area of a triangle?
+% We have discussed the general value of a map function $\phi$ which Fourier transforms the points;\footnote{%
+% \Hogg{The Deep Sets version of the Fourier transform is reminiscent of a positional encoding (CITE), similar to those used to preserve ordering information in (otherwise permutation invariant) transformers (CITE).}}
+% does a formula like \eqref{eq:EnergyDeepSets} exist for the area of a triangle?
 
 {\footnotesize\par\bigskip\noindent
 This project would not have been possible without originating inspiration and discussions with Soledad Villar (JHU).
-The authors thank Ben Blum-Smith (JHU), Jonathan Goodman (NYU), Wilson Gregory (JHU), Teresa Huang (Flatiron), Mike O'Neil (NYU), Alexander Novara (NYU), Ben Wandelt (JHU), Kaze Wong (JHU), and the Blanton--Hogg group meeting at NYU for valuable discussions.
+The authors thank
+  Ben Blum-Smith (JHU),
+  Jonathan Goodman (NYU),
+  Wilson Gregory (JHU),
+  Teresa Huang (Flatiron),
+  Alexander Novara (NYU),
+  Mike O'Neil (NYU),
+  Oliver Philcox (Columbia),
+  Ben Wandelt (JHU),
+  Kaze Wong (JHU),
+and the Blanton--Hogg group meeting at NYU for valuable discussions.
 The Flatiron Institute is a division of the Simons Foundation.
-\Hogg{CH: You need to acknowledge a grant number here, I believe.}
+CH is supported by the National Science Foundation Graduate Research Fellowship under Grant Number DGE-2234660.
 The authors also note that, while we believe the formula is (barely) novel, it is difficult to be sure, given the challenge of conducting a complete literature review for this ancient topic.\par}
 
 \secbreak
@@ -593,5 +648,72 @@ Consider $\mathcal{F}^{-1}[\tilde{\rho} \ast \tilde{\Phi}](\vec{x})$.
 \end{align}
 Taking the Fourier transform of both sides gives the desired result.
 
+\paragraph{Fourier triangle area}
+Suppose our triangle is specified by three vertices $\vec{r}_1,\vec{r}_2,\vec{r}_3 \in \mathbb{R}^d$. We represent this distribution by the field
+\begin{equation}
+    \rho(\vec{r})
+    = \sum_i \, \delta(\vec{r} - \vec{r}_i)~.
+\end{equation}
+Fourier transforming this field gives
+\begin{equation}
+    \tilde{\rho}(\vec{k})
+    =
+    e^{-i \, \vec{k} \cdot \vec{r}_1} +
+    e^{-i \, \vec{k} \cdot \vec{r}_2} +
+    e^{-i \, \vec{k} \cdot \vec{r}_3}~.
+\end{equation}
+Multiplying by its conjugate to find the magnitude squared, we find
+\begin{equation}
+    \abs{\tilde{\rho}(\vec{k})}^2
+    =
+    3 +
+    e^{-i \, \vec{k} \cdot \vec{r}_{12}} +
+    e^{+i \, \vec{k} \cdot \vec{r}_{12}} +
+    e^{-i \, \vec{k} \cdot \vec{r}_{13}} +
+    e^{+i \, \vec{k} \cdot \vec{r}_{13}} +
+    e^{-i \, \vec{k} \cdot \vec{r}_{23}} +
+    e^{+i \, \vec{k} \cdot \vec{r}_{23}}~,
+\end{equation}
+defining $\vec{r}_{ij} \equiv \vec{r}_i - \vec{r}_j$.
+The inverse Fourier transform of this is
+\begin{align}
+    \mathcal{P}(\vec{r})
+    &= (2\pi)^d \, \mathcal{F}^{-1} \left[ \abs{\tilde{\rho}}^2 \right]
+    \nonumber\\ 
+    &= 3 \,\delta(\vec{r})
+    + \delta(\vec{r} - \vec{r}_{12})
+    + \delta(\vec{r} + \vec{r}_{12})
+    \nonumber\\
+    &\quad + \delta(\vec{r} - \vec{r}_{13})
+    + \delta(\vec{r} + \vec{r}_{13})
+    + \delta(\vec{r} - \vec{r}_{23})
+    + \delta(\vec{r} + \vec{r}_{23})~.
+\end{align}
+This is known as the Patterson function.
+
+By multiplying the Patterson function $\mathcal{P}$ by a function of $r \equiv \abs{\vec{r}}$ and integrating over all space, we can extract sums of functions of the side lengths. Explicitly,
+\begin{align}
+    \int_{\mathbb{R}^d} \d^d r \, \mathcal{P}(\vec{r}) \, f(\abs{\vec{r}})
+    &= 3 \, f(0) +
+        2 \, f(r_{12}) +
+        2 \, f(r_{13}) +
+        2 \, f(r_{23}) \nonumber\\
+    &= 3 \, f(0) +
+        2 \, f(a) +
+        2 \, f(b) +
+        2 \, f(c)~.
+\end{align}
+In particular, we can define the $k^{\rm th}$ power sum of the side lengths
+\begin{equation}
+    F_k
+    = \int_{\mathbb{R}^d} \d^d r \, \mathcal{P}(\vec{r}) \, \frac{\abs{\vec{r}}^k}{2}
+    = a^k + b^k + c^k~,
+\end{equation}
+which allows us to write the triangle area as
+\begin{equation}
+    \Delta
+    = \frac{1}{4} \, \sqrt{\left(a^2+b^2+c^2\right)^2 - 2\, \left(a^4+b^4+c^4\right)}
+    = \frac{1}{4} \, \sqrt{F_2^2 - 2\, F_4}~.
+\end{equation}
 
 \end{document}
