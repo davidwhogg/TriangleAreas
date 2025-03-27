@@ -35,7 +35,10 @@
 % document formatting and sectioning issues
 \pagestyle{myheadings}
 \renewcommand{\paragraph}[1]{\par\addvspace{1em}\noindent\textsl{#1}~---}
-\newcommand{\secbreak}{\bigskip{\centering\footnotesize $\triangle~~~\triangle~~~\triangle$\par}\bigskip\noindent}
+\newcommand{\secbreak}{\bigskip{\centering\footnotesize%
+\rotatebox[origin=c]{55}{$\triangle$}~~~%
+\rotatebox[origin=c]{35}{$\triangle$}~~~%
+\rotatebox[origin=c]{15}{$\triangle$}\par}\bigskip\noindent}
 \titleformat*{\subsection}{\normalfont\normalsize\slshape}
 \titlespacing*{\subsection}{0pt}{0pt}{0pt}
 \markboth{foo}{\scshape hainje {\footnotesize\&} hogg / useless formula for the area of a triangle}
@@ -122,7 +125,7 @@ where the quantities used are defined in Figure~\ref{fig:triangle}, apart from t
 $a, b, c = \abs{\vec{a}}, \abs{\vec{b}}, \abs{\vec{c}}$
 and the semi-perimeter $s = (a + b + c)/2$.
 Formula~\eqref{eq:school} is the usual introduction to the subject, traceable back to \citet{Euclid300BC}.
-Formula~\eqref{eq:sine} makes use of the fact that the height can be found from $\sin(C) = (\text{height}) / a$, commonly seen in introductory geometry courses.
+Formula~\eqref{eq:sine} makes use of the fact that if the base is $b$ then the height is $a\,\sin(C)$.
 Formula~\eqref{eq:cross} generalizes to triangles in higher dimensional spaces, using the fact that the cross or wedge product has a magnitude equal to the area of the parallelogram spanned by $\vec{a}$ and $\vec{b}$.
 Formula~\eqref{eq:polynomial} gives the absolute value of a polynomial in terms of the Cartesian coordinates of the corners in two dimensions; it is equal to an expansion of \eqref{eq:cross}.
 Formula~\eqref{eq:Heron} is Heron's formula, which elegantly computes the area from the side lengths alone.
@@ -223,9 +226,9 @@ Further, despite the triangle area being permutation-invariant, there is no know
 
 While this result was recently popularized as Deep Sets, it follows from the classical theory of invariant polynomials.
 It has long been known that any permutation-invariant (or symmetric) polynomial of scalar data $f(\{r_i\})$ can be written as a polynomial of the power sums $\sum_i r_i^m$ \citep{Waring1782}.
-Further, symmetric polynomials of vector data $\{ \vec{r}_i \}$ are decomposable into polarizations of the scalar symmetric polynomials \citep{Weyl1939}, which look like sums of the form $\sum_i \, (\vec{r}_{i})_{j}^{m_j} \cdots (\vec{r}_{i})_{k}^{m_k}$, where $(\vec{r}_i)_j$ is the $j^{\rm th}$ component of $\vec{r}_i$.
-Together, these imply that a permutation-invariant polynomial of vector data is a polynomial in the polarizations of the power sums.
-This result is \emph{universal}, in the sense that it is true for all symmetric polynomials.
+Further, symmetric polynomials of vector data $\{ \vec{r}_i \}$ are decomposable into polarizations of the scalar symmetric polynomials \citep{Weyl1939}.
+Together, these imply that any permutation-invariant polynomial of vector data can be written as a polynomial in the polarizations of the power sums, which look like sums of the form $\sum_i \, (\vec{r}_{i})_{j}^{m_j} \cdots (\vec{r}_{i})_{k}^{m_k}$, where $(\vec{r}_i)_j$ is the $j^{\rm th}$ component of $\vec{r}_i$.
+% This result is \emph{universal}, in the sense that it is true for all symmetric polynomials.
 It also matches onto the Deep Sets form, where the polarizations of the power sums are the components of the vector $\sum_i \phi(\vec{r}_i)$, which are combined in a polynomial $\rho$.
 
 Although a Deep Sets formula for the area of a triangle is of minimal, or even zero, practical interest, our search is motivated by real problems in physics.
@@ -468,15 +471,13 @@ Notice that the Fourier transform of this field at a wavevector $\vec{k}$ is
     = \sum_{j=1}^{N} e^{-i \, \vec{k} \cdot \vec{r}_j}~,
 \end{equation}
 which is exactly in the form of $\sum_i \phi(\vec{r}_i)$.
-Hence, any function of the Fourier transform $\mathcal{D}$ of the density field is technically in Deep Sets form, and has permutation symmetry guaranteed.
+Hence, any function of the Fourier transform $\mathcal{D}$ of the density field is in Deep Sets form and has permutation symmetry guaranteed.
 This is physically useful also because the Fourier basis $\exp (i\, \vec{k}\cdot\vec{x})$ is the eigenbasis of the translation operator, so this choice of the map $\phi$ naturally encodes translation symmetry.\footnote{%
-%
-Interestingly, a transformation like $\phi(r) = \exp(i\,k\,r)$ is used widely in natural language processing.
-Most large language models, such as GPT-3 \citep{Brown2020GPT3}, are transformer models \citep{Vaswani2017Attention}, which are fundamentally permutation invariant.
-In order to use the positional information of tokens (often words), the tokens are augmented by a ``positional encoding.''
-One of the most popular choices for this encoding is the Rotary Positional Encoding \citep[RoPE;][]{Su2024Roformer}, which takes the word embedding vector $\vec{x} \in \mathbb{R}^{d}$ for the token in position $m$ and multiplies it by $e^{i \, m \, \theta}$ for $d/2$ preset constant values $\theta \in \mathbb{R}$.
-While this actually \emph{breaks} permutation invariance rather than enforcing it (since the encoding explicitly involves the index $m$), it underscores the broad applications of these transformations.
-}
+    Interestingly, a transformation like $\phi(r) = \exp(i\,k\,r)$ is often used in natural language processing.
+    Most large language models, such as GPT-3 \citep{Brown2020GPT3}, are transformer models \citep{Vaswani2017Attention}, which are fundamentally permutation invariant.
+    In order to use the positional information of tokens (often words), the tokens are augmented by a ``positional encoding.''
+    One of the most popular choices for this encoding is the Rotary Positional Encoding \citep[RoPE;][]{Su2024Roformer}, which takes the word embedding vector $\vec{x} \in \mathbb{R}^{d}$ for the token in position $m$ and multiplies it by $e^{i \, m \, \theta}$ for $d/2$ preset constant values $\theta \in \mathbb{R}$.
+    While this actually \emph{breaks} permutation invariance rather than enforcing it (since the encoding explicitly involves the index $m$), it underscores the broad applicability of these kinds of transformations.}
 
 Because any function of the Fourier transform $\mathcal{D}$ of the density field is automatically in Deep Sets form,
 we can find a Deep Sets form for the gravitational potential energy of a system of point masses.
@@ -557,7 +558,7 @@ These triangle formulae have no practical value, and we also do not solve any qu
 {\footnotesize\par\bigskip\noindent
 This project would not have been possible without originating inspiration and discussions with Soledad Villar (JHU).
 The authors give special thanks to Ben Blum-Smith (JHU) and Kendrick Smith (Perimeter) for insightful and important input.
-The authors thank
+The authors also thank
   % Ben Blum-Smith (JHU),
   Jonathan Goodman (NYU),
   Wilson Gregory (JHU),
@@ -566,10 +567,10 @@ The authors thank
   Mike O'Neil (NYU),
   Simon Park (Princeton),
   Oliver Philcox (Columbia),
-  % Kendrick Smith (Perimeter Institute),
+  % Kendrick Smith (Perimeter),
   Ben Wandelt (JHU),
   Kaze Wong (JHU),
-and the Blanton--Hogg group meeting at NYU for valuable discussions.
+and the Blanton--Hogg group meeting at NYU for valuable comments.
 The Flatiron Institute is a division of the Simons Foundation.
 CH is supported by the National Science Foundation Graduate Research Fellowship under Grant Number DGE-2234660.
 The authors also note that, while we believe the formulae are (barely) novel, it is difficult to be sure, given the challenge of conducting a complete literature review for this ancient topic.\par}
@@ -586,10 +587,10 @@ The authors also note that, while we believe the formulae are (barely) novel, it
 \subsection{Appendix}
 \label{sec:appendix}
 
-\paragraph{Proof that area sums in quadrature} We prove equation \eqref{eq:quadrature}, that the area of a triangle in $d$ dimensions is the sum in quadrature of the areas of the triangles made by all orthogonal projections onto pairs of axes.
+\paragraph{Proof that the area sums in quadrature} We prove equation \eqref{eq:quadrature}, that the area of a triangle in $d$ dimensions is the sum in quadrature of the areas of the triangles made by all pairs of mutually orthogonal projections of the points.
 
 From the three position vectors $\vec{r}_1, \vec{r}_2, \vec{r}_3 \in \mathbb{R}^d$ (for $d \geq 2$), we consider the two displacement vectors $\vec{a} \equiv \vec{r}_2 - \vec{r}_1$ and $\vec{b} \equiv \vec{r}_3 - \vec{r}_1$.
-Given these, we can write the two-dimensional triangle sub-area $\Delta_{jk}$ by first defining the projected two-dimensional displacement vectors $\vec{a}_{jk} = ( a_j, a_k )$, $\vec{b}_{jk} = ( b_j, b_k )$. Then,
+Given these, we can write the two-dimensional triangle sub-area $\Delta_{jk}$ by first defining the projected two-dimensional displacement vectors $\vec{a}_{jk} = \big[ a_j, a_k \big]$, $\vec{b}_{jk} = \big[ b_j, b_k \big]$. Then,
 \begin{equation}
     \Delta_{jk}
     = \frac{1}{2} \, \abs{ \vec{a}_{jk} \wedge \vec{b}_{jk} }
@@ -611,7 +612,7 @@ Next, consider formula \eqref{eq:cross} with the full $d$-dimensional vectors:
 \end{align}
 
 
-\paragraph{Volume of $d$-simplex} Consider a $d$-simplex in $d$-dimensional space. Let its vertices be labeled $\{ \vec{r}_1, \dots, \vec{r}_{d+1} \}$. The volume of the $d$-simplex is known to be
+\paragraph{Volume of the $d$-simplex} Consider a $d$-simplex in $d$-dimensional space. Let its vertices be labeled $\{ \vec{r}_1, \dots, \vec{r}_{d+1} \}$. The volume of the $d$-simplex is known to be
 \begin{equation}
     V = \frac{1}{d!} \, \abs{\det \mathsf{A}},
     \quad \mathsf{A} \equiv \left[ \begin{array}{cc}
@@ -630,7 +631,7 @@ Squaring both sides, we find
 \end{equation}
 and $\mathsf{A}^\top \mathsf{A}$ matches $\mathsf{M}$ as defined in equation \eqref{eq:dsimplex}.
 
-\paragraph{Deep Sets energy} Consider a system of $N$ point particles with masses $m_i$ and positions $\vec{r}_i$.
+\paragraph{Deep Sets form for the energy} Consider a system of $N$ point particles with masses $m_i$ and positions $\vec{r}_i$.
 The energy density $\mathcal{E} = \d U / \d^3 x$ is given by
 \begin{equation}
     \mathcal{E} = \frac{\varrho \, \Phi,}{2}~,
@@ -675,7 +676,6 @@ Thus, the total energy is given in terms of the Fourier transform of the density
             k^{-2} \, \mathcal{F}\{\varrho\} \right)
         \right\}~.
 \end{equation}
-
 
 \paragraph{Proof of the convolution theorem} We prove the claim (equation \eqref{eq:ConvolutionThm}) that
 \begin{equation}
@@ -725,8 +725,7 @@ Consider $\mathcal{F}^{-1}\{\tilde{\varrho} \ast \tilde{\Phi}\}$.
 \end{align}
 Taking the Fourier transform of both sides gives the desired result.
 
-
-\paragraph{Fourier triangle area}
+\paragraph{Fourier-space triangle area formula}
 Suppose our triangle is specified by three vertices $\vec{r}_1,\vec{r}_2,\vec{r}_3 \in \mathbb{R}^d$. We represent this distribution by the field
 \begin{equation}
     \varrho(\vec{r})
