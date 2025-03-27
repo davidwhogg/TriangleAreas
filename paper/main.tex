@@ -2,8 +2,9 @@
 
 % to-do items
 % -----------
-% - CH: Show that there is NOT an exact solution at polynomial degree 2 order.
-% - HOGG: Discuss alternatives like Novara's; And alternatives like Kaze's. Positional encodings! CH: Describe the connection to positional encodings (in, eg, transformers). Oh and cosmology and power spectrum and bispectrum.
+% - [x] CH will mention positional encodings.
+% - [x] CH will consider changing the outer function rho() to sigma().
+% - [x] CH should define \d as \mathrm{d} and use it for differentials.
 
 % style notes
 % -----------
@@ -11,6 +12,8 @@
 % - Put variable names next to the precise thing they label.
 % - Put ~, or ~. at the end of equations that need punctuation at the end.
 % - Be careful about "not translationally invariant" -- we mean "not explicitly translationally invariant" and so on. Explicitness is what this paper is about.
+% - Think about brackets and parens?
+% - All matrices are \mathsf. All vectors are \vec.
 
 \documentclass[10pt]{article}
 \usepackage[letterpaper]{geometry}
@@ -31,7 +34,7 @@
 
 % document formatting and sectioning issues
 \pagestyle{myheadings}
-\renewcommand{\paragraph}[1]{\par\addvspace{1.5ex}\noindent\textsl{#1}~---}
+\renewcommand{\paragraph}[1]{\par\addvspace{1em}\noindent\textsl{#1}~---}
 \newcommand{\secbreak}{\bigskip{\centering\footnotesize $\triangle~~~\triangle~~~\triangle$\par}\bigskip\noindent}
 \titleformat*{\subsection}{\normalfont\normalsize\slshape}
 \titlespacing*{\subsection}{0pt}{0pt}{0pt}
@@ -89,14 +92,15 @@ Center for Computational Astrophysics, Flatiron Institute}}
 Email:} \texttt{\href{mailto:connor.hainje@nyu.edu}{connor.hainje@nyu.edu}}}
 {\footnotesize\par}  % needed to prevent some weird spacing issue
 
-\medskip
+\smallskip
 \paragraph{Abstract}
 Any permutation-invariant function of data points $\vec{r}_i$
 can be written in the form $\rho(\sum_i\phi(\vec{r}_i))$ for suitable functions $\rho$ and $\phi$.
 This form---known in the machine-learning literature as Deep Sets---also generates a map--reduce algorithm.
 The area of a triangle is a permutation-invariant function of the locations $\vec{r}_i$ of the three corners $1\leq i\leq 3$.
-We find the formula for the area of a triangle that is explicitly in Deep Sets form.
-This project was motivated by questions about the fundamental computational complexity of $n$-point statistics in cosmology; that said, no insights of any kind were gained from these results.
+We find the polynomial formula for the area of a triangle that is explicitly in Deep Sets form.
+This project was motivated by questions about the fundamental computational complexity of $n$-point statistics in cosmology;
+that said, no insights of any kind were gained from these results.
 
 \secbreak
 The area $\Delta$ of a triangle can be written in many ways.
@@ -120,7 +124,7 @@ and the semi-perimeter $s = (a + b + c)/2$.
 Formula~\eqref{eq:school} is the usual introduction to the subject, traceable back to \citet{Euclid300BC}.
 Formula~\eqref{eq:sine} makes use of the fact that the height can be found from $\sin(C) = (\text{height}) / a$, commonly seen in introductory geometry courses.
 Formula~\eqref{eq:cross} generalizes to triangles in higher dimensional spaces, using the fact that the cross or wedge product has a magnitude equal to the area of the parallelogram spanned by $\vec{a}$ and $\vec{b}$.
-Formula~\eqref{eq:polynomial} gives a polynomial in terms of the Cartesian coordinates of the corners in two dimensions; it is equal to an expansion of \eqref{eq:cross}.
+Formula~\eqref{eq:polynomial} gives the absolute value of a polynomial in terms of the Cartesian coordinates of the corners in two dimensions; it is equal to an expansion of \eqref{eq:cross}.
 Formula~\eqref{eq:Heron} is Heron's formula, which elegantly computes the area from the side lengths alone.
 For a collection of 110 unique triangle area formulae, see \citet{Baker1885a,Baker1885b}.
 
@@ -206,7 +210,7 @@ For a collection of 110 unique triangle area formulae, see \citet{Baker1885a,Bak
     \label{fig:triangle}
 \end{figure}
 
-The area of a triangle has many symmetries. It is invariant to translation, rotation, and reflection, as well as to the labeling of sides or corners. However, these symmetries are not always obvious from a given formula; for example, of those listed above, only the polynomial \eqref{eq:polynomial} and Heron's formula \eqref{eq:Heron} are explicitly permutation-invariant.
+The area of a triangle obeys many symmetries. It is invariant to translation, rotation, and reflection, as well as to the labeling of sides or corners. However, these symmetries are not always obvious from a given formula; for example, of those listed above, only the polynomial \eqref{eq:polynomial} and Heron's formula \eqref{eq:Heron} are explicitly permutation-invariant.
 
 A function $f(\vec{r}_1, \dots, \vec{r}_N)$ is invariant to permutation of its arguments if and only if it can be decomposed in the form
 \begin{equation}
@@ -219,23 +223,17 @@ Further, despite the triangle area being permutation-invariant, there is no know
 
 While this result was recently popularized as Deep Sets, it follows from the classical theory of invariant polynomials.
 It has long been known that any permutation-invariant (or symmetric) polynomial of scalar data $f(\{r_i\})$ can be written as a polynomial of the power sums $\sum_i r_i^m$ \citep{Waring1782}.
-Further, symmetric polynomials of any-dimensional data are decomposable into \emph{polarizations} of the scalar symmetric polynomials \citep{Weyl1939}.
-Together, these imply that a permutation-invariant polynomial of vector data is a polynomial in the polarizations of the power sums; e.g., the power sums of the components of the vectors.
+Further, symmetric polynomials of vector data $\{ \vec{r}_i \}$ are decomposable into polarizations of the scalar symmetric polynomials \citep{Weyl1939}, which look like sums of the form $\sum_i \, (\vec{r}_{i})_{j}^{m_j} \cdots (\vec{r}_{i})_{k}^{m_k}$, where $(\vec{r}_i)_j$ is the $j^{\rm th}$ component of $\vec{r}_i$.
+Together, these imply that a permutation-invariant polynomial of vector data is a polynomial in the polarizations of the power sums.
 This result is \emph{universal}, in the sense that it is true for all symmetric polynomials.
 It also matches onto the Deep Sets form, where the polarizations of the power sums are the components of the vector $\sum_i \phi(\vec{r}_i)$, which are combined in a polynomial $\rho$.
-
-% Specifically, it is known that the permutation-invariant polynomials on a set of any-dimensional data are representable in terms of the polarizations of the permutation-invariant polynomials on a corresponding set of one-dimensional data \citep{Weyl1939}.
-% Further, the permutation-invariant polynomials on a set of one-dimensional data are representable in terms of the power sums $\sum_{i=1}^{n} r_i^j$ \citep{Waring1782}.
-% Note that this decomposition is \emph{universal}, in the sense that it is true for \emph{all} symmetric polynomials of any-dimensional data. 
-% This also matches onto the Deep Sets form, as it states that a permutation-invariant polynomial of any-dimensional data $f(\{r_i\})$ can be decomposed into a polynomial ($\rho$) of polarizations of the power sums ($\sum_i \phi(\vec{r}_i)$).
-% \CH{this is mostly plagiarized from BBS email; need to understand it better to massage it.} 
-% \Hogg{Important to emphasize that there is a proof of universality, and it's old.}
 
 Although a Deep Sets formula for the area of a triangle is of minimal, or even zero, practical interest, our search is motivated by real problems in physics.
 The laws of classical physics are generally invariant to permutation.
 For example, the gravitational (or electric) potential energy of a set of point masses (or charges) is invariant to the ordering or labeling of the points. 
 Specifically, for a system of $N$ point particles with masses $m_i$ at positions $\vec{r}_i$, the gravitational potential energy is
 \begin{equation}
+\label{eq:EnergyNaive}
     U = -G \, \sum_{i=1}^{N} \sum_{j=i+1}^{N} \frac{m_i \, m_j}{\abs{\vec{r}_i - \vec{r}_j}} ~.
 \end{equation}
 This is explicitly permutation invariant since it involves a sum without repeats over all pairs of particles, but it is not in Deep Sets form \eqref{eq:DeepSets} because it involves a double sum (with $N^2$ computational scaling) of quantities computed from pairs of particles.
@@ -250,7 +248,7 @@ used for precision measurement in cosmology \citep[e.g.,][]{Eisenstein+2005BAO,P
 are all permutation-invariant.
 Calculating these statistics na\"ively involves loops over all $k$-tuplets of points, which is not only inconsistent with Deep Sets form, but also has a runtime that scales as $N^k$, where $N$ the number of points in the set.
 
-Because all these (computationally expensive) statistics are permutation-invariant, they must be possible to write in Deep Sets form.
+Because all these (computationally expensive) statistics are permutation-invariant, it must be possible to write them in Deep Sets form.
 At the same time, Deep Sets form \eqref{eq:DeepSets} looks like it is computable in linear time.
 What resolves this discrepancy?
 The resolution must be either that $\phi$ has a dimensionality that grows with $N$, or else that the complexity of $\rho$ grows with $N$.
@@ -264,88 +262,120 @@ The sums are then the ``reduce'', which can be performed hierarchically across a
 (Granted, a triangle will never have more than three points!)
 
 So, there may be benefits to finding Deep Sets forms for problems that depend on permutation-invariant pairs, triplets, or $k$-tuplets of points.
-The simplest such problem is the area of a triangle, which depends on pairs of points via
+The simplest such problem is the area of a triangle, 
+which depends on pairs of points via
 side lengths, as in Heron's formula \eqref{eq:Heron};
 angles, as in \eqref{eq:sine};
-or point displacements, as in \eqref{eq:cross}.
+or point displacements, as in \eqref{eq:cross};
+or as a sum over $x_i \, y_j - x_j \, y_i$, as in \eqref{eq:polynomial}.
+% which can be written as a sum over pairs of points as
+% \begin{equation}
+%     \label{eq:pairwiseSums}
+%     \Delta = \frac{1}{2} \, \bigg|\,
+%     \sum_{i=1}^{3} \sum_{j=i+1}^{3}
+%     x_i \, y_j - x_j \, y_i
+%     \,\bigg|~,
+% \end{equation}
+% very similar in form to \eqref{eq:EnergyNaive}.
+
 
 \secbreak
 We find this formula---in Deep Sets form---for the area $\Delta$ of a triangle:
 \begin{align}
     \Delta^2 = \ &
-    \frac{3}{4} \, \big( \sum_{i=1}^{3} x_i^2 \big) \, \big( \sum_{i=1}^{3} y_i^2 \big)
-    - \frac{3}{4} \, \big( \sum_{i=1}^{3} x_i \, y_i \big)^2 
-    + \frac{2}{4} \, \big( \sum_{i=1}^{3} x_i \, y_i \big) \, \big( \sum_{i=1}^{3} x_i \big) \, \big( \sum_{i=1}^{3} y_i \big)
+    \frac{3}{4}
+        \,\big( \sum_{i=1}^{3} x_i^2 \big)
+        \,\big( \sum_{i=1}^{3} y_i^2 \big)
+    - \frac{3}{4}
+        \,\big( \sum_{i=1}^{3} x_i \, y_i \big)^2 
+    + \frac{2}{4}
+        \,\big( \sum_{i=1}^{3} x_i \, y_i \big)
+        \,\big( \sum_{i=1}^{3} x_i \big)
+        \,\big( \sum_{i=1}^{3} y_i \big)
     \nonumber\\ &
-    - \, \frac{1}{4} \, \big( \sum_{i=1}^{3} y_i^2 \big) \, \big( \sum_{i=1}^{3} x_i \big)^2
-    - \, \frac{1}{4} \, \big( \sum_{i=1}^{3} x_i^2 \big) \, \big( \sum_{i=1}^{3} y_i \big)^2
+    - \frac{1}{4}
+        \,\big( \sum_{i=1}^{3} x_i^2 \big)
+        \,\big( \sum_{i=1}^{3} y_i \big)^2
+    - \frac{1}{4}
+        \,\big( \sum_{i=1}^{3} y_i^2 \big)
+        \,\big( \sum_{i=1}^{3} x_i \big)^2
      ~.
 \label{eq:result}
 \end{align}
 This formula \eqref{eq:result} for the squared area\footnote{%
     We choose to work with squared area $\Delta^2$ and not area $\Delta$ because, geometrically, areas are signed quantities.
     Indeed, the formulae \eqref{eq:school} through \eqref{eq:Heron} either (implicitly) involve square roots of polynomials, or else absolute value signs, such that the corresponding pure polynomial expression would be for the squared area.}
-is the primary contribution of this \documentname, along with the generalization to higher-dimensional vectors $\vec{r}_i$ below in \eqref{eq:quadrature}.
+is the primary contribution of this \documentname, along with the generalizations below.
 
 This equation \eqref{eq:result} is verified via computational algebra, expanding and simplifying the formula to demonstrate its equivalence to \eqref{eq:polynomial}.
 The formula is in Deep Sets form, since
 every expression in parentheses in \eqref{eq:result} is a pure sum over all three points.
 Being very explicit, it matches \eqref{eq:DeepSets} for $\rho$ and $\phi$ defined as follows:
 \begin{gather}
-    \phi(\vec{r}_i) = (
+    \label{eq:resultDeepSets}
+    \phi(\vec{r}_i) = \big[
         x_i, \,
         y_i, \,
         x_i^2, \,
         x_i \, y_i, \,
         y_i^2
-    ), \quad
-    (
+    \big], \quad
+    \big[
         F_{10}, \,
         F_{01}, \,
         F_{20}, \,
         F_{11}, \,
         F_{02}
-    ) = \sum_{i=1}^{3} \phi(\vec{r}_i),
+    \big] = \sum_{i=1}^{3} \phi(\vec{r}_i),
     \\
     \rho \, \big( \sum_{i=1}^{3} \phi(\vec{r}_i) \big)
     = \frac{3}{4} \, F_{20} \, F_{02}
     - \frac{3}{4} \, F_{11}^2
     + \frac{2}{4} \, F_{11} \, F_{10} \, F_{01}
-    - \frac{1}{4} \, F_{02} \, F_{10}^2
-    - \frac{1}{4} \, F_{20} \, F_{01}^2~.
+    - \frac{1}{4} \, F_{20} \, F_{01}^2
+    - \frac{1}{4} \, F_{02} \, F_{10}^2~.
     \nonumber
 \end{gather}
+Notice that the runtime is formally linear in the number of points, since $\phi$ and $\rho$ can be considered to have constant time complexity.
+However, because the dimensionality of $\phi$ is larger than the number of points, evaluating the triangle area in this way will not necessarily be faster than a loop over pairs of points.
 
-\CH{moved this to here from farther down}
 The area of a triangle is not only invariant to permutation, but also to translation, rotation, and reflection.
 Formulae \eqref{eq:sine} and \eqref{eq:Heron}, by virtue of referencing only side-lengths and angles, are explicitly invariant to these other symmetries.
 While true, it is not obvious that our solution \eqref{eq:result} is so invariant.
 An explicit proof of this is left to the reader.
 
-Note that a triangle defined by three points has one-half the area of the parallelogram spanned by the vectors $\vec{a} = \vec{r}_2 - \vec{r}_1$ and $\vec{b} = \vec{r}_3 - \vec{r}_1$.
-Multiplying both sides by 4 reveals that \eqref{eq:result} is an integer polynomial of permutation-invariant factors for the squared area of the parallelogram.
-Using this fact, we have written code to perform a symbolic regression that recovers our result.\footnote{
-    The simple code is available for re-use under an open-source license at \url{https://github.com/davidwhogg/TriangleAreas}.
-}
+Recall that a triangle with vertices $\{ \vec{r}_1, \vec{r}_2, \vec{r}_3 \}$ has one-half the area of the parallelogram spanned by the displacement vectors $\{ \vec{r}_2 - \vec{r}_1, \vec{r}_3 - \vec{r}_1 \}$.
+So our result \eqref{eq:result} is actually an integer polynomial for the squared area of this parallelogram.
+Using this fact, we have written code that performs a symbolic regression to recover our result.\footnote{
+    The simple code is available for re-use under an open-source license at \url{https://github.com/davidwhogg/TriangleAreas}.} 
+The code performs least-squares regression to find a fourth-order homogeneous polynomial of the multi-power sums $\sum_i \, x_i^m \, y_i^n$, and it requires that the result gives the squared areas to machine precision after rounding the coefficients to the nearest integers.
+Using and extending the code, we also find several generalizations to our formula.
 
-In this symbolic regression, we consider a linear combination of monomials, each of which can be written in Deep Sets form, but each of which has units of area-squared (position to the fourth power).
-All the possible monomials are made of permutation-invariant factors of the form 
-\begin{equation}
-F_{mn} = \sum_{i=1}^{3} x_i^m \, y_i^n~;
-\end{equation}
-each such a factor has degree $m + n$.
-The invariant monomials of degree $d$ are then products $\prod_j F_{m_j n_j}$ such that $\sum_j m_j + n_j = d$.
-We generate all factors $F_{mn}$ with degree $1 \leq m + n \leq 4$, then form all products of these factors with total degree four.
-However, these monomials are not all linearly-independent;
-the five monomials made of a single degree-four factor ($F_{40}$, $F_{31}$, $F_{22}$, $F_{13}$, $F_{04}$) can be written as a linear combination of the other monomials and are thus removed.
-This leaves 28 linearly-independent monomials.
+% Note that a triangle defined by three points has one-half the area of the parallelogram spanned by the vectors $\vec{a} = \vec{r}_2 - \vec{r}_1$ and $\vec{b} = \vec{r}_3 - \vec{r}_1$.
+% Multiplying both sides by 4 reveals that \eqref{eq:result} is an integer polynomial of permutation-invariant factors for the squared area of the parallelogram.
+% Using this fact, we have written code to perform a symbolic regression that recovers our result.\footnote{
+%     The simple code is available for re-use under an open-source license at \url{https://github.com/davidwhogg/TriangleAreas}.
+% }
 
-We fit a linear combination of the monomials to a data set of generated triples of points, drawn from a two-dimensional Gaussian whose mean was also drawn from a Gaussian in a two-dimensional space.
-Each triple defines a parallelogram whose squared area we use as a label for regression.
-We then perform least-squares regression to fit a linear combination of the invariant monomials.
-We require that the labels are reproduced to machine precision after rounding the coefficients to the nearest integers.
+% In this symbolic regression, we consider a linear combination of monomials, each of which can be written in Deep Sets form, but each of which has units of area-squared (position to the fourth power).
+% All the possible monomials are made of permutation-invariant factors of the form 
+% \begin{equation}
+% F_{mn} = \sum_{i=1}^{3} x_i^m \, y_i^n~;
+% \end{equation}
+% each such a factor has degree $m + n$.
+% The invariant monomials of degree $d$ are then products $\prod_j F_{m_j n_j}$ such that $\sum_j m_j + n_j = d$.
+% We generate all factors $F_{mn}$ with degree $1 \leq m + n \leq 4$, then form all products of these factors with total degree four.
+% However, these monomials are not all linearly-independent;
+% the five monomials made of a single degree-four factor ($F_{40}$, $F_{31}$, $F_{22}$, $F_{13}$, $F_{04}$) can be written as a linear combination of the other monomials and are thus removed.
+% This leaves 28 linearly-independent monomials.
 
-If the triangle is embedded in a higher-dimensional space with the positions of the three vertices given by $\vec{r}_i \in \mathbb{R}^{d}$ for $d \geq 2$, the area of the triangle can be determined by summing in quadrature the areas of the triangles made by all mutually orthogonal two-dimensional projections of the points:
+% We fit a linear combination of the monomials to a data set of generated triples of points, drawn from a two-dimensional Gaussian whose mean was also drawn from a Gaussian in a two-dimensional space.
+% Each triple defines a parallelogram whose squared area we use as a label for regression.
+% We then perform least-squares regression to fit a linear combination of the invariant monomials.
+% We require that the labels are reproduced to machine precision after rounding the coefficients to the nearest integers.
+% The result exactly matches equation \eqref{eq:result}.
+
+If the triangle is embedded in a higher-dimensional space with vertex positions given by $\vec{r}_i \in \mathbb{R}^{d}$ for $d \geq 2$, the area of the triangle can be determined by summing in quadrature the areas of the triangles made by all pairs of mutually orthogonal projections of the points:
 \begin{equation}
     \Delta^2 = \sum_{1 \leq j < k \leq d} \Delta_{jk}^2~, 
     \label{eq:quadrature}
@@ -354,156 +384,195 @@ where $\Delta_{jk}$ is the area of the two-dimensional triangle formed by just t
 A proof is given in the \nameref{sec:appendix}.
 By using \eqref{eq:result} for each of the two-dimensional sub-areas, each can be computed in a permutation-invariant way and the entire result is thus explicitly permutation invariant and in Deep Sets form.
 
-Our method also extends to the volume of a simplex. In three dimensions, four vectors $\{ \vec{r}_1, \vec{r}_2, \vec{r}_3, \vec{r}_4 \}$ determine the vertices of a simplex. 
-Like the area of a triangle is one-half the area of a related parallelogram, the volume of a simplex is one-sixth the volume of the parallelepiped spanned by the vectors $\{ \vec{r}_2 - \vec{r}_1, \vec{r}_3 - \vec{r}_1, \vec{r}_4 - \vec{r}_1 \}$. 
-Expecting an integer solution once again, we modify the symbolic regression to generate 4-tuplets of points, using the squared volumes of the parallelepipeds they produce as labels.
-The invariant factors then have three indices, $F_{\ell m n} = \sum_i x_i^\ell \, y_i^m \, z_i^n$, and we form all invariant monomials of degree six.
-The result, verifiable by computational algebra, is that the volume $V$ of the simplex is given by
-\begin{align}
-(6 V)^2 = &
-+8 \, F_{110} \, F_{101} \, F_{011}
-+4 \, F_{200} \, F_{020} \, F_{002}
-\nonumber \\ &
--4 \, F_{200} \, F_{011}^2
--4 \, F_{020} \, F_{101}^2
--4 \, F_{002} \, F_{110}^2
-\nonumber \\ &
-+2 \, F_{200} \, F_{011} \, F_{010} \, F_{001}
-+2 \, F_{020} \, F_{101} \, F_{100} \, F_{001}
-+2 \, F_{002} \, F_{110} \, F_{100} \, F_{010}
-\nonumber \\ &
--2 \, F_{110} \, F_{101} \, F_{010} \, F_{001}
--2 \, F_{110} \, F_{011} \, F_{100} \, F_{001}
--2 \, F_{101} \, F_{011} \, F_{100} \, F_{010}
-\nonumber \\ &
-+1 \, F_{110}^2 \, F_{001}^2
-+1 \, F_{101}^2 \, F_{010}^2
-+1 \, F_{011}^2 \, F_{100}^2
-\nonumber \\ &
--1 \, F_{200} \, F_{020} \, F_{001}^2
--1 \, F_{200} \, F_{002} \, F_{010}^2
--1 \, F_{020} \, F_{002} \, F_{100}^2~.
-\label{eq:simplex}
-\end{align}
-There are many similarities between this and our result for the triangle area \eqref{eq:result}, which we believe may indicate a way to generalize this result to the hypervolume of a $d$-simplex.
+The result can also be extended to the volume of a $d$-dimensional simplex.
+A $d$-simplex is defined by $d+1$ vectors $\{ \vec{r}_1, \dots, \vec{r}_{d+1} \}$ in $\mathbb{R}^d$.
+Then, the volume $V$ of the $d$-simplex is given by
+\begin{equation}
+    V^2 = \frac{1}{(d!)^2} \, \det \mathsf{M}~,
+    \quad
+    \mathsf{M} \equiv \left[\begin{array}{cccc}
+        \sum_i \, r_{i1}^2
+            & \cdots 
+            & \sum_i \, r_{i1} \, r_{id}
+            & \sum_i \, r_{i1} \\
+        \vdots
+            & \ddots 
+            & \vdots
+            & \vdots \\
+        \sum_i \, r_{id} \, r_{i1}
+            & \cdots 
+            & \sum_i \, r_{id}^2
+            & \sum_i \, r_{id} \\
+        \sum_i \, r_{i1}
+            & \cdots 
+            & \sum_i \, r_{id}
+            & d + 1 \\
+    \end{array}\right]~,
+    \label{eq:dsimplex}
+\end{equation}
+where $r_{ij}$ is the $j^{\rm th}$ component of $\vec{r}_i$.\footnote{%
+    This generalization was pointed out by Kendrick Smith (Perimeter Institute).}
+A proof is deferred to the \nameref{sec:appendix}.
+This is in Deep Sets form, as the components of $\mathsf{M}$ are all of the form $\sum_i \phi(\vec{r}_i)$.
+
+A few notes we'd make about this formula are as follows.
+This formula with $d=2$ gives back exactly our result \eqref{eq:result}, since the 2-simplex is a triangle and the 2-volume is its area.
+The components of $\mathsf{M}$ are in fact the polarizations of the first and second power sums, so the determinant of $\mathsf{M}$ gives the polynomial in these power sums that we were guaranteed by invariant theory.
+The runtime complexity can again be considered to be linear, with $\rho$ and $\phi$ having constant complexity.
+However, the dimensionality of $\phi$ is $(d+1)(d+2)/2$, the number of unique components in $\mathsf{M}$, so there are no real performance improvements.
+As with the relationship between triangles and parallelograms, the volume of the $d$-parallelotope spanned by the displacement vectors $\{ \vec{r}_2 - \vec{r}_1, \dots, \vec{r}_{d+1} - \vec{r}_1 \}$ is $d!$ the volume of a $d$-simplex; thus \eqref{eq:dsimplex} is an integer polynomial for the squared volume of this $d$-parallelotope.
+
+
+
+% Our method also extends to the volume of a simplex. In three dimensions, four vectors $\{ \vec{r}_1, \vec{r}_2, \vec{r}_3, \vec{r}_4 \}$ determine the vertices of a simplex. 
+% Like the area of a triangle is one-half the area of a related parallelogram, the volume of a simplex is one-sixth the volume of the parallelepiped spanned by the displacement vectors $\{ \vec{r}_2 - \vec{r}_1, \vec{r}_3 - \vec{r}_1, \vec{r}_4 - \vec{r}_1 \}$.
+% Expecting an integer solution once again, we modify the symbolic regression to generate 4-tuplets of points, using the squared volumes of the parallelepipeds they produce as labels.
+% The invariant factors then have three indices, $F_{\ell m n} = \sum_i x_i^\ell \, y_i^m \, z_i^n$, and we form all invariant monomials of degree six.
+% The result, verifiable by computational algebra, is that the volume $V$ of the simplex is given by
+% \begin{align}
+% (6 V)^2 = &
+% +8 \, F_{110} \, F_{101} \, F_{011}
+% +4 \, F_{200} \, F_{020} \, F_{002}
+% \nonumber \\ &
+% -4 \, F_{200} \, F_{011}^2
+% -4 \, F_{020} \, F_{101}^2
+% -4 \, F_{002} \, F_{110}^2
+% \nonumber \\ &
+% +2 \, F_{200} \, F_{011} \, F_{010} \, F_{001}
+% +2 \, F_{020} \, F_{101} \, F_{100} \, F_{001}
+% +2 \, F_{002} \, F_{110} \, F_{100} \, F_{010}
+% \nonumber \\ &
+% -2 \, F_{110} \, F_{101} \, F_{010} \, F_{001}
+% -2 \, F_{110} \, F_{011} \, F_{100} \, F_{001}
+% -2 \, F_{101} \, F_{011} \, F_{100} \, F_{010}
+% \nonumber \\ &
+% +1 \, F_{110}^2 \, F_{001}^2
+% +1 \, F_{101}^2 \, F_{010}^2
+% +1 \, F_{011}^2 \, F_{100}^2
+% \nonumber \\ &
+% -1 \, F_{200} \, F_{020} \, F_{001}^2
+% -1 \, F_{200} \, F_{002} \, F_{010}^2
+% -1 \, F_{020} \, F_{002} \, F_{100}^2~.
+% \label{eq:simplex}
+% \end{align}
+% There are many similarities between this and our result for the triangle area \eqref{eq:result}, which we believe may indicate a way to generalize this result to the hypervolume of a $d$-simplex.
 
 \secbreak
-% We now consider two more applications of the Deep Sets form to Heron's formula and to the potential energy of a system of point masses.
+While the triangle area, by virtue of being a sum over pairs of points, is in a form similar to some physics problems, the polynomial methods we employ are not so relevant for those problems.
+However, in physics it is common to encode a set of points by defining the density field to be a sum of delta functions at the points.
+Notice that the Fourier transform of this field at a wavevector $\vec{k}$ is
+\begin{equation}
+    \mathcal{D}_{\vec{k}} = \mathcal{F} \,\bigg\{
+        \sum_{j=1}^{N} \delta(\vec{r} - \vec{r}_j)
+    \bigg\}
+    = \sum_{j=1}^{N} e^{-i \, \vec{k} \cdot \vec{r}_j}~,
+\end{equation}
+which is exactly in the form of $\sum_i \phi(\vec{r}_i)$.
+Hence, any function of the Fourier transform $\mathcal{D}$ of the density field is technically in Deep Sets form, and has permutation symmetry guaranteed.
+This is physically useful also because the Fourier basis $\exp (i\, \vec{k}\cdot\vec{x})$ is the eigenbasis of the translation operator, so this choice of the map $\phi$ naturally encodes translation symmetry.\footnote{%
+%
+Interestingly, a transformation like $\phi(r) = \exp(i\,k\,r)$ is used widely in natural language processing.
+Most large language models, such as GPT-3 \citep{Brown2020GPT3}, are transformer models \citep{Vaswani2017Attention}, which are fundamentally permutation invariant.
+In order to use the positional information of tokens (often words), the tokens are augmented by a ``positional encoding.''
+One of the most popular choices for this encoding is the Rotary Positional Encoding \citep[RoPE;][]{Su2024Roformer}, which takes the word embedding vector $\vec{x} \in \mathbb{R}^{d}$ for the token in position $m$ and multiplies it by $e^{i \, m \, \theta}$ for $d/2$ preset constant values $\theta \in \mathbb{R}$.
+While this actually \emph{breaks} permutation invariance rather than enforcing it (since the encoding explicitly involves the index $m$), it underscores the broad applications of these transformations.
+}
 
-% \CH{I want to cut this?}
-% We stated above that Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant, and yet it is not represented in Deep Sets form. Consider instead
-% \begin{equation}
-% \label{eq:HeronDeepSets}
-%     \Delta = \frac{1}{4} \, \sqrt{
-%         \left( a^2 + b^2 + c^2 \right)^2
-%         - 2 \left( a^4 + b^4 + c^4 \right)
-%     }~.
-% \end{equation}
-% It is simple to show that this is exactly equivalent to Heron's formula when expanded, but it is now in Deep Sets form.\footnote{
-%     This is not novel. Heron's formula is a special case of Brahmagupta's formula, which gives the area $K$ of a convex cyclic quadrilateral in terms of its four side lengths $a, b, c, d$ \citep{coolidge1939}.
-%     On Wikipedia, it has been written
-%     \begin{equation}
-%         K = \frac{1}{4} \, \sqrt{
-%             \left( a^2 + b^2 + c^2 + d^2 \right)^2
-%             + 8 \, a\,b\,c\,d
-%             - 2 \left( a^4 + b^4 + c^4 + d^4 \right)
-%         }~,
-%     \end{equation}
-%     which is exactly \eqref{eq:HeronDeepSets} if $d$ is zero.
-%     This expression is in Deep Sets form, with the product $a \, b \, c \, d$ 
-%     representable as $\exp( \sum_{x \in \{ a,b,c,d \}} \log x )$.
-% }
-% 
-While the triangle area is in a form similar to some physics problems, the polynomial methods we employ to find the Deep Sets form for the triangle area \eqref{eq:result} are not so relevant for those problems.
-More relevant instead is to consider a $\phi$ which Fourier transforms the input data.
-In doing so, translation symmetry is encoded as well as permutation symmetry, since the Fourier basis $\exp (i\, \vec{k}\cdot\vec{x})$ is the eigenbasis of the translation operator.
-
-For example, this can be used to produce a Deep Sets form for the gravitational potential energy of a system of point masses. Explicitly, consider a system of $N$ point particles with masses $m_i$ and positions $\vec{r}_i$.
+Because any function of the Fourier transform $\mathcal{D}$ of the density field is automatically in Deep Sets form,
+we can find a Deep Sets form for the gravitational potential energy of a system of point masses.
+Explicitly, consider a system of $N$ point particles with masses $m_i$ and positions $\vec{r}_i$.
 The total energy is given in Deep Sets form by
 \begin{align}
-    \phi_{\vec{k}}(m_j, \vec{r}_j)
-    &=m_j \, e^{-i \, \vec{k} \cdot \vec{r}_j}
+    &\phi_{\vec{k}}(m_j, \vec{r}_j)
+    =m_j \, e^{-i \, \vec{k} \cdot \vec{r}_j}
     ~,
     \quad
     \sum_{i=1}^{N} \phi_{\vec{k}}(m_i, \vec{r}_i)
-    = \mathcal{F}[\rho](\vec{k})~,
+    = \mathcal{D}_{\vec{k}}~,
     \nonumber\\
-    U \, \big( \sum_{i=1}^{N} \, \phi_{\vec{k}}(m_i, \vec{r}_i) \big)
-    &= -\frac{G}{4 \pi^2} \,
+    U = \ &\rho \, \big( \sum_{i=1}^{N} \, \phi_{\vec{k}}(m_i, \vec{r}_i) \big)
+    = -\frac{G}{4 \pi^2} \,
         \int \d^3 r \,
-        \mathcal{F}^{-1} \left[
-            \mathcal{F}[\rho] \ast \left(
-            k^{-2} \, \mathcal{F}[\rho] \right)
-        \right]~.
+        \mathcal{F}^{-1}\!\left\{
+            \mathcal{D}_{\vec{k}} \ast \left(
+            k^{-2} \, \mathcal{D}_{\vec{k}} \right)
+        \right\}~.
     \label{eq:EnergyDeepSets}
 \end{align}
 A derivation is given in the \nameref{sec:appendix}.
 In principle this requires $\phi$ to be evaluated at every possible wavenumber $\vec{k}$.
-To avoid making this infinite-dimensional $\phi$, one can instead evaluate $\mathcal{F}[\rho]$ at a finite set of wavenumbers $\vec{k}$ and live with approximations to the integrals necessary for the convolution and inverse Fourier transform.
+To avoid making this infinite-dimensional $\phi$, one can instead evaluate $\mathcal{D}_{\vec{k}}$ at a finite set of wavenumbers $\vec{k}$ and live with approximations to the integrals necessary for the convolution and inverse Fourier transform.
 The approximation will improve as the size of $\phi$ grows.
 Approaches akin to this Fourier approach can be used \citep[and are used; e.g.,][]{Portillo+2018,Philcox+2022ENCORE} to estimate or approximate $k$-point statistics in cosmology, which was our motivating question.
 
-We can even use these methods to find another formula for the area $\Delta$ of a triangle.
+Of course, these methods can be used to find another triangle area formula.
 \begin{align}
     \phi_{\vec{k}} (\vec{r}_j) &= e^{-i \, \vec{k} \cdot \vec{r}_j}~,
     \quad
-    \mathcal{F}[\rho](\vec{k}) = \sum_{j=1}^{3} \phi_{\vec{k}}(\vec{r}_j)~,
-    \nonumber\\
-    \mathcal{P}(\vec{r}) &= (2\pi)^d \, \mathcal{F}^{-1} \left[ 
-    \abs{ \mathcal{F}[\rho] }^2 \right]~,
+    \sum_{j=1}^{3} \phi_{\vec{k}}(\vec{r}_j) = \mathcal{D}_{\vec{k}}~,
     \quad
-    F_m = \int_{\mathbb{R}^d} \d^d r \, \mathcal{P}(\vec{r}) \, \frac{\abs{\vec{r}}^m}{2}~,
+    \mathcal{P}(\vec{r}) = (2\pi)^d \, \mathcal{F}^{-1}\!\left\{
+    \abs{ \mathcal{D}_{\vec{k}} }^2 \right\}~,
     \nonumber\\
+    P_m &= \int_{\mathbb{R}^d} \d^d r \, \mathcal{P}(\vec{r}) \, \frac{\abs{\vec{r}}^m}{2}
+    = a^m+b^m+c^m
+    ~,
+    \quad
     \Delta
-    &= \frac{1}{4} \, \sqrt{F_2^2 - 2 \, F_4}~.
+    = \frac{1}{4} \, \sqrt{P_2^2 - 2 \, P_4}~.
+    \label{eq:Fresult}
 \end{align}
 A complete derivation is provided in the \nameref{sec:appendix}.
-Briefly, $\mathcal{P}$ is the Patterson function of X-ray crystallography \citep{Patterson1934} which has 6 delta function peaks corresponding to the three displacement vectors and their negatives. 
-Multiplying the Patterson function by a function of the magnitude $r \equiv \vec{r}$ and integrating over all space gives a sum of the values of the function evaluated at the three side lengths. 
-Choosing this function properly allows us to write the power sums of the side lengths $F_m = a^m+b^m+c^m$ in this form.
+Briefly, $\mathcal{P}$ is the Patterson function used in x-ray crystallography \citep{Patterson1934} which has six delta function peaks corresponding to the three displacement vectors and their negatives.
+Multiplying the Patterson function by a function of the magnitude $r \equiv \abs{\vec{r}}$ and integrating over all space gives a sum of the values of the function evaluated at the three side lengths. 
+Choosing this function properly allows us to write the $m^{\rm th}$ power sum $P_m$ of the side lengths in this form.
 
-To verify this formula, note that we can write it in terms of the side lengths as
+To verify this formula \eqref{eq:Fresult}, note that we can write it in terms of the side lengths as
 \begin{equation}
 \label{eq:HeronDeepSets}
     \Delta = \frac{1}{4} \, \sqrt{
-        F_2^2
-        - 2 \, F_4
+        P_2^2
+        - 2 \, P_4
     }
     = \frac{1}{4} \, \sqrt{
         \left( a^2 + b^2 + c^2 \right)^2
         - 2 \, \left( a^4 + b^4 + c^4 \right)
-    }~.
+    }~,
 \end{equation}
-This formula is equivalent to Heron's formula \eqref{eq:Heron} by expansion.
-Note that it is also in Deep Sets form as a function of the side lengths.
+which is equivalent to Heron's ancient formula \eqref{eq:Heron}.
+It is even in Deep Sets form as a function of the side lengths.
 
-\CH{I don't like this ending ... thinking about other ways to conclude}
+\secbreak
+In this \documentname, we were motivated by the question of how to convert $k$-point functions in cosmology, which involve loops over $k$-tuplets of points and na\"ively scale as $N^k$, into Deep Sets forms \eqref{eq:DeepSets}, which na\"ively scale as $N$, though perhaps with very large constant-runtime computational costs.
+These conversions must be possible, since all permutation-invariant functions can be written in Deep Sets form.
+The simplest permutation-invariant problem involving a loop over pairs of points is the computation of the area of a triangle, for which no traditional formula is in Deep Sets form.
+We deliver two new formulae, a polynomial \eqref{eq:result} and a Fourier expression \eqref{eq:Fresult}.
+These triangle formulae have no practical value, and we also do not solve any question of practical importance for cosmology.
 
-We leave the reader with the following questions. 
-It is trivial to take the form of \eqref{eq:result} and evaluate the sums for more than three vectors; does the result have any meaning?
-Is there a generalization of the triangle area \eqref{eq:result} and simplex volume \eqref{eq:simplex} results to a $d$-simplex?
-Our formulae \eqref{eq:result} and \eqref{eq:simplex} only used invariant factors of degree $2$, with exponents that are larger than $2$. Does this generalize to higher dimension simplexes, and can it be shown that higher order factors aren't needed?
-One can replace the sum in \eqref{eq:DeepSets} with any other permutation-invariant aggregator (e.g., max or product), though we do not know if there are any claims to universality in these cases. Does another area formula exist for these other aggregators?
-% We have discussed the general value of a map function $\phi$ which Fourier transforms the points;\footnote{%
-% \Hogg{The Deep Sets version of the Fourier transform is reminiscent of a positional encoding (CITE), similar to those used to preserve ordering information in (otherwise permutation invariant) transformers (CITE).}}
-% does a formula like \eqref{eq:EnergyDeepSets} exist for the area of a triangle?
+% We leave the reader with the following question. 
+% It is trivial to take the form of \eqref{eq:result} and evaluate the sums for more than three vectors; does the result have any meaning?
+% One can replace the sum in \eqref{eq:DeepSets} with any other permutation-invariant aggregator (e.g., max or product), though we do not know if there are any claims to universality in these cases. Do area formulae exist for these other aggregators?
+
 
 {\footnotesize\par\bigskip\noindent
 This project would not have been possible without originating inspiration and discussions with Soledad Villar (JHU).
+The authors give special thanks to Ben Blum-Smith (JHU) and Kendrick Smith (Perimeter) for insightful and important input.
 The authors thank
-  Ben Blum-Smith (JHU),
+  % Ben Blum-Smith (JHU),
   Jonathan Goodman (NYU),
   Wilson Gregory (JHU),
   Teresa Huang (Flatiron),
   Alexander Novara (NYU),
   Mike O'Neil (NYU),
+  Simon Park (Princeton),
   Oliver Philcox (Columbia),
+  % Kendrick Smith (Perimeter Institute),
   Ben Wandelt (JHU),
   Kaze Wong (JHU),
 and the Blanton--Hogg group meeting at NYU for valuable discussions.
 The Flatiron Institute is a division of the Simons Foundation.
 CH is supported by the National Science Foundation Graduate Research Fellowship under Grant Number DGE-2234660.
-The authors also note that, while we believe the formula is (barely) novel, it is difficult to be sure, given the challenge of conducting a complete literature review for this ancient topic.\par}
+The authors also note that, while we believe the formulae are (barely) novel, it is difficult to be sure, given the challenge of conducting a complete literature review for this ancient topic.\par}
 
 \secbreak
 % need a line break this time
@@ -517,7 +586,7 @@ The authors also note that, while we believe the formula is (barely) novel, it i
 \subsection{Appendix}
 \label{sec:appendix}
 
-\paragraph{Proof that area sums in quadrature} We prove equation \eqref{eq:quadrature}, that the area of a triangle in $d$ dimensions is the sum in quadrature of the areas of the triangles made by all orthogonal projections to two axes.
+\paragraph{Proof that area sums in quadrature} We prove equation \eqref{eq:quadrature}, that the area of a triangle in $d$ dimensions is the sum in quadrature of the areas of the triangles made by all orthogonal projections onto pairs of axes.
 
 From the three position vectors $\vec{r}_1, \vec{r}_2, \vec{r}_3 \in \mathbb{R}^d$ (for $d \geq 2$), we consider the two displacement vectors $\vec{a} \equiv \vec{r}_2 - \vec{r}_1$ and $\vec{b} \equiv \vec{r}_3 - \vec{r}_1$.
 Given these, we can write the two-dimensional triangle sub-area $\Delta_{jk}$ by first defining the projected two-dimensional displacement vectors $\vec{a}_{jk} = ( a_j, a_k )$, $\vec{b}_{jk} = ( b_j, b_k )$. Then,
@@ -542,35 +611,52 @@ Next, consider formula \eqref{eq:cross} with the full $d$-dimensional vectors:
 \end{align}
 
 
-\paragraph{Derivation of Deep Sets energy} Consider a system of $N$ point particles with masses $m_i$ and positions $\vec{r}_i$.
-The energy density $\mathcal{E} = d U / d^3 x$ is given by
+\paragraph{Volume of $d$-simplex} Consider a $d$-simplex in $d$-dimensional space. Let its vertices be labeled $\{ \vec{r}_1, \dots, \vec{r}_{d+1} \}$. The volume of the $d$-simplex is known to be
 \begin{equation}
-    \mathcal{E} = \frac{\rho \, \Phi,}{2}~,
+    V = \frac{1}{d!} \, \abs{\det \mathsf{A}},
+    \quad \mathsf{A} \equiv \left[ \begin{array}{cc}
+        \vec{r}_1 & 1 \\
+        \vdots & \vdots \\
+        \vec{r}_{d+1} & 1 \\
+    \end{array} \right]~,
 \end{equation}
-where $\rho$ is the mass density and $\Phi$ is the gravitational potential \citep{LandauLifshitzFields}.
+where $\mathsf{A}$ is a $(d+1) \times (d+1)$ matrix whose rows are the vertices, appended by a single 1.
+
+Squaring both sides, we find
+\begin{equation}
+    V^2
+    = \frac{1}{(d!)^2} \, (\det \mathsf{A})^2
+    = \frac{1}{(d!)^2} \, \det \mathsf{A}^\top \mathsf{A},
+\end{equation}
+and $\mathsf{A}^\top \mathsf{A}$ matches $\mathsf{M}$ as defined in equation \eqref{eq:dsimplex}.
+
+\paragraph{Deep Sets energy} Consider a system of $N$ point particles with masses $m_i$ and positions $\vec{r}_i$.
+The energy density $\mathcal{E} = \d U / \d^3 x$ is given by
+\begin{equation}
+    \mathcal{E} = \frac{\varrho \, \Phi,}{2}~,
+\end{equation}
+where $\varrho$ is the mass density and $\Phi$ is the gravitational potential \citep{LandauLifshitzFields}.
 These are related by the Poisson equation
 \begin{equation}
-    \nabla^2 \Phi = 4 \pi G \, \rho~,
+    \nabla^2 \Phi = 4 \pi G \, \varrho~,
 \end{equation}
 which implies the following relationship between their Fourier transforms
 \begin{equation}
-    -k^2 \, \mathcal{F}[\Phi] = 4 \pi G \, \mathcal{F}[\rho]~,
+    -k^2 \, \mathcal{F}\{\Phi\} = 4 \pi G \, \mathcal{F}\{\varrho\}~,
 \end{equation}
 with $k^2 \equiv \abs{\vec{k}}^2$.
 Using the convolution theorem, we then have
 \begin{align}
-    \mathcal{F}[\mathcal{E}] 
-    &= \frac{1}{2} \mathcal{F}[\rho \, \Phi] \nonumber\\
-    &= \frac{1}{2} \, \frac{\mathcal{F}[\rho] \ast \mathcal{F}[\Phi]}{(2\pi)^3} \nonumber\\
-    &= \frac{1}{2 \, (2\pi)^3} \, \mathcal{F}[\rho] \ast \left(
-        -4 \pi G \, k^{-2} \, \mathcal{F}[\rho]
-    \right)~.
+    \mathcal{F}\{\mathcal{E}\}
+    &= \frac{1}{2} \, \mathcal{F}\{\varrho \, \Phi\} \nonumber\\
+    &= \frac{1}{2 \, (2\pi)^3} \, \mathcal{F}\{\varrho\} \ast \mathcal{F}\{\Phi\} \nonumber\\
+    &= -\frac{G}{4\pi^2} \, \mathcal{F}\{\varrho\} \ast \left( k^{-2} \, \mathcal{F}\{\varrho\} \right)~.
     \label{eq:ConvolutionThm}
 \end{align}
 This form of the convolution theorem is proven below.
 The Fourier transform of the mass density is
 \begin{equation}
-    \mathcal{F}[\rho](\vec{k})
+    \mathcal{F}\{\varrho\}(\vec{k})
     = \int \d^3 r
         \, e^{-i \, \vec{k} \cdot \vec{r}}
         \, \sum_{j=1}^{N}
@@ -579,84 +665,76 @@ The Fourier transform of the mass density is
     = \sum_{j=1}^{N} \, m_j \, e^{-i \, \vec{k} \cdot \vec{r}_j}~,
 \end{equation}
 where we sum over $j$ and use $i=\sqrt{-1}$.
-Note that the value of the Fourier transform at a wavenumber $\vec{k}$ is of the required form $\sum_i \phi(m_i, \vec{r}_i)$ for Deep Sets features.
-Hence, the total energy is given in Deep Sets form by
-\begin{align}
-    \phi_{\vec{k}}(m_j, \vec{r}_j)
-    &=m_j \, e^{-i \, \vec{k} \cdot \vec{r}_j}
-    ~,
-    \quad
-    \sum_{i=1}^{N} \phi_{\vec{k}}(m_i, \vec{r}_i)
-    = \mathcal{F}[\rho](\vec{k})~,
-    \nonumber\\
-    U \, \big( \sum_{i=1}^{N} \, \phi_{\vec{k}}(m_i, \vec{r}_i) \big)
-    &= -\frac{G}{4 \pi^2} \,
+Thus, the total energy is given in terms of the Fourier transform of the density field by
+\begin{equation}
+    U 
+    = -\frac{G}{4 \pi^2} \,
         \int \d^3 r \,
-        \mathcal{F}^{-1} \left[
-            \mathcal{F}[\rho] \ast \left(
-            k^{-2} \, \mathcal{F}[\rho] \right)
-        \right]~.
-\end{align}
-
+        \mathcal{F}^{-1} \! \left\{
+            \mathcal{F}\{\varrho\} \ast \left(
+            k^{-2} \, \mathcal{F}\{\varrho\} \right)
+        \right\}~.
+\end{equation}
 
 
 \paragraph{Proof of the convolution theorem} We prove the claim (equation \eqref{eq:ConvolutionThm}) that
 \begin{equation}
-    \mathcal{F}[\rho \, \Phi] 
-    = (2\pi)^{-3} \, \mathcal{F}[\rho] \ast \mathcal{F}[\Phi] ~.
+    \mathcal{F}\{\varrho \, \Phi\}
+    = (2\pi)^{-3} \, \mathcal{F}\{\varrho\} \ast \mathcal{F}\{\Phi\} ~.
 \end{equation}
 Note that we use the conventions:
 \begin{align}
     \tilde{f}(\vec{k})
-    = \mathcal{F}[f(\vec{x})]
+    = \mathcal{F}\{f(\vec{x})\}
     &= \int \d^3 x
         \, e^{-i \, \vec{k} \cdot \vec{x}}
         \, f(\vec{x})~, \\
     f(\vec{x})
-    = \mathcal{F}^{-1}[\tilde{f}(\vec{k})]
+    = \mathcal{F}^{-1}\{\tilde{f}(\vec{k})\}
     &= \int \frac{\d^3 k}{(2\pi)^3}
         \, e^{+i \, \vec{k} \cdot \vec{x}}
-        \, f(\vec{x})~.
+        \, \tilde{f}(\vec{k})~.
 \end{align}
-Consider $\mathcal{F}^{-1}[\tilde{\rho} \ast \tilde{\Phi}](\vec{x})$. 
+Consider $\mathcal{F}^{-1}\{\tilde{\varrho} \ast \tilde{\Phi}\}$. 
 \begin{align}
-    \mathcal{F}^{-1}[\tilde{\rho} \ast \tilde{\Phi}](\vec{x})
+    \mathcal{F}^{-1}\{\tilde{\varrho} \ast \tilde{\Phi}\}(\vec{x})
     &= \int_{\mathbb{R}^3} \frac{\d^3 k}{(2\pi)^3}
         \, e^{i \, \vec{k} \cdot \vec{x}} 
-        \, \big( \tilde{\rho} \ast \tilde{\Phi} \big) (\vec{k}) 
+        \, \big( \tilde{\varrho} \ast \tilde{\Phi} \big) (\vec{k}) 
         \nonumber\\
     &= \int_{\mathbb{R}^3} \frac{\d^3 k}{(2\pi)^3}
         \, e^{i \, \vec{k} \cdot \vec{x}} 
         \, \int_{\mathbb{R}^3} \d^3 \vec{k}' 
-        \, \tilde{\rho}(\vec{k}') 
+        \, \tilde{\varrho}(\vec{k}') 
         \, \tilde{\Phi}(\vec{k} - \vec{k}')
         \nonumber\\
     &= \int_{\mathbb{R}^3} \d^3 \vec{k}'
-        \, \tilde{\rho}(\vec{k}') 
+        \, \tilde{\varrho}(\vec{k}') 
         \, \int_{\mathbb{R}^3} \frac{\d^3 k}{(2\pi)^3}
         \, e^{i \, \vec{k} \cdot \vec{x}} 
         \, \tilde{\Phi}(\vec{k} - \vec{k}')
         \nonumber\\
     &= \int_{\mathbb{R}^3} \d^3 \vec{k}'
-        \, \tilde{\rho}(\vec{k}') 
+        \, \tilde{\varrho}(\vec{k}') 
         \, e^{i \, \vec{k}' \cdot \vec{x}}
         \, \Phi(\vec{x})
         \nonumber\\
     &= (2\pi)^3
-        \, \rho(\vec{x}) 
+        \, \varrho(\vec{x}) 
         \, \Phi(\vec{x})~.
 \end{align}
 Taking the Fourier transform of both sides gives the desired result.
 
+
 \paragraph{Fourier triangle area}
 Suppose our triangle is specified by three vertices $\vec{r}_1,\vec{r}_2,\vec{r}_3 \in \mathbb{R}^d$. We represent this distribution by the field
 \begin{equation}
-    \rho(\vec{r})
+    \varrho(\vec{r})
     = \sum_i \, \delta(\vec{r} - \vec{r}_i)~.
 \end{equation}
 Fourier transforming this field gives
 \begin{equation}
-    \tilde{\rho}(\vec{k})
+    \tilde{\varrho}(\vec{k})
     =
     e^{-i \, \vec{k} \cdot \vec{r}_1} +
     e^{-i \, \vec{k} \cdot \vec{r}_2} +
@@ -664,7 +742,7 @@ Fourier transforming this field gives
 \end{equation}
 Multiplying by its conjugate to find the magnitude squared, we find
 \begin{equation}
-    \abs{\tilde{\rho}(\vec{k})}^2
+    \abs{\tilde{\varrho}(\vec{k})}^2
     =
     3 +
     e^{-i \, \vec{k} \cdot \vec{r}_{12}} +
@@ -678,7 +756,7 @@ defining $\vec{r}_{ij} \equiv \vec{r}_i - \vec{r}_j$.
 The inverse Fourier transform of this is
 \begin{align}
     \mathcal{P}(\vec{r})
-    &= (2\pi)^d \, \mathcal{F}^{-1} \left[ \abs{\tilde{\rho}}^2 \right]
+    &= (2\pi)^d \, \mathcal{F}^{-1} \! \left\{ \abs{\tilde{\varrho}}^2 \right\}
     \nonumber\\ 
     &= 3 \,\delta(\vec{r})
     + \delta(\vec{r} - \vec{r}_{12})
@@ -703,17 +781,17 @@ By multiplying the Patterson function $\mathcal{P}$ by a function of $r \equiv \
         2 \, f(b) +
         2 \, f(c)~.
 \end{align}
-In particular, we can define the $k^{\rm th}$ power sum of the side lengths
+In particular, we can define the $m^{\rm th}$ power sum of the side lengths
 \begin{equation}
-    F_k
-    = \int_{\mathbb{R}^d} \d^d r \, \mathcal{P}(\vec{r}) \, \frac{\abs{\vec{r}}^k}{2}
-    = a^k + b^k + c^k~,
+    P_m
+    = \int_{\mathbb{R}^d} \d^d r \, \mathcal{P}(\vec{r}) \, \frac{\abs{\vec{r}}^m}{2}
+    = a^m + b^m + c^m~,
 \end{equation}
 which allows us to write the triangle area as
 \begin{equation}
     \Delta
     = \frac{1}{4} \, \sqrt{\left(a^2+b^2+c^2\right)^2 - 2\, \left(a^4+b^4+c^4\right)}
-    = \frac{1}{4} \, \sqrt{F_2^2 - 2\, F_4}~.
+    = \frac{1}{4} \, \sqrt{P_2^2 - 2\, P_4}~.
 \end{equation}
 
 \end{document}
