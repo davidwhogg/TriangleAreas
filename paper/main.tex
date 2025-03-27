@@ -221,11 +221,11 @@ A function $f(\vec{r}_1, \dots, \vec{r}_N)$ is invariant to permutation of its a
 \end{equation}
 for some functions $\rho$ and $\phi$, where $\phi$ is usually vector valued.
 This result---often known by the name of the deep learning architecture derived from it, \emph{Deep Sets} (\citealt{Zaheer+17deepsets}; see Theorem~2)---is not at all obvious.
-For example, even though Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant, it is not actually in the form of \eqref{eq:DeepSets}. 
+For example, even though Heron's formula \eqref{eq:Heron} is explicitly permutation-invariant, it is not actually in the form of \eqref{eq:DeepSets}.\footnote{But see equation \eqref{eq:HeronDeepSets} below.}
 Further, despite the triangle area being permutation-invariant, there is no known (prior to this work) formula for the area of a triangle that is explicitly in Deep Sets form.
 
 While this result was recently popularized as Deep Sets, it follows from the classical theory of invariant polynomials.
-It has long been known that any permutation-invariant (or symmetric) polynomial of scalar data $f(\{r_i\})$ can be written as a polynomial of the power sums $\sum_i r_i^m$ \citep{Waring1782}.
+Any permutation-invariant (or symmetric) polynomial of scalar data $f(\{r_i\})$ can be written as a polynomial of the power sums $\sum_i r_i^m$ \citep{Waring1782}.
 Further, symmetric polynomials of vector data $\{ \vec{r}_i \}$ are decomposable into polarizations of the scalar symmetric polynomials \citep{Weyl1939}.
 Together, these imply that any permutation-invariant polynomial of vector data can be written as a polynomial in the polarizations of the power sums, which look like sums of the form $\sum_i \, (\vec{r}_{i})_{j}^{m_j} \cdots (\vec{r}_{i})_{k}^{m_k}$, where $(\vec{r}_i)_j$ is the $j^{\rm th}$ component of $\vec{r}_i$.
 % This result is \emph{universal}, in the sense that it is true for all symmetric polynomials.
@@ -254,14 +254,14 @@ Calculating these statistics na\"ively involves loops over all $k$-tuplets of po
 Because all these (computationally expensive) statistics are permutation-invariant, it must be possible to write them in Deep Sets form.
 At the same time, Deep Sets form \eqref{eq:DeepSets} looks like it is computable in linear time.
 What resolves this discrepancy?
-The resolution must be either that $\phi$ has a dimensionality that grows with $N$, or else that the complexity of $\rho$ grows with $N$.
+The resolution must be either that $\phi$ has a dimensionality that effectively grows with $N$, or else that the complexity of $\rho$ effectively grows with $N$.
 Still, these time complexities may be better than the $N^k$ runtime of na\"ive implementations.
 
 Even if $\phi$ and $\rho$ grow rapidly with $N$, it might be that Deep Sets form \eqref{eq:DeepSets} delivers a computational advantage in that it is explicitly in map--reduce form.
 Map--reduce is a model for parallelizing and distributing a calculation over a large dataset \citep{DeanGhemawat2008,Lammel2008}.
 In our case, $\phi$ is the ``map'':
 It can be executed independently and asynchronously on each data point.
-The sums are then the ``reduce'', which can be performed hierarchically across a data center such that the runtime of the sums scales only logarithmically with the number of points.
+The sums are then the ``reduce,'' which can be performed hierarchically across a data center such that the runtime of the sums scales only logarithmically with the number of points.
 (Granted, a triangle will never have more than three points!)
 
 So, there may be benefits to finding Deep Sets forms for problems that depend on permutation-invariant pairs, triplets, or $k$-tuplets of points.
@@ -340,7 +340,7 @@ Being very explicit, it matches \eqref{eq:DeepSets} for $\rho$ and $\phi$ define
     \nonumber
 \end{gather}
 Notice that the runtime is formally linear in the number of points, since $\phi$ and $\rho$ can be considered to have constant time complexity.
-However, because the dimensionality of $\phi$ is larger than the number of points, evaluating the triangle area in this way will not necessarily be faster than a loop over pairs of points.
+However, because the dimensionality of $\phi$ is larger than the number of points, evaluating the triangle area in this way will probably not ever be faster than a loop over pairs of points.
 
 The area of a triangle is not only invariant to permutation, but also to translation, rotation, and reflection.
 Formulae \eqref{eq:sine} and \eqref{eq:Heron}, by virtue of referencing only side-lengths and angles, are explicitly invariant to these other symmetries.
@@ -462,7 +462,7 @@ As with the relationship between triangles and parallelograms, the volume of the
 
 \secbreak
 While the triangle area, by virtue of being a sum over pairs of points, is in a form similar to some physics problems, the polynomial methods we employ are not so relevant for those problems.
-However, in physics it is common to encode a set of points by defining the density field to be a sum of delta functions at the points.
+In physics contexts it is common to encode a set of points by defining a density field that is a sum of delta functions located at the points.
 Notice that the Fourier transform of this field at a wavevector $\vec{k}$ is
 \begin{equation}
     \mathcal{D}_{\vec{k}} = \mathcal{F} \,\bigg\{
@@ -481,7 +481,7 @@ This is physically useful also because the Fourier basis $\exp (i\, \vec{k}\cdot
 
 Because any function of the Fourier transform $\mathcal{D}$ of the density field is automatically in Deep Sets form,
 we can find a Deep Sets form for the gravitational potential energy of a system of point masses.
-Explicitly, consider a system of $N$ point particles with masses $m_i$ and positions $\vec{r}_i$.
+To be explicit: Consider a system of $N$ point particles with masses $m_i$ and positions $\vec{r}_i$.
 The total energy is given in Deep Sets form by
 \begin{align}
     &\phi_{\vec{k}}(m_j, \vec{r}_j)
@@ -506,7 +506,7 @@ To avoid making this infinite-dimensional $\phi$, one can instead evaluate $\mat
 The approximation will improve as the size of $\phi$ grows.
 Approaches akin to this Fourier approach can be used \citep[and are used; e.g.,][]{Portillo+2018,Philcox+2022ENCORE} to estimate or approximate $k$-point statistics in cosmology, which was our motivating question.
 
-Of course, these methods can be used to find another triangle area formula.
+Of course, these Fourier methods can be used to find another triangle area formula.
 \begin{align}
     \phi_{\vec{k}} (\vec{r}_j) &= e^{-i \, \vec{k} \cdot \vec{r}_j}~,
     \quad
