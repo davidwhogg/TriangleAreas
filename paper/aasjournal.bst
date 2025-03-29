@@ -707,7 +707,7 @@ FUNCTION {format.eprint}
         %{ archivePrefix "arXiv" =
         %{new.block "\doarXiv{" eprint * "}" * }
         %{new.block "\doeprint{" eprint * "}" * }
-        if$}
+        %if$}
       if$
     }
   if$
